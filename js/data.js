@@ -1,6 +1,6 @@
-// Triangle Properties Pvt. Ltd. - Corporate Data Module
+// Triangle Properties Pvt. Ltd. - Dynamic Data & Live Content Sync Module
 
-const TRIANGLE_DATA = {
+const BASE_TRIANGLE_DATA = {
   company: {
     name: "Triangle Properties Pvt. Ltd.",
     shortName: "Triangle Properties",
@@ -65,12 +65,7 @@ const TRIANGLE_DATA = {
       featured: true,
       description: "Executive 3 BHK apartments in prime Vadapalani. Featuring 100% Vastu compliance, covered car parking, elevator backup, and proximity to Vadapalani Metro station.",
       amenities: ["Covered Parking", "24/7 Power Backup", "Elevator Access", "CCTV Security", "Vastu Compliant Layout", "EV Charging Point"],
-      specs: {
-        facing: "East",
-        floor: "2nd Floor of 5",
-        possession: "Ready to Move",
-        approval: "CMDA Approved"
-      }
+      specs: { facing: "East", floor: "2nd Floor of 5", possession: "Ready to Move", approval: "CMDA Approved" }
     },
     {
       id: "prop-102",
@@ -94,12 +89,7 @@ const TRIANGLE_DATA = {
       featured: true,
       description: "Exclusive sea-facing luxury villa offering private swimming pool, private terrace garden, double-height living room, and modern architectural finishes.",
       amenities: ["Private Pool", "Private Garden", "Home Theater Room", "Solar Panel Grid", "24/7 Gated Security"],
-      specs: {
-        facing: "North-East",
-        floor: "G+2 Independent Villa",
-        possession: "Immediate",
-        approval: "DTCP Approved"
-      }
+      specs: { facing: "North-East", floor: "G+2 Independent Villa", possession: "Immediate", approval: "DTCP Approved" }
     },
     {
       id: "prop-103",
@@ -122,12 +112,7 @@ const TRIANGLE_DATA = {
       featured: true,
       description: "Premium 2 BHK budget apartments strategically located near IT corridors and metro links. Excellent capital growth and rental yield potential.",
       amenities: ["Clubhouse Facilities", "Elevator Access", "Badminton Court", "Water Treatment Plant", "Visitor Parking"],
-      specs: {
-        facing: "North",
-        floor: "3rd Floor of 8",
-        possession: "December 2025",
-        approval: "RERA Registered"
-      }
+      specs: { facing: "North", floor: "3rd Floor of 8", possession: "December 2025", approval: "RERA Registered" }
     },
     {
       id: "prop-104",
@@ -150,12 +135,7 @@ const TRIANGLE_DATA = {
       featured: false,
       description: "Grade-A plug-and-play office workspace ready for IT, corporate headquarters, or showroom setup. High visibility main road frontage.",
       amenities: ["Centralized AC", "100% Power Backup", "High-Speed Elevators", "Fire Safety Systems", "Valet Parking"],
-      specs: {
-        facing: "East",
-        floor: "1st Floor",
-        possession: "Immediate",
-        approval: "CMDA Commercial"
-      }
+      specs: { facing: "East", floor: "1st Floor", possession: "Immediate", approval: "CMDA Commercial" }
     },
     {
       id: "prop-105",
@@ -178,12 +158,7 @@ const TRIANGLE_DATA = {
       featured: false,
       description: "DTCP & RERA approved villa plots in a fully developed gated township with 30ft wide blacktop roads and LED streetlights.",
       amenities: ["Gated Community", "30ft Wide Roads", "Underground Electrical Lines", "Water Connection Ready", "Park & Track"],
-      specs: {
-        facing: "South-East",
-        floor: "Plot / Land",
-        possession: "Immediate Registration",
-        approval: "DTCP & RERA Approved"
-      }
+      specs: { facing: "South-East", floor: "Plot / Land", possession: "Immediate Registration", approval: "DTCP & RERA Approved" }
     },
     {
       id: "prop-106",
@@ -206,26 +181,21 @@ const TRIANGLE_DATA = {
       featured: true,
       description: "Ultra-prime 3 BHK apartment with Italian marble flooring, teak wood finishings, and smart security systems in Anna Nagar East.",
       amenities: ["Covered Parking", "Elevator Access", "Intercom Facility", "Power Backup", "CCTV Surveillance"],
-      specs: {
-        facing: "East",
-        floor: "3rd Floor",
-        possession: "Ready to Move",
-        approval: "CMDA Approved"
-      }
+      specs: { facing: "East", floor: "3rd Floor", possession: "Ready to Move", approval: "CMDA Approved" }
     }
   ],
 
   services: [
     {
       id: "serv-1",
-      icon: "building-office-2",
+      icon: "apartment",
       title: "Real Estate Sales & Advisory",
       shortDesc: "End-to-end assistance for residential apartments, independent houses, luxury villas, gated plots, and commercial spaces.",
       fullDesc: "We help home buyers find legal-clear, affordable properties in Chennai and guide property owners to get maximum market valuation with zero stress."
     },
     {
       id: "serv-2",
-      icon: "wrench-screwdriver",
+      icon: "foundation",
       title: "Residential & Commercial Construction",
       shortDesc: "Turnkey house construction, building planning, structural design, interior works, and renovation with transparent material pricing.",
       fullDesc: "From architectural drawings and soil testing to RCC framework and final keys, our civil engineering team delivers on time and within budget."
@@ -239,14 +209,13 @@ const TRIANGLE_DATA = {
     },
     {
       id: "serv-4",
-      icon: "document-text",
+      icon: "policy",
       title: "Property Management & Legal Documentation",
       shortDesc: "Rental management, tenant vetting, property inspection, title deed clearance, encumbrance certificates, and registration support.",
       fullDesc: "Our legal advocates and property managers look after your investment portfolio, handle tenant contracts, and ensure 100% legal title safety."
     }
   ],
 
-  // Real Authentic Google Reviews
   testimonials: [
     {
       id: "test-1",
@@ -255,7 +224,7 @@ const TRIANGLE_DATA = {
       rating: 5,
       time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-      content: "Excellent service from start to finish. The team was professional, transparent, and very supportive throughout the entire process. They helped us find the perfect property with clear guidance and quick responses to all our questions. Highly trustworthy and customer friendly company."
+      content: "Excellent service from start to finish. The team was professional, transparent, and very supportive throughout the entire process. They helped us find the perfect property with clear guidance and quick responses."
     },
     {
       id: "test-2",
@@ -273,7 +242,7 @@ const TRIANGLE_DATA = {
       rating: 5,
       time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
-      content: "Very happy with our land purchase experience. The team was very trustworthy and guided clearly according to our budget. Every step was transparent, and felt money was completely safe. All documents were genuine and properly explained."
+      content: "Very happy with our land purchase experience. The team was very trustworthy and guided clearly according to our budget. Every step was transparent, and felt money was completely safe."
     },
     {
       id: "test-4",
@@ -282,7 +251,7 @@ const TRIANGLE_DATA = {
       rating: 5,
       time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-      content: "It was easy to contact these people, and their rates are very competitive. I am planning to purchase one of these properties soon. Thank you, everyone."
+      content: "It was easy to contact these people, and their rates are very competitive. I am planning to purchase one of these properties soon."
     },
     {
       id: "test-5",
@@ -292,33 +261,6 @@ const TRIANGLE_DATA = {
       time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&q=80",
       content: "Kutumbakam project land I am also purchasing. Good place, customer support is very friendly."
-    },
-    {
-      id: "test-6",
-      name: "Ashok Thapa M",
-      role: "Google Local Guide (22 Reviews)",
-      rating: 5,
-      time: "1 year ago",
-      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
-      content: "The most trusted company and referred by my friend... well guided persons and had the best experience."
-    },
-    {
-      id: "test-7",
-      name: "Keshore Muruga",
-      role: "Google Reviewer (4 Reviews)",
-      rating: 5,
-      time: "1 year ago",
-      avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80",
-      content: "Best property company I ever came across. Kind management and helpful employees."
-    },
-    {
-      id: "test-8",
-      name: "S Natarajan",
-      role: "Google Reviewer (4 Reviews)",
-      rating: 5,
-      time: "6 months ago",
-      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
-      content: "Best projects and price, very good customer service and transparency."
     }
   ],
 
@@ -359,32 +301,48 @@ const TRIANGLE_DATA = {
       category: "Interior",
       image: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80"
     }
-  ],
-
-  faqs: [
-    {
-      question: "Why choose Triangle Properties Pvt. Ltd. for property development in Chennai?",
-      answer: "We combine architectural innovation, direct manufacturer material sourcing, and comprehensive legal clearance to deliver high-end properties at accessible market prices."
-    },
-    {
-      question: "Are all Triangle Properties projects DTCP/CMDA and RERA approved?",
-      answer: "Yes, 100% of our residential and commercial developments hold mandatory CMDA/DTCP approvals, legal title clearance certificates, and official RERA registrations."
-    },
-    {
-      question: "How does the Joint Venture (JV) land development process work?",
-      answer: "Landowners provide the plot, while Triangle Properties Pvt. Ltd. manages architectural planning, statutory approvals, construction, and sales. Built-up area or revenues are shared transparently under a legal JDA contract."
-    },
-    {
-      question: "Where is the head office of Triangle Properties Pvt. Ltd. located?",
-      answer: "Our head office is located at No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India. (Near Vadapalani Metro Station)."
-    },
-    {
-      question: "What are your customer contact mobile and WhatsApp numbers?",
-      answer: "You can reach our sales and advisory team directly via Phone or WhatsApp at 8838957874 or 7200212759."
-    }
   ]
 };
 
+// Retrieve live merged data (Baseline + Dynamic Admin Overrides)
+function loadLiveTriangleData() {
+  const customDataStr = localStorage.getItem('triangle_custom_data');
+  if (!customDataStr) {
+    return BASE_TRIANGLE_DATA;
+  }
+  try {
+    const custom = JSON.parse(customDataStr);
+    return {
+      company: { ...BASE_TRIANGLE_DATA.company, ...(custom.company || {}) },
+      stats: custom.stats || BASE_TRIANGLE_DATA.stats,
+      processSteps: custom.processSteps || BASE_TRIANGLE_DATA.processSteps,
+      properties: custom.properties || BASE_TRIANGLE_DATA.properties,
+      services: custom.services || BASE_TRIANGLE_DATA.services,
+      testimonials: custom.testimonials || BASE_TRIANGLE_DATA.testimonials,
+      gallery: custom.gallery || BASE_TRIANGLE_DATA.gallery
+    };
+  } catch (e) {
+    console.error("Error loading custom data overrides:", e);
+    return BASE_TRIANGLE_DATA;
+  }
+}
+
+function saveLiveTriangleData(newData) {
+  try {
+    localStorage.setItem('triangle_custom_data', JSON.stringify(newData));
+    window.TRIANGLE_DATA = newData;
+    console.log("Live TRIANGLE_DATA updated and saved successfully!");
+  } catch (e) {
+    console.error("Error saving dynamic custom data:", e);
+  }
+}
+
+// Global initialization
+const TRIANGLE_DATA = loadLiveTriangleData();
+
 if (typeof window !== 'undefined') {
+  window.BASE_TRIANGLE_DATA = BASE_TRIANGLE_DATA;
   window.TRIANGLE_DATA = TRIANGLE_DATA;
+  window.loadLiveTriangleData = loadLiveTriangleData;
+  window.saveLiveTriangleData = saveLiveTriangleData;
 }
