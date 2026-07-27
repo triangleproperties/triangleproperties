@@ -1,6 +1,8 @@
-// Triangle Properties Pvt. Ltd. - Main Application Logic
+// Triangle Properties Pvt. Ltd. - Main Application Logic (UI & Interactivity Pass)
 
 document.addEventListener('DOMContentLoaded', () => {
+  initScrollProgressBar();
+  initScrollToTopButton();
   initThemeToggle();
   initNavigation();
   initFloatingButtons();
@@ -10,7 +12,53 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* -------------------------------------------------------------
- * 1. Dark / Light Theme Toggle System
+ * 1. Scroll Progress Bar & Scroll To Top
+ * ------------------------------------------------------------- */
+function initScrollProgressBar() {
+  if (document.getElementById('scroll-progress-bar')) return;
+
+  const bar = document.createElement('div');
+  bar.id = 'scroll-progress-bar';
+  document.body.appendChild(bar);
+
+  window.addEventListener('scroll', () => {
+    const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+    const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const scrolled = (winScroll / height) * 100;
+    bar.style.width = scrolled + '%';
+  });
+}
+
+function initScrollToTopButton() {
+  if (document.getElementById('scroll-to-top')) return;
+
+  const btn = document.createElement('button');
+  btn.id = 'scroll-to-top';
+  btn.ariaLabel = 'Scroll to top';
+  btn.className = 'fixed bottom-24 right-6 z-40 p-3 rounded-full bg-slate-900 dark:bg-slate-800 text-amber-400 border border-amber-500/30 shadow-xl hover:scale-110 focus:outline-none transition-all';
+  btn.innerHTML = `
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/>
+    </svg>
+  `;
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 400) {
+      btn.classList.add('visible');
+    } else {
+      btn.classList.remove('visible');
+    }
+  });
+
+  document.body.appendChild(btn);
+}
+
+/* -------------------------------------------------------------
+ * 2. Dark / Light Theme Toggle System
  * ------------------------------------------------------------- */
 function initThemeToggle() {
   const savedTheme = localStorage.getItem('triangle_theme') || 
@@ -23,6 +71,10 @@ function initThemeToggle() {
     btn.addEventListener('click', () => {
       const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      
+      btn.classList.add('theme-icon-animate');
+      setTimeout(() => btn.classList.remove('theme-icon-animate'), 400);
+
       applyTheme(newTheme);
     });
   });
@@ -56,7 +108,7 @@ function updateThemeIcons(theme) {
 }
 
 /* -------------------------------------------------------------
- * 2. Sticky Navbar & Mobile Menu Drawer
+ * 3. Sticky Navbar & Mobile Menu Drawer
  * ------------------------------------------------------------- */
 function initNavigation() {
   const navbar = document.getElementById('navbar');
@@ -65,9 +117,9 @@ function initNavigation() {
 
   window.addEventListener('scroll', () => {
     if (window.scrollY > 20) {
-      navbar?.classList.add('shadow-lg');
+      navbar?.classList.add('shadow-xl');
     } else {
-      navbar?.classList.remove('shadow-lg');
+      navbar?.classList.remove('shadow-xl');
     }
   });
 
@@ -82,13 +134,13 @@ function initNavigation() {
   navLinks.forEach(link => {
     const href = link.getAttribute('href');
     if (href === currentPath || (currentPath === '' && href === 'index.html')) {
-      link.classList.add('text-amber-500', 'font-semibold');
+      link.classList.add('text-amber-500', 'font-bold');
     }
   });
 }
 
 /* -------------------------------------------------------------
- * 3. Floating Action Buttons (WhatsApp & Call)
+ * 4. Floating Action Buttons (WhatsApp & Call)
  * ------------------------------------------------------------- */
 function initFloatingButtons() {
   if (document.getElementById('floating-cta')) return;
@@ -104,12 +156,12 @@ function initFloatingButtons() {
     <!-- Direct Call Button -->
     <a href="tel:${phoneNum}" 
        title="Call Triangle Properties"
-       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-full shadow-xl transition-all hover:scale-110 group focus:outline-none">
+       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none">
       <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
       </svg>
-      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium pr-1">
+      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1">
         Call 8838957874
       </span>
     </a>
@@ -119,11 +171,11 @@ function initFloatingButtons() {
        target="_blank" 
        rel="noopener noreferrer"
        title="Chat on WhatsApp"
-       class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-xl transition-all hover:scale-110 group focus:outline-none animate-pulse-glow">
+       class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none animate-pulse-glow">
       <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
       </svg>
-      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-sm font-medium pr-1">
+      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1">
         WhatsApp Us
       </span>
     </a>
@@ -133,7 +185,7 @@ function initFloatingButtons() {
 }
 
 /* -------------------------------------------------------------
- * 4. Animated Stats Counters
+ * 5. Animated Stats Counters
  * ------------------------------------------------------------- */
 function initStatsCounters() {
   const statElements = document.querySelectorAll('.stat-counter');
@@ -175,7 +227,7 @@ function animateValue(obj, start, end, duration, prefix, suffix) {
 }
 
 /* -------------------------------------------------------------
- * 5. FAQ Accordions
+ * 6. FAQ Accordions
  * ------------------------------------------------------------- */
 function initFaqAccordions() {
   const accordionButtons = document.querySelectorAll('.faq-accordion-btn');
@@ -198,7 +250,7 @@ function initFaqAccordions() {
 }
 
 /* -------------------------------------------------------------
- * 6. Inquiry Form Submission Handler
+ * 7. Inquiry Form Submission Handler
  * ------------------------------------------------------------- */
 function initInquiryForms() {
   const forms = document.querySelectorAll('.triangle-inquiry-form');
@@ -247,7 +299,7 @@ function initInquiryForms() {
 }
 
 /* -------------------------------------------------------------
- * 7. Toast Notification Helper
+ * 8. Toast Notification Helper
  * ------------------------------------------------------------- */
 function showToast(message, type = 'info') {
   const existing = document.getElementById('triangle-toast');

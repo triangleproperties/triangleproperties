@@ -1,13 +1,13 @@
-/* Triangle Properties - Custom Styles & Theme System */
+/* Triangle Properties Pvt. Ltd. - Luxury Design System */
 
 /* Root Theme Variables */
 :root {
-  --bg-primary: #f8fafc;
-  --bg-secondary: #ffffff;
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
   --bg-card: #ffffff;
-  --bg-card-hover: #f1f5f9;
-  --bg-nav: rgba(255, 255, 255, 0.85);
-  --text-main: #0f172a;
+  --bg-card-hover: #ffffff;
+  --bg-nav: rgba(255, 255, 255, 0.88);
+  --text-main: #111827;
   --text-muted: #64748b;
   --border-color: #e2e8f0;
   
@@ -16,47 +16,70 @@
   --color-blue: #2563eb;
   --color-blue-hover: #1d4ed8;
   
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-glow: 0 0 25px rgba(251, 191, 36, 0.25);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
+  --shadow-glow-gold: 0 10px 30px -5px rgba(251, 191, 36, 0.3);
+  --shadow-glow-blue: 0 10px 30px -5px rgba(37, 99, 235, 0.3);
   
-  --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .dark {
   --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
+  --bg-secondary: #020617;
   --bg-card: #1e293b;
   --bg-card-hover: #334155;
-  --bg-nav: rgba(15, 23, 42, 0.85);
+  --bg-nav: rgba(15, 23, 42, 0.90);
   --text-main: #f8fafc;
   --text-muted: #94a3b8;
   --border-color: #334155;
   
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 30px rgba(251, 191, 36, 0.3);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.6);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+  --shadow-glow-gold: 0 10px 35px -5px rgba(251, 191, 36, 0.25);
+  --shadow-glow-blue: 0 10px 35px -5px rgba(37, 99, 235, 0.35);
+}
+
+/* Global Styles */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--bg-primary);
   color: var(--text-main);
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   transition: var(--transition-smooth);
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 h1, h2, h3, h4, h5, h6, .font-heading {
   font-family: 'Poppins', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* Scroll Progress Bar at Top */
+#scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #fbbf24, #2563eb);
+  z-index: 100;
+  width: 0%;
+  transition: width 0.1s ease-out;
 }
 
 /* Glassmorphism Classes */
 .glass-nav {
   background-color: var(--bg-nav);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-color);
 }
 
@@ -73,7 +96,17 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   transform: translateY(-4px);
 }
 
-/* Gradient Text */
+/* Luxury Card Lift Effect */
+.card-hover-lift {
+  transition: var(--transition-smooth);
+}
+
+.card-hover-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-2xl);
+}
+
+/* Text Gradients */
 .gradient-gold {
   background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
   -webkit-background-clip: text;
@@ -81,19 +114,50 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 .gradient-blue {
-  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Floating Animation */
+/* Status Badges */
+.badge-for-sale {
+  background: rgba(251, 191, 36, 0.15);
+  color: #d97706;
+  border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.dark .badge-for-sale {
+  color: #fbbf24;
+}
+
+.badge-under-construction {
+  background: rgba(37, 99, 235, 0.15);
+  color: #2563eb;
+  border: 1px solid rgba(37, 99, 235, 0.3);
+}
+
+.dark .badge-under-construction {
+  color: #60a5fa;
+}
+
+.badge-for-rent {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.dark .badge-for-rent {
+  color: #34d399;
+}
+
+/* Animations */
 @keyframes floatSlow {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-8px); }
 }
 
 .animate-float {
-  animation: floatSlow 4s ease-in-out infinite;
+  animation: floatSlow 5s ease-in-out infinite;
 }
 
 @keyframes pulseGlow {
@@ -105,25 +169,25 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   animation: pulseGlow 2.5s infinite;
 }
 
-/* Badges */
-.badge-gold {
-  background: rgba(251, 191, 36, 0.15);
-  color: #d97706;
-  border: 1px solid rgba(251, 191, 36, 0.3);
+@keyframes spinIcon {
+  from { transform: rotate(0deg) scale(0.8); }
+  to { transform: rotate(360deg) scale(1); }
 }
 
-.dark .badge-gold {
-  color: #fbbf24;
+.theme-icon-animate {
+  animation: spinIcon 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.badge-blue {
-  background: rgba(37, 99, 235, 0.15);
-  color: #2563eb;
-  border: 1px solid rgba(37, 99, 235, 0.3);
+/* Scroll To Top Button */
+#scroll-to-top {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
 }
 
-.dark .badge-blue {
-  color: #60a5fa;
+#scroll-to-top.visible {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Custom Scrollbar */
@@ -141,17 +205,5 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-blue);
-}
-
-/* Modal Overlay Animation */
-.modal-enter {
-  opacity: 0;
-  transform: scale(0.95);
-}
-
-.modal-enter-active {
-  opacity: 1;
-  transform: scale(1);
-  transition: var(--transition-smooth);
+  background: var(--color-gold);
 }
