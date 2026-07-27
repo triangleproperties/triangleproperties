@@ -1,4 +1,4 @@
-// Triangle Properties Pvt. Ltd. - Main Application Logic (UI & Interactivity Pass)
+// Triangle Properties Pvt. Ltd. - Main Application Logic (Mobile & UI Pass)
 
 document.addEventListener('DOMContentLoaded', () => {
   initScrollProgressBar();
@@ -24,7 +24,7 @@ function initScrollProgressBar() {
   window.addEventListener('scroll', () => {
     const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
     const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    const scrolled = (winScroll / height) * 100;
+    const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
     bar.style.width = scrolled + '%';
   });
 }
@@ -35,7 +35,7 @@ function initScrollToTopButton() {
   const btn = document.createElement('button');
   btn.id = 'scroll-to-top';
   btn.ariaLabel = 'Scroll to top';
-  btn.className = 'fixed bottom-24 right-6 z-40 p-3 rounded-full bg-slate-900 dark:bg-slate-800 text-amber-400 border border-amber-500/30 shadow-xl hover:scale-110 focus:outline-none transition-all';
+  btn.className = 'fixed bottom-24 right-4 sm:right-6 z-40 p-3 rounded-full bg-slate-900 dark:bg-slate-800 text-amber-400 border border-amber-500/30 shadow-xl hover:scale-110 focus:outline-none transition-all';
   btn.innerHTML = `
     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/>
@@ -68,7 +68,8 @@ function initThemeToggle() {
 
   const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
   toggleBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
       const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
       
@@ -124,11 +125,28 @@ function initNavigation() {
   });
 
   if (mobileMenuBtn && mobileMenu) {
-    mobileMenuBtn.addEventListener('click', () => {
+    mobileMenuBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
       mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close menu when tapping any link inside
+    const mobileLinks = mobileMenu.querySelectorAll('a');
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // Close menu when tapping outside
+    document.addEventListener('click', (e) => {
+      if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
+        mobileMenu.classList.add('hidden');
+      }
     });
   }
 
+  // Active page link indicator
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
@@ -150,18 +168,18 @@ function initFloatingButtons() {
 
   const container = document.createElement('div');
   container.id = 'floating-cta';
-  container.className = 'fixed bottom-6 right-6 z-50 flex flex-col gap-3 items-end';
+  container.className = 'fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 flex flex-col gap-3 items-end';
 
   container.innerHTML = `
     <!-- Direct Call Button -->
     <a href="tel:${phoneNum}" 
        title="Call Triangle Properties"
-       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none">
-      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+       class="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white p-3 sm:p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none">
+      <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
               d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
       </svg>
-      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1">
+      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1 hidden sm:inline">
         Call 8838957874
       </span>
     </a>
@@ -171,11 +189,11 @@ function initFloatingButtons() {
        target="_blank" 
        rel="noopener noreferrer"
        title="Chat on WhatsApp"
-       class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none animate-pulse-glow">
-      <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24">
+       class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white p-3 sm:p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none animate-pulse-glow">
+      <svg class="w-5 h-5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24">
         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
       </svg>
-      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1">
+      <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1 hidden sm:inline">
         WhatsApp Us
       </span>
     </a>
@@ -202,7 +220,7 @@ function initStatsCounters() {
         obs.unobserve(el);
       }
     });
-  }, { threshold: 0.3 });
+  }, { threshold: 0.2 });
 
   statElements.forEach(el => observer.observe(el));
 }
@@ -311,13 +329,13 @@ function showToast(message, type = 'info') {
   const bgClass = type === 'success' ? 'bg-emerald-600 text-white' : 
                   type === 'error' ? 'bg-rose-600 text-white' : 'bg-blue-600 text-white';
 
-  toast.className = `fixed top-6 right-6 z-50 px-6 py-4 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 ${bgClass}`;
+  toast.className = `fixed top-4 right-4 z-50 px-4 py-3 sm:px-6 sm:py-4 rounded-xl shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-y-0 ${bgClass}`;
   
   toast.innerHTML = `
-    <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
-    <span class="text-sm font-medium">${message}</span>
+    <span class="text-xs sm:text-sm font-medium">${message}</span>
     <button onclick="this.parentElement.remove()" class="ml-auto opacity-70 hover:opacity-100">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>

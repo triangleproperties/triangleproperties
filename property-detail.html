@@ -36,13 +36,13 @@
   <link rel="stylesheet" href="css/variables.css"/>
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
   <!-- NAVBAR -->
   <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-16 py-4 flex items-center justify-between">
+    <div class="max-w-[1440px] mx-auto px-4 md:px-16 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
-        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-11 w-auto object-contain transition-transform group-hover:scale-105">
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105">
       </a>
 
       <nav class="hidden lg:flex items-center gap-7">
@@ -56,20 +56,33 @@
         <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="tel:8838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-xl">call</span></a>
-        <a href="https://wa.me/918838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-xl">chat</span></a>
-        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-          <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="tel:8838957874" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-lg sm:text-xl">call</span></a>
+        <a href="https://wa.me/918838957874" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-lg sm:text-xl">chat</span></a>
+        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <svg class="icon-sun w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="icon-moon w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
         </button>
         <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Visit</a>
+        <button id="mobile-menu-btn" type="button" class="lg:hidden p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span class="material-symbols-outlined text-lg sm:text-xl">menu</span></button>
       </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-6 space-y-3 font-button text-xs uppercase tracking-widest">
+      <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Portfolio</a>
+      <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Collections</a>
+      <a href="construction.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Construction</a>
+      <a href="joint-venture.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Joint Venture</a>
+      <a href="gallery.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Gallery</a>
+      <a href="about.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">About</a>
+      <a href="services.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Services</a>
+      <a href="contact.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Contact</a>
     </div>
   </header>
 
   <!-- PROPERTY DETAIL CONTAINER -->
-  <main id="property-detail-container" class="py-16 px-6 md:px-16 max-w-[1440px] mx-auto flex-grow">
+  <main id="property-detail-container" class="py-12 sm:py-16 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow">
     <!-- Dynamically populated by JS from query param id (e.g. ?id=prop-101) -->
     <div class="text-center py-20">
       <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Loading Property Details</span>
@@ -99,7 +112,7 @@
       const prop = window.TRIANGLE_DATA.properties.find(p => p.id === id) || window.TRIANGLE_DATA.properties[0];
 
       container.innerHTML = `
-        <div class="space-y-12">
+        <div class="space-y-8 sm:space-y-12">
           <!-- Back Link & Title -->
           <div>
             <a href="properties.html" class="inline-flex items-center gap-2 text-amber-500 font-button text-xs uppercase tracking-widest mb-4 hover:underline">
@@ -108,22 +121,22 @@
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-1">${prop.category} • ${prop.location}</span>
-                <h1 class="font-display text-4xl sm:text-6xl font-light">${prop.title}</h1>
-                <p class="font-body text-slate-500 dark:text-slate-400 text-sm mt-2">${prop.address}</p>
+                <h1 class="font-display text-3xl sm:text-6xl font-light">${prop.title}</h1>
+                <p class="font-body text-slate-500 dark:text-slate-400 text-xs sm:text-sm mt-2">${prop.address}</p>
               </div>
-              <div class="text-right">
-                <span class="font-display text-4xl text-amber-500 font-bold block">${prop.price}</span>
+              <div class="text-left md:text-right">
+                <span class="font-display text-3xl sm:text-4xl text-amber-500 font-bold block">${prop.price}</span>
                 <span class="font-button text-xs uppercase text-slate-400">CMDA / DTCP Approved</span>
               </div>
             </div>
           </div>
 
           <!-- Main Gallery Showcase -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
             <div class="md:col-span-2 aspect-[16/10] rounded-2xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800">
               <img id="main-detail-img" src="${prop.image}" alt="${prop.title}" class="w-full h-full object-cover">
             </div>
-            <div class="flex flex-col gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-1 gap-3 sm:gap-4">
               ${(prop.gallery || [prop.image]).map(img => `
                 <div class="aspect-[16/9] rounded-xl overflow-hidden border border-slate-200 dark:border-slate-800 cursor-pointer hover:opacity-80 transition-opacity" onclick="document.getElementById('main-detail-img').src='${img}'">
                   <img src="${img}" alt="Gallery thumbnail" class="w-full h-full object-cover">
@@ -133,38 +146,38 @@
           </div>
 
           <!-- Specifications Bar -->
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-6 p-8 rounded-2xl glass-card text-center">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 p-6 sm:p-8 rounded-2xl glass-card text-center">
             <div>
               <span class="font-button text-xs uppercase text-slate-400 block mb-1">Bedrooms</span>
-              <span class="font-display text-2xl font-bold text-amber-500">${prop.bedrooms || 'N/A'} BHK</span>
+              <span class="font-display text-xl sm:text-2xl font-bold text-amber-500">${prop.bedrooms || 'N/A'} BHK</span>
             </div>
             <div>
               <span class="font-button text-xs uppercase text-slate-400 block mb-1">Bathrooms</span>
-              <span class="font-display text-2xl font-bold text-amber-500">${prop.bathrooms || 'N/A'} Baths</span>
+              <span class="font-display text-xl sm:text-2xl font-bold text-amber-500">${prop.bathrooms || 'N/A'} Baths</span>
             </div>
             <div>
               <span class="font-button text-xs uppercase text-slate-400 block mb-1">Built-up Area</span>
-              <span class="font-display text-2xl font-bold text-amber-500">${prop.areaSqft} Sq. Ft.</span>
+              <span class="font-display text-xl sm:text-2xl font-bold text-amber-500">${prop.areaSqft} Sq. Ft.</span>
             </div>
             <div>
               <span class="font-button text-xs uppercase text-slate-400 block mb-1">Parking</span>
-              <span class="font-display text-2xl font-bold text-amber-500">${prop.parking || 'Reserved'}</span>
+              <span class="font-display text-xl sm:text-2xl font-bold text-amber-500">${prop.parking || 'Reserved'}</span>
             </div>
           </div>
 
           <!-- Description & Inquiry CTA -->
-          <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div class="lg:col-span-2 space-y-8">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
+            <div class="lg:col-span-2 space-y-6 sm:space-y-8">
               <div>
-                <h2 class="font-display text-3xl font-light mb-4">Property Description</h2>
-                <p class="font-body text-slate-600 dark:text-slate-300 text-base leading-relaxed">${prop.description}</p>
+                <h2 class="font-display text-2xl sm:text-3xl font-light mb-3 sm:mb-4">Property Description</h2>
+                <p class="font-body text-slate-600 dark:text-slate-300 text-sm leading-relaxed">${prop.description}</p>
               </div>
 
               <div>
-                <h2 class="font-display text-3xl font-light mb-4">Luxury Amenities</h2>
-                <div class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                <h2 class="font-display text-2xl sm:text-3xl font-light mb-3 sm:mb-4">Luxury Amenities</h2>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
                   ${(prop.amenities || ['Covered Parking', 'Vastu Compliant', 'Power Backup', 'CCTV Security', 'Elevator Access']).map(am => `
-                    <div class="flex items-center gap-2 p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-button uppercase">
+                    <div class="flex items-center gap-2 p-3 sm:p-4 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-xs font-button uppercase">
                       <span class="material-symbols-outlined text-amber-500 text-base">check_circle</span>
                       <span>${am}</span>
                     </div>
@@ -174,8 +187,8 @@
             </div>
 
             <!-- Sticky Right Inquiry Form -->
-            <div class="glass-card p-8 rounded-2xl h-fit sticky top-28">
-              <h3 class="font-display text-2xl mb-2">Interested in this property?</h3>
+            <div class="glass-card p-6 sm:p-8 rounded-2xl h-fit sticky top-24">
+              <h3 class="font-display text-xl sm:text-2xl mb-2">Interested in this property?</h3>
               <p class="font-body text-xs text-slate-400 mb-6">Schedule a site visit with our Vadapalani relationship advisor.</p>
 
               <form class="triangle-inquiry-form space-y-4">

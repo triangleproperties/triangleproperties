@@ -11,6 +11,7 @@ html {
   background-color: var(--color-surface);
   color: var(--color-on-surface);
   transition: background-color var(--transition-normal), color var(--transition-normal);
+  overflow-x: hidden;
 }
 
 body {
@@ -19,6 +20,7 @@ body {
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  width: 100%;
   transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
@@ -35,6 +37,13 @@ h2, h3 { font-weight: 400; line-height: 1.2; }
   font-family: var(--font-button);
   font-weight: 600;
   letter-spacing: 0.05em;
+}
+
+/* Prevent auto-zoom on iOS mobile inputs */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }
 
 /* Top Scroll Progress Bar */

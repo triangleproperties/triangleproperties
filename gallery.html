@@ -36,13 +36,13 @@
   <link rel="stylesheet" href="css/variables.css"/>
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
   <!-- NAVBAR -->
   <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-16 py-4 flex items-center justify-between">
+    <div class="max-w-[1440px] mx-auto px-4 md:px-16 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
-        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-11 w-auto object-contain transition-transform group-hover:scale-105">
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105">
       </a>
 
       <nav class="hidden lg:flex items-center gap-7">
@@ -56,42 +56,55 @@
         <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="tel:8838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-xl">call</span></a>
-        <a href="https://wa.me/918838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-xl">chat</span></a>
-        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-          <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="tel:8838957874" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-lg sm:text-xl">call</span></a>
+        <a href="https://wa.me/918838957874" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-lg sm:text-xl">chat</span></a>
+        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <svg class="icon-sun w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="icon-moon w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
         </button>
         <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Visit</a>
+        <button id="mobile-menu-btn" type="button" class="lg:hidden p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span class="material-symbols-outlined text-lg sm:text-xl">menu</span></button>
       </div>
+    </div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-6 space-y-3 font-button text-xs uppercase tracking-widest">
+      <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Portfolio</a>
+      <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Collections</a>
+      <a href="construction.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Construction</a>
+      <a href="joint-venture.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Joint Venture</a>
+      <a href="gallery.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Gallery</a>
+      <a href="about.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">About</a>
+      <a href="services.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Services</a>
+      <a href="contact.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Contact</a>
     </div>
   </header>
 
   <!-- BANNER -->
-  <section class="py-20 px-6 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
+  <section class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
     <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Visual Heritage</span>
-    <h1 class="font-display text-4xl sm:text-6xl font-light mb-4">Architectural Gallery</h1>
-    <p class="font-body text-slate-600 dark:text-slate-300 text-sm max-w-xl mx-auto">
+    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Architectural Gallery</h1>
+    <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
       Explore high-resolution photography showcasing completed developments, luxury interior design, and civil engineering progress across Chennai.
     </p>
   </section>
 
   <!-- GALLERY CATEGORY FILTER BUTTONS -->
-  <section class="py-8 px-6 md:px-16 max-w-[1440px] mx-auto">
-    <div class="flex flex-wrap justify-center gap-3 font-button text-xs uppercase tracking-widest">
-      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-amber-500 text-slate-950 font-bold shadow-md" data-filter="ALL">All Photos</button>
-      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Elevation">Elevations</button>
-      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Interior">Interiors</button>
-      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Construction">Construction</button>
-      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Completed">Completed</button>
+  <section class="py-6 sm:py-8 px-4 md:px-16 max-w-[1440px] mx-auto">
+    <div class="flex flex-wrap justify-center gap-2 sm:gap-3 font-button text-xs uppercase tracking-widest">
+      <button class="gallery-filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-amber-500 text-slate-950 font-bold shadow-md" data-filter="ALL">All Photos</button>
+      <button class="gallery-filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Elevation">Elevations</button>
+      <button class="gallery-filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Interior">Interiors</button>
+      <button class="gallery-filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Construction">Construction</button>
+      <button class="gallery-filter-btn px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Completed">Completed</button>
     </div>
   </section>
 
   <!-- GALLERY PHOTO GRID -->
-  <main class="py-12 px-6 md:px-16 max-w-[1440px] mx-auto flex-grow">
-    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-      <!-- Populated via JavaScript from TRIANGLE_DATA.gallery -->
+  <main class="py-8 sm:py-12 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow">
+    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+      <!-- Populated via JavaScript -->
     </div>
   </main>
 
@@ -123,8 +136,8 @@
               ${item.category}
             </div>
           </div>
-          <div class="p-6">
-            <h3 class="font-display text-xl font-bold mb-1">${item.title}</h3>
+          <div class="p-4 sm:p-6">
+            <h3 class="font-display text-lg sm:text-xl font-bold mb-1">${item.title}</h3>
           </div>
         </div>
       `).join('');
