@@ -1,104 +1,80 @@
-/* Triangle Properties Pvt. Ltd. - Luxury Design System */
+/* Triangle Properties Pvt. Ltd. - Stylesheet & Accessibility System */
+@import url('variables.css');
 
-/* Root Theme Variables */
-:root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-card-hover: #ffffff;
-  --bg-nav: rgba(255, 255, 255, 0.88);
-  --text-main: #111827;
-  --text-muted: #64748b;
-  --border-color: #e2e8f0;
-  
-  --color-gold: #fbbf24;
-  --color-gold-hover: #d97706;
-  --color-blue: #2563eb;
-  --color-blue-hover: #1d4ed8;
-  
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.12);
-  --shadow-glow-gold: 0 10px 30px -5px rgba(251, 191, 36, 0.3);
-  --shadow-glow-blue: 0 10px 30px -5px rgba(37, 99, 235, 0.3);
-  
-  --transition-smooth: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+/* Global Reset & Focus Visible Accessibility */
+*:focus-visible {
+  outline: 2px solid var(--color-primary) !important;
+  outline-offset: 2px !important;
 }
 
-.dark {
-  --bg-primary: #0f172a;
-  --bg-secondary: #020617;
-  --bg-card: #1e293b;
-  --bg-card-hover: #334155;
-  --bg-nav: rgba(15, 23, 42, 0.90);
-  --text-main: #f8fafc;
-  --text-muted: #94a3b8;
-  --border-color: #334155;
-  
-  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.6);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
-  --shadow-glow-gold: 0 10px 35px -5px rgba(251, 191, 36, 0.25);
-  --shadow-glow-blue: 0 10px 35px -5px rgba(37, 99, 235, 0.35);
-}
-
-/* Global Styles */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: var(--bg-primary);
-  color: var(--text-main);
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  transition: var(--transition-smooth);
+  background-color: var(--color-bg-light);
+  color: var(--color-text-light);
+  font-family: var(--font-body);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
+.dark body {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-dark);
+}
+
 h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: 'Poppins', sans-serif;
+  font-family: var(--font-heading);
   letter-spacing: -0.02em;
 }
 
-/* Scroll Progress Bar at Top */
+/* Top Scroll Progress Bar */
 #scroll-progress-bar {
   position: fixed;
   top: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, #fbbf24, #2563eb);
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
   z-index: 100;
   width: 0%;
-  transition: width 0.1s ease-out;
+  transition: width 100ms ease-out;
 }
 
 /* Glassmorphism Classes */
 .glass-nav {
-  background-color: var(--bg-nav);
+  background-color: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.dark .glass-nav {
+  background-color: rgba(15, 23, 42, 0.92);
+  border-bottom: 1px solid var(--color-border-dark);
 }
 
 .glass-card {
-  background-color: var(--bg-card);
-  border: 1px solid var(--border-color);
+  background-color: var(--color-card-light);
+  border: 1px solid var(--color-border-light);
   box-shadow: var(--shadow-md);
-  transition: var(--transition-smooth);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), background-color var(--transition-normal);
+}
+
+.dark .glass-card {
+  background-color: var(--color-card-dark);
+  border: 1px solid var(--color-border-dark);
 }
 
 .glass-card:hover {
-  background-color: var(--bg-card-hover);
   box-shadow: var(--shadow-lg);
   transform: translateY(-4px);
 }
 
-/* Luxury Card Lift Effect */
+/* Component Consistency Cards */
 .card-hover-lift {
-  transition: var(--transition-smooth);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
 }
 
 .card-hover-lift:hover {
@@ -121,45 +97,24 @@ h1, h2, h3, h4, h5, h6, .font-heading {
 
 /* Status Badges */
 .badge-for-sale {
-  background: rgba(251, 191, 36, 0.15);
-  color: #d97706;
+  background-color: var(--color-badge-sale-bg);
+  color: var(--color-badge-sale-text);
   border: 1px solid rgba(251, 191, 36, 0.3);
 }
 
-.dark .badge-for-sale {
-  color: #fbbf24;
-}
-
 .badge-under-construction {
-  background: rgba(37, 99, 235, 0.15);
-  color: #2563eb;
+  background-color: var(--color-badge-construction-bg);
+  color: var(--color-badge-construction-text);
   border: 1px solid rgba(37, 99, 235, 0.3);
 }
 
-.dark .badge-under-construction {
-  color: #60a5fa;
-}
-
 .badge-for-rent {
-  background: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  background-color: var(--color-badge-rent-bg);
+  color: var(--color-badge-rent-text);
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
-.dark .badge-for-rent {
-  color: #34d399;
-}
-
-/* Animations */
-@keyframes floatSlow {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-8px); }
-}
-
-.animate-float {
-  animation: floatSlow 5s ease-in-out infinite;
-}
-
+/* Pulse Animation for Floating CTA */
 @keyframes pulseGlow {
   0%, 100% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
   50% { box-shadow: 0 0 30px rgba(37, 99, 235, 0.8); }
@@ -169,20 +124,11 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   animation: pulseGlow 2.5s infinite;
 }
 
-@keyframes spinIcon {
-  from { transform: rotate(0deg) scale(0.8); }
-  to { transform: rotate(360deg) scale(1); }
-}
-
-.theme-icon-animate {
-  animation: spinIcon 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
 /* Scroll To Top Button */
 #scroll-to-top {
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
+  transition: opacity var(--transition-normal), visibility var(--transition-normal), transform var(--transition-fast);
 }
 
 #scroll-to-top.visible {
@@ -190,20 +136,28 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   visibility: visible;
 }
 
-/* Custom Scrollbar */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-primary);
+  background: var(--color-bg-light);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: var(--color-bg-dark);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
-  border-radius: 4px;
+  background: var(--color-border-light);
+  border-radius: var(--radius-sm);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: var(--color-border-dark);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold);
+  background: var(--color-primary);
 }
