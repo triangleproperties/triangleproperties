@@ -1,133 +1,171 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Properties & Listings | Triangle Properties Pvt. Ltd.</title>
-  <meta name="description" content="Browse CMDA & DTCP approved luxury apartments, villas, plots, and commercial spaces for sale and rent in Chennai. Filter by price, BHK, and location.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Collections & Portfolio | Triangle Properties</title>
+  <meta name="description" content="Browse CMDA & DTCP approved luxury apartments, villas, plots, and commercial spaces for sale and rent in Chennai."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
   <script>
     tailwind.config = {
-      darkMode: 'class',
+      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            amber: { 400: '#E5C158', 500: '#D4AF37', 600: '#B59226' },
-            blue: { 600: '#2563eb', 700: '#1d4ed8' },
-            slate: { 900: '#0B0F19', 950: '#060911' }
+            surface: "var(--color-surface)",
+            "on-surface": "var(--color-on-surface)",
+            "on-surface-variant": "var(--color-on-surface-variant)",
+            primary: "var(--color-primary)",
+            secondary: "var(--color-secondary)"
+          },
+          fontFamily: {
+            display: ["'Cormorant Garamond'", "serif"],
+            body: ["Inter", "sans-serif"],
+            button: ["Poppins", "sans-serif"]
           }
         }
       }
     }
   </script>
-  <link rel="stylesheet" href="css/variables.css">
-  <link rel="stylesheet" href="css/styles.css">
+
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
 
   <!-- NAVBAR -->
-  <header id="navbar" class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 md:px-8">
-      <div class="flex items-center justify-between h-20">
-        <a href="index.html" class="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-xl">
-          <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="60" class="h-12 w-auto object-contain transition-transform group-hover:scale-105">
-        </a>
+  <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-16 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-11 w-auto object-contain transition-transform group-hover:scale-105">
+      </a>
 
-        <nav class="hidden lg:flex items-center gap-7">
-          <a href="index.html" class="nav-link text-sm font-medium hover:text-amber-500">Home</a>
-          <a href="about.html" class="nav-link text-sm font-medium hover:text-amber-500">About Us</a>
-          <a href="services.html" class="nav-link text-sm font-medium hover:text-amber-500">Services</a>
-          <a href="properties.html" class="nav-link text-sm font-bold text-amber-500">Properties</a>
-          <a href="construction.html" class="nav-link text-sm font-medium hover:text-amber-500">Construction</a>
-          <a href="joint-venture.html" class="nav-link text-sm font-medium hover:text-amber-500">Joint Venture</a>
-          <a href="gallery.html" class="nav-link text-sm font-medium hover:text-amber-500">Gallery</a>
-          <a href="contact.html" class="nav-link text-sm font-medium hover:text-amber-500">Contact</a>
-        </nav>
+      <nav class="hidden lg:flex items-center gap-7">
+        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-amber-500 border-b border-amber-500 pb-1">Portfolio</a>
+        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Collections</a>
+        <a href="construction.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Construction</a>
+        <a href="joint-venture.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Joint Venture</a>
+        <a href="gallery.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Gallery</a>
+        <a href="about.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">About</a>
+        <a href="services.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Services</a>
+        <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
+      </nav>
 
-        <div class="flex items-center gap-3">
-          <button type="button" aria-label="Toggle dark mode" class="theme-toggle-btn p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-            <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-            <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-          </button>
-          <a href="contact.html" class="hidden sm:inline-flex px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm">Book Visit</a>
-        </div>
+      <div class="flex items-center gap-3">
+        <a href="tel:8838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-xl">call</span></a>
+        <a href="https://wa.me/918838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-xl">chat</span></a>
+        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+        <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Visit</a>
       </div>
     </div>
   </header>
 
   <!-- BANNER -->
-  <section class="pt-32 pb-16 bg-slate-900 text-white relative overflow-hidden text-center">
-    <div class="max-w-7xl mx-auto px-4 md:px-8 relative z-10">
-      <span class="text-amber-400 text-xs font-bold uppercase tracking-widest block mb-2">Verified Real Estate</span>
-      <h1 class="text-3xl sm:text-5xl font-black font-heading mb-4">Explore Premier Properties</h1>
-      <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-        Filter through luxury apartments, sea-view villas, commercial hubs, and DTCP approved plot layouts in Vadapalani & Chennai.
-      </p>
-    </div>
+  <section class="py-20 px-6 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Exclusive Portfolio</span>
+    <h1 class="font-display text-4xl sm:text-6xl font-light mb-4">Signature Real Estate Collections</h1>
+    <p class="font-body text-slate-600 dark:text-slate-300 text-sm max-w-xl mx-auto">
+      CMDA & DTCP approved luxury apartments, beach villas, gated plots, and commercial spaces in Vadapalani & Chennai.
+    </p>
   </section>
 
   <!-- SEARCH TOOLBAR -->
-  <section class="py-8 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-20 z-30 shadow-md">
-    <div class="max-w-7xl mx-auto px-4 md:px-8">
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-center">
-        
-        <div class="lg:col-span-2 relative">
-          <input type="text" id="search-keyword" placeholder="Search by name, location (e.g. Vadapalani, Anna Nagar)..." 
-                 class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm focus:outline-none focus:border-amber-500 font-medium">
-          <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </div>
+  <section class="py-6 px-6 md:px-16 max-w-[1440px] mx-auto sticky top-20 z-30 glass-nav border-b border-slate-200 dark:border-slate-800">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 items-center">
+      <div class="lg:col-span-2 relative">
+        <input type="text" id="search-keyword" placeholder="Search location (Vadapalani, ECR, Anna Nagar)..." 
+               class="w-full pl-10 pr-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500">
+        <span class="material-symbols-outlined absolute left-3 top-3 text-slate-400 text-base">search</span>
+      </div>
 
-        <div>
-          <select id="filter-type" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold">
-            <option value="ALL">All Categories</option>
-            <option value="Apartment">Apartment / Flat</option>
-            <option value="Villa">Luxury Villa</option>
-            <option value="Plot">Gated Plot</option>
-            <option value="Commercial">Commercial Space</option>
-          </select>
-        </div>
+      <div>
+        <select id="filter-type" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm font-button uppercase">
+          <option value="ALL">All Categories</option>
+          <option value="Apartment">Apartments</option>
+          <option value="Villa">Villas</option>
+          <option value="Plot">Gated Plots</option>
+          <option value="Commercial">Commercial</option>
+        </select>
+      </div>
 
-        <div>
-          <select id="filter-status" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold">
-            <option value="ALL">All Statuses</option>
-            <option value="For Sale">For Sale</option>
-            <option value="Under Construction">Under Construction</option>
-            <option value="For Rent">For Rent</option>
-          </select>
-        </div>
+      <div>
+        <select id="filter-status" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm font-button uppercase">
+          <option value="ALL">All Statuses</option>
+          <option value="For Sale">For Sale</option>
+          <option value="Under Construction">Under Construction</option>
+          <option value="For Rent">For Rent</option>
+        </select>
+      </div>
 
-        <div>
-          <select id="filter-price" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm font-semibold">
-            <option value="9999999999">Max Price: Any</option>
-            <option value="5000000">Up to ₹ 50 Lakhs</option>
-            <option value="10000000">Up to ₹ 1.0 Crore</option>
-            <option value="20000000">Up to ₹ 2.0 Crores</option>
-            <option value="40000000">Up to ₹ 4.0 Crores</option>
-          </select>
-        </div>
-
+      <div>
+        <select id="filter-price" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm font-button uppercase">
+          <option value="9999999999">Max Price: Any</option>
+          <option value="5000000">Up to ₹ 50 Lakhs</option>
+          <option value="10000000">Up to ₹ 1.0 Cr</option>
+          <option value="20000000">Up to ₹ 2.0 Cr</option>
+          <option value="40000000">Up to ₹ 4.0 Cr</option>
+        </select>
       </div>
     </div>
   </section>
 
   <!-- GRID -->
-  <main class="py-16 flex-grow">
-    <div class="max-w-7xl mx-auto px-4 md:px-8">
-      <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Rendered by properties.js -->
-      </div>
+  <main class="py-16 px-6 md:px-16 max-w-[1440px] mx-auto flex-grow">
+    <div id="properties-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Rendered dynamically -->
     </div>
   </main>
 
-  <footer class="bg-slate-950 text-slate-400 pt-12 pb-8 border-t border-slate-900 mt-auto text-center text-xs">
-    <p>© 2026 Triangle Properties Pvt. Ltd. All rights reserved.</p>
+  <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-16 text-slate-600 dark:text-slate-400">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-16 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+      <div class="md:col-span-1">
+        <a href="index.html" class="inline-block mb-4">
+          <img src="assets/logo.png" alt="Triangle Properties Logo" class="h-10 w-auto object-contain">
+        </a>
+        <p class="font-body text-xs leading-relaxed mb-4">Triangle Properties Pvt. Ltd. — Vadapalani, Chennai.</p>
+        <div class="flex items-center gap-4">
+          <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+          </a>
+          <a href="https://www.facebook.com/Triangleproperties/?ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/></svg>
+          </a>
+          <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
+            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Portfolio</h3>
+        <ul class="space-y-2.5 text-xs font-body">
+          <li><a href="properties.html?type=Apartment" class="hover:text-amber-500 transition-colors">Residential Apartments</a></li>
+          <li><a href="properties.html?type=Villa" class="hover:text-amber-500 transition-colors">Independent Villas</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Services</h3>
+        <ul class="space-y-2.5 text-xs font-body">
+          <li><a href="construction.html" class="hover:text-amber-500 transition-colors">Turnkey Construction</a></li>
+          <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Joint Venture</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Vadapalani HQ</h3>
+        <p class="font-body text-xs mb-2">No.23, Pillaiyar Kovil Street, Vadapalani, Chennai - 600026</p>
+        <p class="font-body text-xs">Phone: 8838957874</p>
+      </div>
+    </div>
+    <div class="border-t border-slate-200 dark:border-slate-900 pt-8 text-center text-xs text-slate-500">
+      <p>© 2026 Triangle Properties Pvt. Ltd. All rights reserved.</p>
+    </div>
   </footer>
 
   <script src="js/data.js"></script>

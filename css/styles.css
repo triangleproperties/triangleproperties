@@ -1,7 +1,6 @@
-/* Triangle Properties Pvt. Ltd. - Stylesheet & Accessibility System */
+/* Aurelian Estate System - Light & Dark Dual Theme Stylesheet */
 @import url('variables.css');
 
-/* Global Reset & Focus Visible Accessibility */
 *:focus-visible {
   outline: 2px solid var(--color-primary) !important;
   outline-offset: 2px !important;
@@ -9,25 +8,33 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
 body {
-  background-color: var(--color-bg-light);
-  color: var(--color-text-light);
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
   font-family: var(--font-body);
-  transition: background-color var(--transition-normal), color var(--transition-normal);
-  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background-color var(--transition-normal), color var(--transition-normal);
 }
 
-.dark body {
-  background-color: var(--color-bg-dark);
-  color: var(--color-text-dark);
-}
-
-h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: var(--font-heading);
+/* Typography */
+h1, h2, h3, h4, h5, h6, .font-display, .font-serif {
+  font-family: var(--font-display);
   letter-spacing: -0.02em;
+}
+
+h1 { font-weight: 300; line-height: 1.1; }
+h2, h3 { font-weight: 400; line-height: 1.2; }
+
+.font-button, button, .btn {
+  font-family: var(--font-button);
+  font-weight: 600;
+  letter-spacing: 0.05em;
 }
 
 /* Top Scroll Progress Bar */
@@ -36,128 +43,100 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   top: 0;
   left: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  background: linear-gradient(90deg, #d4af37, #f2ca50);
   z-index: 100;
   width: 0%;
   transition: width 100ms ease-out;
 }
 
-/* Glassmorphism Classes */
+/* Glassmorphism Navigation */
 .glass-nav {
-  background-color: rgba(255, 255, 255, 0.90);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--color-border-light);
+  background: var(--glass-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: var(--glass-border);
+  transition: background-color var(--transition-normal), border-color var(--transition-normal);
 }
 
-.dark .glass-nav {
-  background-color: rgba(15, 23, 42, 0.92);
-  border-bottom: 1px solid var(--color-border-dark);
-}
-
+/* Glassmorphism Cards */
 .glass-card {
-  background-color: var(--color-card-light);
-  border: 1px solid var(--color-border-light);
-  box-shadow: var(--shadow-md);
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal), background-color var(--transition-normal);
-}
-
-.dark .glass-card {
-  background-color: var(--color-card-dark);
-  border: 1px solid var(--color-border-dark);
+  background: var(--color-surface-container-low);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  box-shadow: var(--shadow-card);
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal), border-color var(--transition-normal), background-color var(--transition-normal);
 }
 
 .glass-card:hover {
-  box-shadow: var(--shadow-lg);
   transform: translateY(-4px);
+  border-color: var(--color-primary);
 }
 
-/* Component Consistency Cards */
-.card-hover-lift {
-  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+/* Metallic Gold Accent */
+.gold-gradient-bg {
+  background: linear-gradient(135deg, #f2ca50 0%, #d4af37 50%, #b59226 100%);
 }
 
-.card-hover-lift:hover {
-  transform: translateY(-6px);
-  box-shadow: var(--shadow-2xl);
-}
-
-/* Text Gradients */
-.gradient-gold {
-  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+.gold-gradient-text {
+  background: linear-gradient(135deg, #d4af37 0%, #f2ca50 50%, #b59226 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-.gradient-blue {
-  background: linear-gradient(135deg, #60a5fa 0%, #2563eb 100%);
+html.dark .gold-gradient-text {
+  background: linear-gradient(135deg, #ffe088 0%, #f2ca50 50%, #d4af37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Status Badges */
-.badge-for-sale {
-  background-color: var(--color-badge-sale-bg);
-  color: var(--color-badge-sale-text);
-  border: 1px solid rgba(251, 191, 36, 0.3);
+/* Buttons */
+.btn-primary {
+  background: linear-gradient(135deg, #f2ca50 0%, #d4af37 100%);
+  color: #110e07;
+  font-family: var(--font-button);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  padding: 0.875rem 2rem;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
-.badge-under-construction {
-  background-color: var(--color-badge-construction-bg);
-  color: var(--color-badge-construction-text);
-  border: 1px solid rgba(37, 99, 235, 0.3);
+.btn-primary:hover {
+  transform: scale(1.03);
+  box-shadow: 0 10px 25px rgba(212, 175, 55, 0.35);
 }
 
-.badge-for-rent {
-  background-color: var(--color-badge-rent-bg);
-  color: var(--color-badge-rent-text);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+.btn-secondary {
+  background: transparent;
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
+  font-family: var(--font-button);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  padding: 0.875rem 2rem;
+  transition: background-color var(--transition-fast), color var(--transition-fast), transform var(--transition-fast);
 }
 
-/* Pulse Animation for Floating CTA */
-@keyframes pulseGlow {
-  0%, 100% { box-shadow: 0 0 15px rgba(37, 99, 235, 0.4); }
-  50% { box-shadow: 0 0 30px rgba(37, 99, 235, 0.8); }
+.btn-secondary:hover {
+  background: rgba(212, 175, 55, 0.1);
+  transform: scale(1.03);
 }
 
-.animate-pulse-glow {
-  animation: pulseGlow 2.5s infinite;
+/* Theme Icon Animation */
+.theme-icon-animate {
+  transform: rotate(360deg) scale(1.1);
+  transition: transform 400ms ease-in-out;
 }
 
-/* Scroll To Top Button */
+/* Scroll To Top */
 #scroll-to-top {
   opacity: 0;
   visibility: hidden;
-  transition: opacity var(--transition-normal), visibility var(--transition-normal), transform var(--transition-fast);
+  transition: opacity var(--transition-normal), visibility var(--transition-normal);
 }
 
 #scroll-to-top.visible {
   opacity: 1;
   visibility: visible;
-}
-
-/* Scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: var(--color-bg-light);
-}
-
-.dark ::-webkit-scrollbar-track {
-  background: var(--color-bg-dark);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-border-light);
-  border-radius: var(--radius-sm);
-}
-
-.dark ::-webkit-scrollbar-thumb {
-  background: var(--color-border-dark);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-primary);
 }

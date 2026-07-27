@@ -15,6 +15,11 @@ const TRIANGLE_DATA = {
     email: "info@triangleproperties.in",
     address: "No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India",
     domains: ["triangleproperties.in", "trianglepropertiespvt.com"],
+    socialLinks: {
+      instagram: "https://www.instagram.com/trianglepropertiespvt/",
+      facebook: "https://www.facebook.com/Triangleproperties/?ref=NONE_xav_ig_profile_page_web#",
+      googleReviews: "https://www.google.com/search?q=trianglepropertiespvt+google+reviews"
+    },
     mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.6872580436444!2d80.2089901!3d13.0506307!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266c1f1f280a9%3A0x6b801a2f64d0d0f5!2sVadapalani%2C%20Chennai%2C%20Tamil%20Nadu%20600026!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
     workingHours: "Mon - Sat: 9:00 AM - 7:30 PM | Sun: By Appointment"
   },
@@ -241,30 +246,79 @@ const TRIANGLE_DATA = {
     }
   ],
 
+  // Real Authentic Google Reviews
   testimonials: [
     {
       id: "test-1",
-      name: "Ramesh & Sunitha",
-      role: "Apartment Buyers (Vadapalani)",
+      name: "Suryamech",
+      role: "Verified Google Reviewer (3 Reviews)",
       rating: 5,
+      time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-      content: "Triangle Properties Pvt. Ltd. delivers outstanding real estate quality. The purchase of our Vadapalani apartment was transparent and completed right on schedule."
+      content: "Excellent service from start to finish. The team was professional, transparent, and very supportive throughout the entire process. They helped us find the perfect property with clear guidance and quick responses to all our questions. Highly trustworthy and customer friendly company."
     },
     {
       id: "test-2",
-      name: "Dr. K. Parthasarathy",
-      role: "Landowner - Joint Venture Partner",
+      name: "Dillibabu Ramu",
+      role: "Google Reviewer (8 Reviews • 3 Photos)",
       rating: 5,
+      time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-      content: "I entrusted my land for Joint Venture development with Triangle Properties. They constructed an 8-flat luxury apartment complex with top-grade materials."
+      content: "Perfect location! Perfect choice! Perfect partner! Perfect price! Triangle Properties service is professional, organized, and customer-friendly."
     },
     {
       id: "test-3",
-      name: "Anand Vikram",
-      role: "Villa Owner (ECR)",
+      name: "Sandhiya Jagadeesan",
+      role: "Google Reviewer (4 Reviews)",
       rating: 5,
+      time: "2 months ago",
+      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
+      content: "Very happy with our land purchase experience. The team was very trustworthy and guided clearly according to our budget. Every step was transparent, and felt money was completely safe. All documents were genuine and properly explained."
+    },
+    {
+      id: "test-4",
+      name: "Sathesh S",
+      role: "Google Reviewer (2 Reviews)",
+      rating: 5,
+      time: "2 months ago",
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-      content: "Their turnkey construction team is exceptional. Itemized estimates, zero hidden costs, weekly progress reports, and great Vastu layout."
+      content: "It was easy to contact these people, and their rates are very competitive. I am planning to purchase one of these properties soon. Thank you, everyone."
+    },
+    {
+      id: "test-5",
+      name: "Shankar M",
+      role: "Google Reviewer (5 Reviews • 3 Photos)",
+      rating: 5,
+      time: "2 months ago",
+      avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&q=80",
+      content: "Kutumbakam project land I am also purchasing. Good place, customer support is very friendly."
+    },
+    {
+      id: "test-6",
+      name: "Ashok Thapa M",
+      role: "Google Local Guide (22 Reviews)",
+      rating: 5,
+      time: "1 year ago",
+      avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&q=80",
+      content: "The most trusted company and referred by my friend... well guided persons and had the best experience."
+    },
+    {
+      id: "test-7",
+      name: "Keshore Muruga",
+      role: "Google Reviewer (4 Reviews)",
+      rating: 5,
+      time: "1 year ago",
+      avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=200&q=80",
+      content: "Best property company I ever came across. Kind management and helpful employees."
+    },
+    {
+      id: "test-8",
+      name: "S Natarajan",
+      role: "Google Reviewer (4 Reviews)",
+      rating: 5,
+      time: "6 months ago",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&q=80",
+      content: "Best projects and price, very good customer service and transparency."
     }
   ],
 

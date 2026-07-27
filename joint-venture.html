@@ -1,175 +1,124 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Joint Venture (JV) Land Development | Triangle Properties Pvt. Ltd.</title>
-  <meta name="description" content="Unlock maximum wealth from your land in Chennai with zero financial investment. Partner with Triangle Properties Pvt. Ltd. for Joint Venture apartment & commercial projects.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Joint Venture Landowners | Triangle Properties</title>
+  <meta name="description" content="Partner with Triangle Properties Pvt. Ltd. for Joint Venture (JV) land development in Vadapalani, ECR, Anna Nagar & Chennai. Maximum built-up area sharing."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
+      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
-            blue: { 600: '#2563eb', 700: '#1d4ed8' },
-            slate: { 900: '#0f172a', 950: '#020617' }
+            surface: "var(--color-surface)",
+            "on-surface": "var(--color-on-surface)",
+            "on-surface-variant": "var(--color-on-surface-variant)",
+            primary: "var(--color-primary)",
+            secondary: "var(--color-secondary)"
+          },
+          fontFamily: {
+            display: ["'Cormorant Garamond'", "serif"],
+            body: ["Inter", "sans-serif"],
+            button: ["Poppins", "sans-serif"]
           }
         }
       }
     }
   </script>
-  <link rel="stylesheet" href="css/styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
 
   <!-- NAVBAR -->
-  <header id="navbar" class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        <a href="index.html" class="flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg">
-            <svg class="w-6 h-6 text-slate-950 stroke-current stroke-2" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0v-8a2 2 0 012-2h2a2 2 0 012 2v8" /></svg>
-          </div>
-          <div>
-            <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white font-heading block leading-none">
-              TRIANGLE <span class="text-amber-500">PROPERTIES</span>
-            </span>
-            <span class="text-[10px] font-bold tracking-wider text-amber-500 block mt-0.5">Joint Venture</span>
-          </div>
-        </a>
+  <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-16 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-11 w-auto object-contain transition-transform group-hover:scale-105">
+      </a>
 
-        <nav class="hidden lg:flex items-center gap-7">
-          <a href="index.html" class="nav-link text-sm font-medium hover:text-amber-500">Home</a>
-          <a href="about.html" class="nav-link text-sm font-medium hover:text-amber-500">About Us</a>
-          <a href="services.html" class="nav-link text-sm font-medium hover:text-amber-500">Services</a>
-          <a href="properties.html" class="nav-link text-sm font-medium hover:text-amber-500">Properties</a>
-          <a href="construction.html" class="nav-link text-sm font-medium hover:text-amber-500">Construction</a>
-          <a href="joint-venture.html" class="nav-link text-sm font-bold text-amber-500">Joint Venture</a>
-          <a href="gallery.html" class="nav-link text-sm font-medium hover:text-amber-500">Gallery</a>
-          <a href="contact.html" class="nav-link text-sm font-medium hover:text-amber-500">Contact</a>
-        </nav>
+      <nav class="hidden lg:flex items-center gap-7">
+        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Portfolio</a>
+        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Collections</a>
+        <a href="construction.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Construction</a>
+        <a href="joint-venture.html" class="nav-link font-button text-xs tracking-widest uppercase text-amber-500 border-b border-amber-500 pb-1">Joint Venture</a>
+        <a href="gallery.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Gallery</a>
+        <a href="about.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">About</a>
+        <a href="services.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Services</a>
+        <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
+      </nav>
 
-        <div class="flex items-center gap-3">
-          <button type="button" class="theme-toggle-btn p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-            <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-            <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-          </button>
-          <a href="contact.html" class="hidden sm:inline-flex px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm">Book Visit</a>
-        </div>
+      <div class="flex items-center gap-3">
+        <a href="tel:8838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-xl">call</span></a>
+        <a href="https://wa.me/918838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-xl">chat</span></a>
+        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+        <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Visit</a>
       </div>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="pt-32 pb-16 bg-slate-900 text-white relative overflow-hidden text-center">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <span class="text-amber-400 text-xs font-bold uppercase tracking-widest block mb-2">Landowner Partnership</span>
-      <h1 class="text-3xl sm:text-5xl font-black font-heading mb-4">Joint Venture Land Development</h1>
-      <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-        Transform your vacant plot into a high-yield residential apartment complex with 100% developer financing and transparent built-up sharing.
-      </p>
-    </div>
+  <!-- BANNER -->
+  <section class="py-20 px-6 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Landowner Partnership</span>
+    <h1 class="font-display text-4xl sm:text-6xl font-light mb-4">Joint Venture Land Development</h1>
+    <p class="font-body text-slate-600 dark:text-slate-300 text-sm max-w-xl mx-auto">
+      Convert your prime land into high-value luxury apartments with zero landowner capital required.
+    </p>
   </section>
 
-  <!-- ADVANTAGES -->
-  <section class="py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
-      
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="glass-card card-hover-lift p-8 rounded-3xl">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+  <!-- PROPOSAL FORM -->
+  <main class="py-16 px-6 md:px-16 max-w-[1440px] mx-auto flex-grow space-y-16">
+    <div class="glass-card p-8 md:p-12 border-amber-500/30 max-w-3xl mx-auto shadow-2xl">
+      <h2 class="font-display text-3xl text-center mb-2">Landowner JV Proposal Form</h2>
+      <p class="font-body text-xs text-slate-500 dark:text-slate-400 text-center mb-8">Submit your plot details for an expert legal and financial feasibility study.</p>
+
+      <form class="triangle-inquiry-form space-y-4">
+        <input type="hidden" name="propertyType" value="Joint Venture Proposal">
+
+        <div>
+          <label for="jv-name" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Landowner Name *</label>
+          <input type="text" id="jv-name" name="name" required placeholder="Full Name" 
+                 class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="jv-phone" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Mobile Number *</label>
+            <input type="tel" id="jv-phone" name="phone" required placeholder="Phone Number" 
+                   class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
           </div>
-          <h3 class="text-xl font-bold font-heading mb-2">Zero Capital Needed</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Landowners supply the property while Triangle Properties Pvt. Ltd. funds 100% of planning, statutory approvals, and construction expenses.
-          </p>
-        </div>
-
-        <div class="glass-card card-hover-lift p-8 rounded-3xl">
-          <div class="w-12 h-12 rounded-2xl bg-blue-600/10 text-blue-600 flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+          <div>
+            <label for="jv-location" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Plot Location *</label>
+            <input type="text" id="jv-location" name="budget" required placeholder="e.g. Vadapalani, Anna Nagar" 
+                   class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
           </div>
-          <h3 class="text-xl font-bold font-heading mb-2">Max Built-Up Share</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Our architectural team optimizes Floor Space Index (FSI) to deliver maximum square footage of luxurious apartments or commercial space.
-          </p>
         </div>
 
-        <div class="glass-card card-hover-lift p-8 rounded-3xl">
-          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center mb-6">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-          </div>
-          <h3 class="text-xl font-bold font-heading mb-2">Legal Security</h3>
-          <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-            Legal-vetted Joint Development Agreements (JDA) and Power of Attorney (POA) drafted by senior High Court advocates.
-          </p>
-        </div>
-      </div>
-
-      <!-- Landowner Proposal Form Card -->
-      <div class="glass-card p-8 md:p-12 rounded-3xl bg-slate-950 text-white border border-slate-800 shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 right-0 p-8 opacity-10">
-          <svg class="w-48 h-48 text-amber-500" fill="currentColor" viewBox="0 0 24 24"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0v-8a2 2 0 012-2h2a2 2 0 012 2v8"/></svg>
+        <div>
+          <label for="jv-message" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Land Details & Road Width</label>
+          <textarea id="jv-message" name="message" rows="3" placeholder="Plot area in sqft / grounds, road width, surrounding landmark..." 
+                    class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500"></textarea>
         </div>
 
-        <div class="relative z-10">
-          <div class="text-center max-w-xl mx-auto mb-10">
-            <span class="px-3.5 py-1 rounded-full text-xs font-bold uppercase bg-amber-500/10 text-amber-400 border border-amber-500/30 inline-block mb-3">
-              Landowner Evaluation Form
-            </span>
-            <h2 class="text-3xl font-black font-heading">Submit Plot For Joint Venture Study</h2>
-            <p class="text-slate-400 text-xs mt-1">Our JV acquisitions team will complete a free site feasibility & FSI report within 48 hours.</p>
-          </div>
-
-          <form class="triangle-inquiry-form grid grid-cols-1 md:grid-cols-2 gap-6">
-            <input type="hidden" name="propertyType" value="Joint Venture Land Proposal">
-            
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Landowner Full Name *</label>
-              <input type="text" name="name" required placeholder="Your Full Name" 
-                     class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Mobile / WhatsApp Number *</label>
-              <input type="tel" name="phone" required placeholder="Mobile Number (e.g. 8838957874)" 
-                     class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Plot Location & Landmark *</label>
-              <input type="text" name="message" required placeholder="e.g., Vadapalani, 40ft Road Frontage" 
-                     class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors">
-            </div>
-
-            <div>
-              <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Land Extent (Grounds / Sq.Ft) *</label>
-              <input type="text" name="budget" required placeholder="e.g., 2.5 Grounds (6,000 sqft)" 
-                     class="w-full px-4 py-3.5 rounded-xl bg-slate-900 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-500 transition-colors">
-            </div>
-
-            <div class="md:col-span-2">
-              <button type="submit" class="w-full py-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-black text-xs uppercase tracking-wider rounded-xl transition-all shadow-xl">
-                Submit Land Proposal For Free Feasibility Study
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-
+        <button type="submit" class="w-full btn-primary text-xs uppercase tracking-widest">
+          Submit Joint Venture Proposal
+        </button>
+      </form>
     </div>
-  </section>
+  </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-slate-950 text-slate-400 pt-12 pb-8 border-t border-slate-900 mt-auto text-center text-xs">
+  <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900 py-12 text-center text-xs font-body text-slate-500">
     <p>© 2026 Triangle Properties Pvt. Ltd. All rights reserved.</p>
   </footer>
 

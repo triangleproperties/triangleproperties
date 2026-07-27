@@ -1,151 +1,147 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" class="dark scroll-smooth">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Project & Interior Gallery | Triangle Properties</title>
-  <meta name="description" content="Explore high-resolution elevation photos, interior designs, teak modular kitchens, and ongoing construction site photos from Triangle Properties.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Architectural Gallery | Triangle Properties</title>
+  <meta name="description" content="Explore high-resolution photographs of Triangle Properties completed developments, elevation concepts, structural construction progress, and luxury interiors in Vadapalani & Chennai."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
+      darkMode: "class",
       theme: {
         extend: {
           colors: {
-            amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
-            blue: { 600: '#2563eb', 700: '#1d4ed8' },
-            slate: { 900: '#0f172a', 950: '#020617' }
+            surface: "var(--color-surface)",
+            "on-surface": "var(--color-on-surface)",
+            "on-surface-variant": "var(--color-on-surface-variant)",
+            primary: "var(--color-primary)",
+            secondary: "var(--color-secondary)"
+          },
+          fontFamily: {
+            display: ["'Cormorant Garamond'", "serif"],
+            body: ["Inter", "sans-serif"],
+            button: ["Poppins", "sans-serif"]
           }
         }
       }
     }
   </script>
-  <link rel="stylesheet" href="css/styles.css">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
 </head>
-<body class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
 
   <!-- NAVBAR -->
-  <header id="navbar" class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-20">
-        <a href="index.html" class="flex items-center gap-3 group">
-          <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg">
-            <svg class="w-6 h-6 text-slate-950 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0v-8a2 2 0 012-2h2a2 2 0 012 2v8" />
-            </svg>
-          </div>
-          <div>
-            <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white font-heading block leading-none">
-              TRIANGLE <span class="text-amber-500">PROPERTIES</span>
-            </span>
-            <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 block mt-0.5">Project Gallery</span>
-          </div>
-        </a>
+  <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
+    <div class="max-w-[1440px] mx-auto px-6 md:px-16 py-4 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-11 w-auto object-contain transition-transform group-hover:scale-105">
+      </a>
 
-        <nav class="hidden lg:flex items-center gap-7">
-          <a href="index.html" class="nav-link text-sm font-medium hover:text-amber-500">Home</a>
-          <a href="about.html" class="nav-link text-sm font-medium hover:text-amber-500">About Us</a>
-          <a href="services.html" class="nav-link text-sm font-medium hover:text-amber-500">Services</a>
-          <a href="properties.html" class="nav-link text-sm font-medium hover:text-amber-500">Properties</a>
-          <a href="construction.html" class="nav-link text-sm font-medium hover:text-amber-500">Construction</a>
-          <a href="joint-venture.html" class="nav-link text-sm font-medium hover:text-amber-500">Joint Venture</a>
-          <a href="gallery.html" class="nav-link text-sm font-bold text-amber-500">Gallery</a>
-          <a href="contact.html" class="nav-link text-sm font-medium hover:text-amber-500">Contact</a>
-        </nav>
+      <nav class="hidden lg:flex items-center gap-7">
+        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Portfolio</a>
+        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Collections</a>
+        <a href="construction.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Construction</a>
+        <a href="joint-venture.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Joint Venture</a>
+        <a href="gallery.html" class="nav-link font-button text-xs tracking-widest uppercase text-amber-500 border-b border-amber-500 pb-1">Gallery</a>
+        <a href="about.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">About</a>
+        <a href="services.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Services</a>
+        <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
+      </nav>
 
-        <div class="flex items-center gap-3">
-          <button type="button" class="theme-toggle-btn p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-            <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-            <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-          </button>
-          <a href="contact.html" class="hidden sm:inline-flex px-5 py-2.5 rounded-xl bg-amber-500 text-slate-950 font-bold text-sm">Book Visit</a>
-        </div>
+      <div class="flex items-center gap-3">
+        <a href="tel:8838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-xl">call</span></a>
+        <a href="https://wa.me/918838957874" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-xl">chat</span></a>
+        <button type="button" aria-label="Toggle light and dark mode" class="theme-toggle-btn p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+        </button>
+        <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Visit</a>
       </div>
     </div>
   </header>
 
-  <!-- HERO -->
-  <section class="pt-32 pb-16 bg-slate-900 text-white relative overflow-hidden text-center">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <span class="text-amber-400 text-xs font-bold uppercase tracking-widest block mb-2">Visual Showcase</span>
-      <h1 class="text-3xl sm:text-5xl font-black font-heading mb-4">Project & Interior Gallery</h1>
-      <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
-        Explore exterior building elevations, luxury living room interiors, modular teak kitchens, and ongoing site construction progress.
-      </p>
-    </div>
+  <!-- BANNER -->
+  <section class="py-20 px-6 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Visual Heritage</span>
+    <h1 class="font-display text-4xl sm:text-6xl font-light mb-4">Architectural Gallery</h1>
+    <p class="font-body text-slate-600 dark:text-slate-300 text-sm max-w-xl mx-auto">
+      Explore high-resolution photography showcasing completed developments, luxury interior design, and civil engineering progress across Chennai.
+    </p>
   </section>
 
   <!-- GALLERY CATEGORY FILTER BUTTONS -->
-  <section class="py-8 border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-wrap items-center justify-center gap-3">
-      <button onclick="filterGallery('ALL')" class="gal-filter-btn active px-5 py-2.5 rounded-full text-xs font-bold bg-amber-500 text-slate-950 shadow-md">All Photos</button>
-      <button onclick="filterGallery('Elevation')" class="gal-filter-btn px-5 py-2.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950">Elevations</button>
-      <button onclick="filterGallery('Interior')" class="gal-filter-btn px-5 py-2.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950">Interiors</button>
-      <button onclick="filterGallery('Completed')" class="gal-filter-btn px-5 py-2.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950">Completed</button>
-      <button onclick="filterGallery('Construction')" class="gal-filter-btn px-5 py-2.5 rounded-full text-xs font-bold bg-slate-200 dark:bg-slate-800 hover:bg-amber-500 hover:text-slate-950">Site Construction</button>
+  <section class="py-8 px-6 md:px-16 max-w-[1440px] mx-auto">
+    <div class="flex flex-wrap justify-center gap-3 font-button text-xs uppercase tracking-widest">
+      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-amber-500 text-slate-950 font-bold shadow-md" data-filter="ALL">All Photos</button>
+      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Elevation">Elevations</button>
+      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Interior">Interiors</button>
+      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Construction">Construction</button>
+      <button class="gallery-filter-btn px-6 py-2.5 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Completed">Completed</button>
     </div>
   </section>
 
-  <!-- GALLERY GRID -->
-  <main class="py-16 flex-grow">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <!-- Rendered via inline script below -->
-      </div>
+  <!-- GALLERY PHOTO GRID -->
+  <main class="py-12 px-6 md:px-16 max-w-[1440px] mx-auto flex-grow">
+    <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Populated via JavaScript from TRIANGLE_DATA.gallery -->
     </div>
   </main>
 
-  <footer class="bg-slate-950 text-slate-400 pt-12 pb-8 border-t border-slate-900 mt-auto text-center text-xs">
-    <p>© 2026 Triangle Properties & Constructions. All rights reserved.</p>
+  <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-900 py-12 text-center text-xs font-body text-slate-500">
+    <p>© 2026 Triangle Properties Pvt. Ltd. All rights reserved.</p>
   </footer>
 
   <script src="js/data.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/main.js"></script>
   <script>
-    const galleryData = window.TRIANGLE_DATA?.gallery || [];
-
     document.addEventListener('DOMContentLoaded', () => {
       renderGallery('ALL');
+      initGalleryFilters();
     });
 
-    function filterGallery(category) {
-      document.querySelectorAll('.gal-filter-btn').forEach(btn => {
-        btn.classList.remove('bg-amber-500', 'text-slate-950');
-        btn.classList.add('bg-slate-200', 'dark:bg-slate-800');
-      });
-      event.target.classList.remove('bg-slate-200', 'dark:bg-slate-800');
-      event.target.classList.add('bg-amber-500', 'text-slate-950');
+    function renderGallery(filterCategory) {
+      const grid = document.getElementById('gallery-grid');
+      if (!grid || !window.TRIANGLE_DATA) return;
 
-      renderGallery(category);
-    }
+      const items = window.TRIANGLE_DATA.gallery || [];
+      const filtered = filterCategory === 'ALL' ? items : items.filter(item => item.category === filterCategory);
 
-    function renderGallery(category) {
-      const container = document.getElementById('gallery-grid');
-      if (!container) return;
-
-      const items = category === 'ALL' ? galleryData : galleryData.filter(g => g.category === category);
-
-      container.innerHTML = items.map(item => `
-        <div class="glass-card rounded-3xl overflow-hidden group shadow-lg">
-          <div class="relative h-72 overflow-hidden bg-slate-900">
-            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-            <div class="absolute top-4 left-4">
-              <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500 text-slate-950">
-                ${item.category}
-              </span>
+      grid.innerHTML = filtered.map(item => `
+        <div class="glass-card rounded-2xl overflow-hidden group">
+          <div class="aspect-[4/3] overflow-hidden relative">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+            <div class="absolute top-4 left-4 bg-slate-950/80 text-amber-400 font-button text-[10px] uppercase px-3 py-1 rounded-full border border-amber-500/30">
+              ${item.category}
             </div>
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-6">
-              <h3 class="text-white font-bold text-base font-heading">${item.title}</h3>
-            </div>
+          </div>
+          <div class="p-6">
+            <h3 class="font-display text-xl font-bold mb-1">${item.title}</h3>
           </div>
         </div>
       `).join('');
+    }
+
+    function initGalleryFilters() {
+      const buttons = document.querySelectorAll('.gallery-filter-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => {
+            b.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+            b.classList.add('bg-slate-100', 'dark:bg-slate-900', 'border', 'border-slate-300', 'dark:border-slate-800');
+          });
+          btn.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+          renderGallery(btn.getAttribute('data-filter'));
+        });
+      });
     }
   </script>
 </body>
