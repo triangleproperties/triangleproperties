@@ -356,7 +356,7 @@
 
   </main>
 
-  <!-- PROPERTY ADD/EDIT MODAL -->
+  <!-- PROPERTY ADD/EDIT MODAL WITH FIREBASE STORAGE & LOCAL FILE PICKER -->
   <div id="prop-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
     <div class="glass-card p-6 sm:p-8 max-w-2xl w-full my-8 border-amber-500/40 shadow-2xl">
       <h2 id="prop-modal-title" class="font-display text-2xl mb-6">Add New Property</h2>
@@ -419,14 +419,30 @@
           </div>
         </div>
 
+        <!-- IMAGE UPLOADER SECTION (FIREBASE STORAGE + LOCAL FILE) -->
         <div>
-          <label for="prop-image-input" class="block font-button text-xs uppercase text-slate-400 mb-1">Main Cover Image URL *</label>
-          <div class="flex gap-2">
+          <label for="prop-image-input" class="block font-button text-xs uppercase text-slate-400 mb-1">Main Cover Image *</label>
+          <input type="file" id="prop-file-input" accept="image/*" class="hidden">
+          
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <input type="url" id="prop-image-input" required placeholder="https://..." class="flex-grow px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs focus:outline-none focus:border-amber-500">
-            <button type="button" id="prop-upload-img-btn" class="btn-secondary text-xs uppercase px-4 py-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">cloud_upload</span>
-              <span>Upload</span>
+            <button type="button" id="prop-upload-file-btn" class="btn-primary text-xs uppercase px-4 py-2.5 flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <span class="material-symbols-outlined text-base">cloud_upload</span>
+              <span>Upload Photo File</span>
             </button>
+          </div>
+
+          <!-- Upload Progress & Live Thumbnail Preview -->
+          <div id="prop-upload-progress" class="hidden mt-2">
+            <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+              <div id="prop-progress-bar" class="bg-amber-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <span id="prop-progress-text" class="text-[10px] text-amber-500 font-button block mt-1">Uploading to Firebase Storage... 0%</span>
+          </div>
+
+          <div id="prop-preview-container" class="hidden mt-3 flex items-center gap-3 p-2 rounded-xl bg-slate-900 border border-slate-800">
+            <img id="prop-img-preview" src="" alt="Property Preview" class="w-16 h-12 object-cover rounded-lg border border-slate-700">
+            <span class="text-xs text-slate-300 font-button">Live Thumbnail Preview</span>
           </div>
         </div>
 
@@ -448,11 +464,13 @@
     </div>
   </div>
 
-  <!-- GALLERY ADD MODAL -->
+  <!-- GALLERY ADD MODAL WITH FILE UPLOADER -->
   <div id="gal-modal" class="hidden fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
     <div class="glass-card p-6 sm:p-8 max-w-lg w-full border-amber-500/40 shadow-2xl">
       <h2 class="font-display text-2xl mb-4">Upload Gallery Photo</h2>
       <form id="gal-modal-form" class="space-y-4">
+        <input type="file" id="gal-file-input" accept="image/*" class="hidden">
+
         <div>
           <label for="gal-title-input" class="block font-button text-xs uppercase text-slate-400 mb-1">Photo Title *</label>
           <input type="text" id="gal-title-input" required placeholder="e.g. Vadapalani Luxury Crest Elevation" class="w-full px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500">
@@ -467,13 +485,25 @@
           </select>
         </div>
         <div>
-          <label for="gal-image-input" class="block font-button text-xs uppercase text-slate-400 mb-1">Photo Image URL *</label>
-          <div class="flex gap-2">
+          <label for="gal-image-input" class="block font-button text-xs uppercase text-slate-400 mb-1">Photo Image *</label>
+          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
             <input type="url" id="gal-image-input" required placeholder="https://..." class="flex-grow px-4 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs focus:outline-none focus:border-amber-500">
-            <button type="button" id="gal-upload-img-btn" class="btn-secondary text-xs uppercase px-4 py-2 flex items-center gap-1">
-              <span class="material-symbols-outlined text-sm">cloud_upload</span>
-              <span>Upload</span>
+            <button type="button" id="gal-upload-file-btn" class="btn-primary text-xs uppercase px-4 py-2.5 flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <span class="material-symbols-outlined text-base">cloud_upload</span>
+              <span>Upload Photo File</span>
             </button>
+          </div>
+
+          <div id="gal-upload-progress" class="hidden mt-2">
+            <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+              <div id="gal-progress-bar" class="bg-amber-500 h-1.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <span id="gal-progress-text" class="text-[10px] text-amber-500 font-button block mt-1">Uploading... 0%</span>
+          </div>
+
+          <div id="gal-preview-container" class="hidden mt-3 flex items-center gap-3 p-2 rounded-xl bg-slate-900 border border-slate-800">
+            <img id="gal-img-preview" src="" alt="Gallery Preview" class="w-16 h-12 object-cover rounded-lg border border-slate-700">
+            <span class="text-xs text-slate-300 font-button">Live Thumbnail Preview</span>
           </div>
         </div>
         <div class="flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">

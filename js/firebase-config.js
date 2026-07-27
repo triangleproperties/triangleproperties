@@ -1,4 +1,4 @@
-// Triangle Properties Pvt. Ltd. - Firebase Production Auth & Firestore Integration
+// Triangle Properties Pvt. Ltd. - Firebase Production Auth, Firestore & Cloud Storage Integration
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKVhfxCv8mVmjDnzA2Cu-SeskSIM1mpC8",
@@ -33,23 +33,26 @@ const LocalInquiryStore = {
   }
 };
 
-// Dynamically initialize Firebase Auth, Firestore & Analytics Modules
+// Dynamically initialize Firebase Auth, Firestore, Cloud Storage & Analytics
 (async function initFirebase() {
   try {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
     const { getFirestore, collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
     const { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+    const { getStorage, ref, uploadBytesResumable, getDownloadURL } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js");
     const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js");
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
+    const storage = getStorage(app);
     let analytics = null;
     try { analytics = getAnalytics(app); } catch (e) {}
 
     window.firebaseApp = app;
     window.db = db;
     window.firebaseAuth = auth;
+    window.firebaseStorage = storage;
     window.analytics = analytics;
     window.firestoreAddDoc = addDoc;
     window.firestoreCollection = collection;
@@ -59,7 +62,32 @@ const LocalInquiryStore = {
     window.firebaseSignOut = () => signOut(auth);
     window.onFirebaseAuthStateChanged = (callback) => onAuthStateChanged(auth, callback);
 
-    console.log("🔥 Firebase Auth & Firestore initialized for triangle-properties!");
+    // Global Firebase Cloud Storage File Upload Helper
+    window.uploadFileToFirebaseStorage = function(file, folderName = 'uploads', onProgress, onSuccess, onError) {
+      if (!file) return;
+      const cleanFileName = `${Date.now()}_${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+      const storageRef = ref(storage, `${folderName}/${cleanFileName}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log(`Firebase Storage Upload Progress: ${progress.toFixed(0)}%`);
+          if (typeof onProgress === 'function') onProgress(progress);
+        },
+        (error) => {
+          console.error("Firebase Storage Upload Error:", error);
+          if (typeof onError === 'function') onError(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          console.log("🔥 File uploaded to Firebase Storage! URL:", downloadURL);
+          if (typeof onSuccess === 'function') onSuccess(downloadURL);
+        }
+      );
+    };
+
+    console.log("🔥 Firebase Auth, Firestore & Cloud Storage initialized for triangle-properties!");
   } catch (err) {
     console.warn("Firebase SDK initialization notice:", err);
   }

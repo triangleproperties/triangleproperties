@@ -161,12 +161,21 @@ function initPropertiesManager() {
   const propModal = document.getElementById('prop-modal');
   const propForm = document.getElementById('prop-modal-form');
   const cancelBtn = document.getElementById('prop-modal-cancel');
-  const uploadImgBtn = document.getElementById('prop-upload-img-btn');
+  
+  const propFileInput = document.getElementById('prop-file-input');
+  const propUploadFileBtn = document.getElementById('prop-upload-file-btn');
+  const propProgress = document.getElementById('prop-upload-progress');
+  const propProgressBar = document.getElementById('prop-progress-bar');
+  const propProgressText = document.getElementById('prop-progress-text');
+  const propPreviewContainer = document.getElementById('prop-preview-container');
+  const propImgPreview = document.getElementById('prop-img-preview');
 
   addPropBtn?.addEventListener('click', () => {
     propForm.reset();
     document.getElementById('prop-id-input').value = '';
     document.getElementById('prop-modal-title').textContent = 'Add New Signature Property';
+    if (propPreviewContainer) propPreviewContainer.classList.add('hidden');
+    if (propProgress) propProgress.classList.add('hidden');
     propModal?.classList.remove('hidden');
   });
 
@@ -174,12 +183,37 @@ function initPropertiesManager() {
     propModal?.classList.add('hidden');
   });
 
-  uploadImgBtn?.addEventListener('click', () => {
-    if (window.openCloudinaryWidget) {
-      window.openCloudinaryWidget((url) => {
-        document.getElementById('prop-image-input').value = url;
-        if (window.showToast) window.showToast('Uploaded Image URL attached.', 'success');
-      });
+  propUploadFileBtn?.addEventListener('click', () => {
+    propFileInput?.click();
+  });
+
+  propFileInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (propProgress) propProgress.classList.remove('hidden');
+
+    if (typeof window.uploadFileToFirebaseStorage === 'function') {
+      window.uploadFileToFirebaseStorage(
+        file,
+        'properties',
+        (percent) => {
+          if (propProgressBar) propProgressBar.style.width = `${percent}%`;
+          if (propProgressText) propProgressText.textContent = `Uploading to Firebase Storage... ${percent.toFixed(0)}%`;
+        },
+        (downloadURL) => {
+          document.getElementById('prop-image-input').value = downloadURL;
+          if (propImgPreview) propImgPreview.src = downloadURL;
+          if (propPreviewContainer) propPreviewContainer.classList.remove('hidden');
+          if (propProgress) propProgress.classList.add('hidden');
+          if (window.showToast) window.showToast('Photo uploaded to Firebase Cloud Storage!', 'success');
+        },
+        (err) => {
+          handleLocalFileFallback(file, 'prop-image-input', propImgPreview, propPreviewContainer, propProgress);
+        }
+      );
+    } else {
+      handleLocalFileFallback(file, 'prop-image-input', propImgPreview, propPreviewContainer, propProgress);
     }
   });
 
@@ -297,15 +331,38 @@ window.deleteProperty = function(id) {
 /* -------------------------------------------------------------
  * 5. Gallery Management (Full CRUD + XSS Escaped)
  * ------------------------------------------------------------- */
+function handleLocalFileFallback(file, targetInputId, imgPreviewEl, previewContainerEl, progressEl) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const dataUrl = e.target.result;
+    const inputEl = document.getElementById(targetInputId);
+    if (inputEl) inputEl.value = dataUrl;
+    if (imgPreviewEl) imgPreviewEl.src = dataUrl;
+    if (previewContainerEl) previewContainerEl.classList.remove('hidden');
+    if (progressEl) progressEl.classList.add('hidden');
+    if (window.showToast) window.showToast('Local photo preview generated.', 'info');
+  };
+  reader.readAsDataURL(file);
+}
+
 function initGalleryManager() {
   const addGalBtn = document.getElementById('add-gal-btn');
   const galModal = document.getElementById('gal-modal');
   const galForm = document.getElementById('gal-modal-form');
   const cancelBtn = document.getElementById('gal-modal-cancel');
-  const uploadBtn = document.getElementById('gal-upload-img-btn');
+  
+  const galFileInput = document.getElementById('gal-file-input');
+  const galUploadFileBtn = document.getElementById('gal-upload-file-btn');
+  const galProgress = document.getElementById('gal-upload-progress');
+  const galProgressBar = document.getElementById('gal-progress-bar');
+  const galProgressText = document.getElementById('gal-progress-text');
+  const galPreviewContainer = document.getElementById('gal-preview-container');
+  const galImgPreview = document.getElementById('gal-img-preview');
 
   addGalBtn?.addEventListener('click', () => {
     galForm.reset();
+    if (galPreviewContainer) galPreviewContainer.classList.add('hidden');
+    if (galProgress) galProgress.classList.add('hidden');
     galModal?.classList.remove('hidden');
   });
 
@@ -313,12 +370,37 @@ function initGalleryManager() {
     galModal?.classList.add('hidden');
   });
 
-  uploadBtn?.addEventListener('click', () => {
-    if (window.openCloudinaryWidget) {
-      window.openCloudinaryWidget((url) => {
-        document.getElementById('gal-image-input').value = url;
-        if (window.showToast) window.showToast('Photo uploaded to Cloudinary!', 'success');
-      });
+  galUploadFileBtn?.addEventListener('click', () => {
+    galFileInput?.click();
+  });
+
+  galFileInput?.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (galProgress) galProgress.classList.remove('hidden');
+
+    if (typeof window.uploadFileToFirebaseStorage === 'function') {
+      window.uploadFileToFirebaseStorage(
+        file,
+        'gallery',
+        (percent) => {
+          if (galProgressBar) galProgressBar.style.width = `${percent}%`;
+          if (galProgressText) galProgressText.textContent = `Uploading... ${percent.toFixed(0)}%`;
+        },
+        (downloadURL) => {
+          document.getElementById('gal-image-input').value = downloadURL;
+          if (galImgPreview) galImgPreview.src = downloadURL;
+          if (galPreviewContainer) galPreviewContainer.classList.remove('hidden');
+          if (galProgress) galProgress.classList.add('hidden');
+          if (window.showToast) window.showToast('Gallery photo uploaded to Firebase Storage!', 'success');
+        },
+        (err) => {
+          handleLocalFileFallback(file, 'gal-image-input', galImgPreview, galPreviewContainer, galProgress);
+        }
+      );
+    } else {
+      handleLocalFileFallback(file, 'gal-image-input', galImgPreview, galPreviewContainer, galProgress);
     }
   });
 
