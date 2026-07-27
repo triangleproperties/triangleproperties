@@ -34,6 +34,9 @@
 
   <link rel="stylesheet" href="css/variables.css"/>
   <link rel="stylesheet" href="css/styles.css"/>
+
+  <!-- Cloudinary Upload Widget SDK -->
+  <script src="https://upload-widget.cloudinary.com/global/all.js" type="text/javascript"></script>
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
@@ -88,10 +91,17 @@
         <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-1">Lead Management</span>
         <h1 class="font-display text-3xl sm:text-5xl font-light">Customer Inquiries Dashboard</h1>
       </div>
-      <button id="crm-export-btn" type="button" class="btn-primary text-xs uppercase tracking-widest flex items-center justify-center gap-2 py-3 px-6 w-fit">
-        <span class="material-symbols-outlined text-base">download</span>
-        <span>Export CSV</span>
-      </button>
+      <div class="flex flex-wrap items-center gap-3">
+        <button onclick="openCloudinaryWidget((url) => { if(window.showToast) window.showToast('Uploaded to Cloudinary: ' + url, 'success'); })" 
+                type="button" class="btn-secondary text-xs uppercase tracking-widest flex items-center justify-center gap-2 py-3 px-5">
+          <span class="material-symbols-outlined text-base">cloud_upload</span>
+          <span>Upload Image</span>
+        </button>
+        <button id="crm-export-btn" type="button" class="btn-primary text-xs uppercase tracking-widest flex items-center justify-center gap-2 py-3 px-6">
+          <span class="material-symbols-outlined text-base">download</span>
+          <span>Export CSV</span>
+        </button>
+      </div>
     </div>
 
     <!-- KPI METRICS -->
@@ -174,6 +184,7 @@
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/cloudinary-config.js"></script>
   <script src="js/main.js"></script>
   <script src="js/admin.js"></script>
 </body>
