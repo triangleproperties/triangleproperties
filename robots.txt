@@ -1,4 +1,10 @@
+# Triangle Properties Pvt. Ltd. - Search Engine Robots Configuration
 User-agent: *
 Allow: /
+
+# Exclude internal Admin Portal & CRM dashboard from indexing
+Disallow: /admin.html
+Disallow: /admin/
+Disallow: /js/admin.js
 
 Sitemap: https://triangleproperties.in/sitemap.xml

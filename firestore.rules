@@ -1,0 +1,35 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Inquiries Collection: Public website visitors can create leads; only authenticated Admins can read, update, or delete.
+    match /inquiries/{inquiryId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // 2. Properties Collection: Public can view active listings; only authenticated Admins can write.
+    match /properties/{propertyId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 3. Gallery Collection: Public can view photos; only authenticated Admins can write.
+    match /gallery/{imageId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 4. Testimonials Collection: Public can view reviews; only authenticated Admins can write.
+    match /testimonials/{reviewId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 5. Default fallback: Deny all unhandled paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

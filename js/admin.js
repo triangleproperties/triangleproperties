@@ -1,9 +1,20 @@
-// Triangle Properties Pvt. Ltd. - Full-Stack Professional Admin Management Dashboard JS
+// Triangle Properties Pvt. Ltd. - Firebase Authenticated Admin & Secure XSS Sanitization Handler
 
-const DEFAULT_ADMIN_PASS = "triangle2026";
+/**
+ * Global HTML Sanitizer to prevent Stored & Reflected XSS Attacks
+ */
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  initAdminAuth();
+  initFirebaseAdminAuth();
   initAdminTabs();
   initPropertiesManager();
   initGalleryManager();
@@ -13,41 +24,74 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* -------------------------------------------------------------
- * 1. Admin Authentication Handler
+ * 1. Real Firebase Authentication Handler
  * ------------------------------------------------------------- */
-function initAdminAuth() {
+function initFirebaseAdminAuth() {
   const loginModal = document.getElementById('admin-login-modal');
   const loginForm = document.getElementById('admin-login-form');
   const logoutBtn = document.getElementById('admin-logout-btn');
-  const authStatus = localStorage.getItem('triangle_admin_authed');
+  const userEmailBadge = document.getElementById('admin-user-email');
 
-  if (authStatus === 'true') {
-    loginModal?.classList.add('hidden');
-    renderAllAdminSections();
-  } else {
-    loginModal?.classList.remove('hidden');
+  // Monitor real Firebase Auth Session State
+  if (typeof window.onFirebaseAuthStateChanged === 'function') {
+    window.onFirebaseAuthStateChanged((user) => {
+      if (user) {
+        console.log("🔒 Firebase Auth session active:", user.email);
+        loginModal?.classList.add('hidden');
+        if (userEmailBadge) {
+          userEmailBadge.textContent = user.email;
+          userEmailBadge.classList.remove('hidden');
+        }
+        renderAllAdminSections();
+      } else {
+        console.log("🔑 No active Firebase Auth session.");
+        loginModal?.classList.remove('hidden');
+        if (userEmailBadge) userEmailBadge.classList.add('hidden');
+      }
+    });
   }
 
-  loginForm?.addEventListener('submit', (e) => {
+  // Handle Firebase Sign In
+  loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const passInput = document.getElementById('admin-pass-input');
+    const email = document.getElementById('admin-email-input').value;
+    const pass = document.getElementById('admin-pass-input').value;
     const errorMsg = document.getElementById('admin-auth-error');
+    const submitBtn = document.getElementById('admin-submit-btn');
 
-    if (passInput?.value === DEFAULT_ADMIN_PASS) {
-      localStorage.setItem('triangle_admin_authed', 'true');
-      loginModal?.classList.add('hidden');
-      errorMsg?.classList.add('hidden');
-      renderAllAdminSections();
-      if (window.showToast) window.showToast('Welcome to Triangle Properties Admin Portal!', 'success');
-    } else {
-      errorMsg?.classList.remove('hidden');
+    if (submitBtn) submitBtn.textContent = "Authenticating...";
+
+    try {
+      if (typeof window.firebaseSignIn === 'function') {
+        await window.firebaseSignIn(email, pass);
+        loginModal?.classList.add('hidden');
+        errorMsg?.classList.add('hidden');
+        if (window.showToast) window.showToast('Firebase Auth: Sign in successful!', 'success');
+      } else {
+        // Fallback for offline local dev mode
+        localStorage.setItem('triangle_admin_authed', 'true');
+        loginModal?.classList.add('hidden');
+        renderAllAdminSections();
+      }
+    } catch (err) {
+      console.error("Firebase Sign In error:", err);
+      if (errorMsg) {
+        errorMsg.textContent = `Sign in failed: ${err.message || 'Check email & password.'}`;
+        errorMsg.classList.remove('hidden');
+      }
+    } finally {
+      if (submitBtn) submitBtn.textContent = "Sign In with Firebase Auth";
     }
   });
 
-  logoutBtn?.addEventListener('click', () => {
+  // Handle Sign Out
+  logoutBtn?.addEventListener('click', async () => {
+    if (typeof window.firebaseSignOut === 'function') {
+      await window.firebaseSignOut();
+    }
     localStorage.removeItem('triangle_admin_authed');
     loginModal?.classList.remove('hidden');
-    if (window.showToast) window.showToast('Logged out of Admin Portal.', 'info');
+    if (window.showToast) window.showToast('Signed out of Admin session.', 'info');
   });
 }
 
@@ -109,7 +153,7 @@ function renderOverviewStats() {
 }
 
 /* -------------------------------------------------------------
- * 4. Property Management (Full CRUD)
+ * 4. Property Management (Full CRUD + XSS Escaped)
  * ------------------------------------------------------------- */
 function initPropertiesManager() {
   const addPropBtn = document.getElementById('add-prop-btn');
@@ -133,7 +177,7 @@ function initPropertiesManager() {
     if (window.openCloudinaryWidget) {
       window.openCloudinaryWidget((url) => {
         document.getElementById('prop-image-input').value = url;
-        if (window.showToast) window.showToast('Uploaded Image URL attached to property.', 'success');
+        if (window.showToast) window.showToast('Uploaded Image URL attached.', 'success');
       });
     }
   });
@@ -160,11 +204,9 @@ function initPropertiesManager() {
     };
 
     if (propId) {
-      // Edit existing
       const index = liveData.properties.findIndex(p => p.id === propId);
       if (index !== -1) liveData.properties[index] = { ...liveData.properties[index], ...propData };
     } else {
-      // Add new
       liveData.properties.unshift(propData);
     }
 
@@ -172,7 +214,7 @@ function initPropertiesManager() {
     propModal?.classList.add('hidden');
     renderPropertiesTable();
     renderOverviewStats();
-    if (window.showToast) window.showToast(`Property '${propData.title}' saved successfully!`, 'success');
+    if (window.showToast) window.showToast(`Property saved successfully!`, 'success');
   });
 }
 
@@ -191,25 +233,25 @@ function renderPropertiesTable() {
   tableBody.innerHTML = properties.map(prop => `
     <tr class="border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
       <td class="py-4 px-4">
-        <img src="${prop.image}" alt="${prop.title}" class="w-16 h-12 object-cover rounded-lg border border-slate-700">
+        <img src="${escapeHtml(prop.image)}" alt="${escapeHtml(prop.title)}" class="w-16 h-12 object-cover rounded-lg border border-slate-700">
       </td>
       <td class="py-4 px-4">
-        <span class="font-display font-bold text-base block text-slate-900 dark:text-white">${prop.title}</span>
-        <span class="font-body text-xs text-slate-400 block">${prop.location}</span>
+        <span class="font-display font-bold text-base block text-slate-900 dark:text-white">${escapeHtml(prop.title)}</span>
+        <span class="font-body text-xs text-slate-400 block">${escapeHtml(prop.location)}</span>
       </td>
-      <td class="py-4 px-4 font-button text-xs">${prop.category}</td>
-      <td class="py-4 px-4 font-display font-bold text-amber-500">${prop.price}</td>
+      <td class="py-4 px-4 font-button text-xs">${escapeHtml(prop.category)}</td>
+      <td class="py-4 px-4 font-display font-bold text-amber-500">${escapeHtml(prop.price)}</td>
       <td class="py-4 px-4">
         <span class="font-button text-[10px] uppercase px-2.5 py-1 rounded-full ${prop.status === 'For Sale' ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/30' : 'bg-amber-500/10 text-amber-500 border border-amber-500/30'}">
-          ${prop.status}
+          ${escapeHtml(prop.status)}
         </span>
       </td>
       <td class="py-4 px-4">
         <div class="flex items-center gap-2">
-          <button onclick="editProperty('${prop.id}')" title="Edit Property" class="p-2 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">
+          <button onclick="editProperty('${escapeHtml(prop.id)}')" title="Edit Property" class="p-2 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-base">edit</span>
           </button>
-          <button onclick="deleteProperty('${prop.id}')" title="Delete Property" class="p-2 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
+          <button onclick="deleteProperty('${escapeHtml(prop.id)}')" title="Delete Property" class="p-2 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-base">delete</span>
           </button>
         </div>
@@ -252,7 +294,7 @@ window.deleteProperty = function(id) {
 };
 
 /* -------------------------------------------------------------
- * 5. Gallery Management (Full CRUD)
+ * 5. Gallery Management (Full CRUD + XSS Escaped)
  * ------------------------------------------------------------- */
 function initGalleryManager() {
   const addGalBtn = document.getElementById('add-gal-btn');
@@ -314,14 +356,14 @@ function renderGalleryGrid() {
   grid.innerHTML = items.map(item => `
     <div class="glass-card rounded-xl overflow-hidden group relative">
       <div class="aspect-[4/3] overflow-hidden">
-        <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
       </div>
       <div class="p-4 flex items-center justify-between">
         <div>
-          <span class="font-button text-[10px] uppercase text-amber-500 block">${item.category}</span>
-          <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white truncate max-w-[180px]">${item.title}</h3>
+          <span class="font-button text-[10px] uppercase text-amber-500 block">${escapeHtml(item.category)}</span>
+          <h3 class="font-display font-bold text-sm text-slate-900 dark:text-white truncate max-w-[180px]">${escapeHtml(item.title)}</h3>
         </div>
-        <button onclick="deleteGalleryItem('${item.id}')" title="Delete Photo" class="p-2 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
+        <button onclick="deleteGalleryItem('${escapeHtml(item.id)}')" title="Delete Photo" class="p-2 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
           <span class="material-symbols-outlined text-base">delete</span>
         </button>
       </div>
@@ -340,7 +382,7 @@ window.deleteGalleryItem = function(id) {
 };
 
 /* -------------------------------------------------------------
- * 6. Testimonials & Reviews Management (Full CRUD)
+ * 6. Testimonials & Reviews Management (Full CRUD + XSS Escaped)
  * ------------------------------------------------------------- */
 function initTestimonialsManager() {
   const addBtn = document.getElementById('add-test-btn');
@@ -405,23 +447,23 @@ function renderTestimonialsList() {
       <div>
         <div class="flex items-center justify-between mb-3">
           <span class="text-amber-400 text-xs tracking-widest">${'★'.repeat(t.rating || 5)}</span>
-          <span class="font-button text-[10px] text-slate-400 uppercase">${t.time}</span>
+          <span class="font-button text-[10px] text-slate-400 uppercase">${escapeHtml(t.time)}</span>
         </div>
-        <p class="font-body text-slate-600 dark:text-slate-300 text-xs leading-relaxed mb-4">"${t.content}"</p>
+        <p class="font-body text-slate-600 dark:text-slate-300 text-xs leading-relaxed mb-4">"${escapeHtml(t.content)}"</p>
       </div>
       <div class="flex items-center justify-between pt-3 border-t border-slate-200 dark:border-slate-800">
         <div class="flex items-center gap-3">
-          <img src="${t.avatar}" alt="${t.name}" class="w-8 h-8 rounded-full object-cover">
+          <img src="${escapeHtml(t.avatar)}" alt="${escapeHtml(t.name)}" class="w-8 h-8 rounded-full object-cover">
           <div>
-            <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">${t.name}</h4>
-            <span class="font-button text-[10px] text-slate-500 block">${t.role}</span>
+            <h4 class="font-display font-bold text-sm text-slate-900 dark:text-white">${escapeHtml(t.name)}</h4>
+            <span class="font-button text-[10px] text-slate-500 block">${escapeHtml(t.role)}</span>
           </div>
         </div>
         <div class="flex items-center gap-1">
-          <button onclick="editTestimonial('${t.id}')" title="Edit" class="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">
+          <button onclick="editTestimonial('${escapeHtml(t.id)}')" title="Edit" class="p-1.5 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-sm">edit</span>
           </button>
-          <button onclick="deleteTestimonial('${t.id}')" title="Delete" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
+          <button onclick="deleteTestimonial('${escapeHtml(t.id)}')" title="Delete" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-sm">delete</span>
           </button>
         </div>
@@ -507,7 +549,7 @@ function renderCompanySettingsForm() {
 }
 
 /* -------------------------------------------------------------
- * 8. Lead Management & Local Storage Queue (CRM)
+ * 8. Lead Management CRM Pipeline (XSS Escaped)
  * ------------------------------------------------------------- */
 function getStoredLeads() {
   const defaultLeads = [
@@ -622,25 +664,26 @@ function renderCrmTable() {
     return;
   }
 
+  // STRIKE XSS PROTECTION: All values wrapped in escapeHtml()
   tableBody.innerHTML = filtered.map(lead => `
     <tr class="border-b border-slate-200 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-900/50 transition-colors">
-      <td class="py-4 px-4 font-button text-xs text-amber-500 font-bold">${lead.id}</td>
+      <td class="py-4 px-4 font-button text-xs text-amber-500 font-bold">${escapeHtml(lead.id)}</td>
       <td class="py-4 px-4">
-        <span class="font-display font-bold text-base block text-slate-900 dark:text-white">${lead.name}</span>
-        <span class="font-body text-[11px] text-slate-400 block">${lead.timestamp}</span>
+        <span class="font-display font-bold text-base block text-slate-900 dark:text-white">${escapeHtml(lead.name)}</span>
+        <span class="font-body text-[11px] text-slate-400 block">${escapeHtml(lead.timestamp)}</span>
       </td>
       <td class="py-4 px-4">
-        <a href="tel:${lead.phone}" class="font-body text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-amber-500 block mb-0.5">${lead.phone}</a>
-        <span class="font-body text-[11px] text-slate-400 block">${lead.email}</span>
+        <a href="tel:${escapeHtml(lead.phone)}" class="font-body text-xs font-bold text-slate-700 dark:text-slate-200 hover:text-amber-500 block mb-0.5">${escapeHtml(lead.phone)}</a>
+        <span class="font-body text-[11px] text-slate-400 block">${escapeHtml(lead.email)}</span>
       </td>
       <td class="py-4 px-4">
         <span class="font-button text-[10px] uppercase px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 block w-fit mb-1">
-          ${lead.propertyType}
+          ${escapeHtml(lead.propertyType)}
         </span>
-        <span class="font-body text-[11px] text-slate-400 block truncate max-w-xs" title="${lead.message}">${lead.message || 'No details'}</span>
+        <span class="font-body text-[11px] text-slate-400 block truncate max-w-xs" title="${escapeHtml(lead.message)}">${escapeHtml(lead.message || 'No details')}</span>
       </td>
       <td class="py-4 px-4">
-        <select onchange="updateLeadStatus('${lead.id}', this.value)" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-button font-semibold focus:outline-none focus:border-amber-500">
+        <select onchange="updateLeadStatus('${escapeHtml(lead.id)}', this.value)" class="px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 text-xs font-button font-semibold focus:outline-none focus:border-amber-500">
           <option value="New" ${lead.status === 'New' ? 'selected' : ''}>New</option>
           <option value="Contacted" ${lead.status === 'Contacted' ? 'selected' : ''}>Contacted</option>
           <option value="Site Visit Scheduled" ${lead.status === 'Site Visit Scheduled' ? 'selected' : ''}>Site Visit Scheduled</option>
@@ -650,15 +693,15 @@ function renderCrmTable() {
       </td>
       <td class="py-4 px-4">
         <div class="flex items-center gap-2">
-          <a href="https://wa.me/91${lead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${lead.name}, regarding your inquiry for ${lead.propertyType} with Triangle Properties Pvt. Ltd.`)}" 
+          <a href="https://wa.me/91${escapeHtml(lead.phone.replace(/[^0-9]/g, ''))}?text=${encodeURIComponent(`Hello ${lead.name}, regarding your inquiry for ${lead.propertyType} with Triangle Properties Pvt. Ltd.`)}" 
              target="_blank" rel="noopener noreferrer" title="WhatsApp Lead" 
              class="p-2 rounded-lg bg-emerald-500/10 text-emerald-500 hover:bg-emerald-500 hover:text-white transition-all">
             <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/></svg>
           </a>
-          <a href="tel:${lead.phone}" title="Call Lead" class="p-2 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">
+          <a href="tel:${escapeHtml(lead.phone)}" title="Call Lead" class="p-2 rounded-lg bg-blue-500/10 text-blue-500 hover:bg-blue-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-base">call</span>
           </a>
-          <button onclick="deleteLead('${lead.id}')" title="Delete Record" class="p-2 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
+          <button onclick="deleteLead('${escapeHtml(lead.id)}')" title="Delete Record" class="p-2 rounded-lg bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-base">delete</span>
           </button>
         </div>

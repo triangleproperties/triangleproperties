@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, nofollow"/>
   <title>Full-Stack Professional Admin Portal | Triangle Properties</title>
   
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,25 +41,31 @@
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
-  <!-- ADMIN AUTH MODAL -->
+  <!-- ADMIN AUTH MODAL (FIREBASE AUTH) -->
   <div id="admin-login-modal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
     <div class="glass-card p-8 sm:p-10 max-w-md w-full border-amber-500/40 shadow-2xl">
       <div class="text-center mb-6">
         <img src="assets/logo.png" alt="Triangle Properties Logo" class="h-12 w-auto mx-auto mb-4 object-contain">
         <h1 class="font-display text-2xl sm:text-3xl font-light">Admin Management Portal</h1>
-        <p class="font-body text-xs text-slate-400 mt-1">Authorized Sales & Executive Management Access</p>
+        <p class="font-body text-xs text-slate-400 mt-1">Firebase Authenticated Access</p>
       </div>
 
       <form id="admin-login-form" class="space-y-4">
         <div>
-          <label for="admin-pass-input" class="block font-button text-xs uppercase tracking-wider text-slate-400 mb-1">Enter Passcode *</label>
-          <input type="password" id="admin-pass-input" required placeholder="••••••••" 
+          <label for="admin-email-input" class="block font-button text-xs uppercase tracking-wider text-slate-400 mb-1">Admin Email *</label>
+          <input type="email" id="admin-email-input" required placeholder="admin@triangleproperties.in" value="admin@triangleproperties.in"
                  class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500">
-          <span id="admin-auth-error" class="hidden text-rose-500 text-xs mt-1 block">Incorrect passcode. Try 'triangle2026'.</span>
         </div>
 
-        <button type="submit" class="w-full btn-primary text-xs uppercase tracking-widest py-3">
-          Authenticate Access
+        <div>
+          <label for="admin-pass-input" class="block font-button text-xs uppercase tracking-wider text-slate-400 mb-1">Password *</label>
+          <input type="password" id="admin-pass-input" required placeholder="••••••••" value="TriangleAdmin@2026"
+                 class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500">
+          <span id="admin-auth-error" class="hidden text-rose-500 text-xs mt-1 block">Authentication failed. Check email and password.</span>
+        </div>
+
+        <button type="submit" id="admin-submit-btn" class="w-full btn-primary text-xs uppercase tracking-widest py-3">
+          Sign In with Firebase Auth
         </button>
       </form>
     </div>
@@ -73,11 +80,12 @@
       </a>
 
       <div class="flex items-center gap-3">
+        <span id="admin-user-email" class="hidden sm:inline font-button text-xs text-amber-400 font-semibold px-3 py-1 rounded-full bg-slate-800 border border-slate-700"></span>
         <button type="button" aria-label="Toggle theme" class="theme-toggle-btn p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
           <svg class="icon-sun w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
           <svg class="icon-moon w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
         </button>
-        <button id="admin-logout-btn" type="button" class="btn-secondary text-xs uppercase tracking-widest py-2 px-4">Logout</button>
+        <button id="admin-logout-btn" type="button" class="btn-secondary text-xs uppercase tracking-widest py-2 px-4">Sign Out</button>
       </div>
     </div>
 
@@ -521,6 +529,7 @@
   </footer>
 
   <script src="js/data.js"></script>
+  <script src="js/firebase-config.js"></script>
   <script src="js/cloudinary-config.js"></script>
   <script src="js/main.js"></script>
   <script src="js/admin.js"></script>

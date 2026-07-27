@@ -365,6 +365,19 @@ function initInquiryForms() {
         `;
       }
 
+      // Anti-Spam Honeypot Verification
+      const honeypotVal = form.querySelector('[name="website_url_hp"]')?.value;
+      if (honeypotVal) {
+        console.warn("Spam bot submission blocked via honeypot field.");
+        showToast('Inquiry received successfully!', 'success');
+        form.reset();
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalText;
+        }
+        return;
+      }
+
       const formData = {
         name: form.querySelector('[name="name"]')?.value || '',
         phone: form.querySelector('[name="phone"]')?.value || '',

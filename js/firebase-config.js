@@ -1,15 +1,7 @@
-// Triangle Properties Pvt. Ltd. - Firebase Live Cloud Integration
+// Triangle Properties Pvt. Ltd. - Firebase Production Auth & Firestore Integration
 
-// Assembled dynamically to resolve static GitHub secret scanning regex alerts
-function getFirebaseApiKey() {
-  const k1 = "AIzaSyAKVhfxCv8m";
-  const k2 = "VmjDnzA2Cu-SeskSIM1mpC8";
-  return k1 + k2;
-}
-
-// Real Firebase Web App Config for triangle-properties
 const firebaseConfig = {
-  apiKey: getFirebaseApiKey(),
+  apiKey: "AIzaSyAKVhfxCv8mVmjDnzA2Cu-SeskSIM1mpC8",
   authDomain: "triangle-properties.firebaseapp.com",
   databaseURL: "https://triangle-properties-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "triangle-properties",
@@ -19,7 +11,7 @@ const firebaseConfig = {
   measurementId: "G-1W56Z1ESM8"
 };
 
-// Fallback local storage helper
+// Fallback local storage helper for offline mode
 const LocalInquiryStore = {
   saveInquiry: function(inquiryData) {
     try {
@@ -31,10 +23,8 @@ const LocalInquiryStore = {
       };
       existing.push(newEntry);
       localStorage.setItem('triangle_inquiries', JSON.stringify(existing));
-      console.log('Inquiry saved to local fallback store:', newEntry);
       return Promise.resolve({ success: true, id: newEntry.id, mode: 'local' });
     } catch (err) {
-      console.error('Error saving local inquiry:', err);
       return Promise.reject(err);
     }
   },
@@ -43,39 +33,40 @@ const LocalInquiryStore = {
   }
 };
 
-// Dynamically initialize Firebase Modules
+// Dynamically initialize Firebase Auth, Firestore & Analytics Modules
 (async function initFirebase() {
   try {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
     const { getFirestore, collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
     const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js");
 
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
+    const auth = getAuth(app);
     let analytics = null;
-    try {
-      analytics = getAnalytics(app);
-    } catch (e) {
-      console.log("Analytics initialized in non-measurement browser scope");
-    }
+    try { analytics = getAnalytics(app); } catch (e) {}
 
     window.firebaseApp = app;
     window.db = db;
+    window.firebaseAuth = auth;
     window.analytics = analytics;
     window.firestoreAddDoc = addDoc;
     window.firestoreCollection = collection;
     window.firestoreTimestamp = serverTimestamp;
 
-    console.log("🔥 Firebase initialized successfully for triangle-properties!");
+    window.firebaseSignIn = (email, pass) => signInWithEmailAndPassword(auth, email, pass);
+    window.firebaseSignOut = () => signOut(auth);
+    window.onFirebaseAuthStateChanged = (callback) => onAuthStateChanged(auth, callback);
+
+    console.log("🔥 Firebase Auth & Firestore initialized for triangle-properties!");
   } catch (err) {
-    console.warn("Firebase SDK initialization notice (using offline local store):", err);
+    console.warn("Firebase SDK initialization notice:", err);
   }
 })();
 
-// Global Submit Inquiry Handler with Firebase Firestore Cloud Sync
+// Global Submit Inquiry Handler
 async function submitInquiry(formData) {
-  console.log('Submitting inquiry:', formData);
-  
   if (window.db && window.firestoreAddDoc && window.firestoreCollection) {
     try {
       const colRef = window.firestoreCollection(window.db, 'inquiries');
@@ -83,10 +74,8 @@ async function submitInquiry(formData) {
         ...formData,
         createdAt: window.firestoreTimestamp ? window.firestoreTimestamp() : new Date().toISOString()
       });
-      console.log('🔥 Lead saved to Firebase Firestore Cloud! Doc ID:', docRef.id);
       return { success: true, id: docRef.id, mode: 'firestore' };
     } catch (error) {
-      console.warn('Firestore Cloud write failed, falling back to local storage:', error);
       return LocalInquiryStore.saveInquiry(formData);
     }
   } else {
@@ -94,7 +83,6 @@ async function submitInquiry(formData) {
   }
 }
 
-// Export global handlers
 if (typeof window !== 'undefined') {
   window.firebaseConfig = firebaseConfig;
   window.submitInquiry = submitInquiry;
