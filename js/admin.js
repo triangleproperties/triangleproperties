@@ -90,6 +90,7 @@ function initFirebaseAdminAuth() {
       await window.firebaseSignOut();
     }
     localStorage.removeItem('triangle_admin_authed');
+    if (loginForm) loginForm.reset();
     loginModal?.classList.remove('hidden');
     if (window.showToast) window.showToast('Signed out of Admin session.', 'info');
   });
