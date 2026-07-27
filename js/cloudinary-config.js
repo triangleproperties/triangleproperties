@@ -1,9 +1,9 @@
-// Triangle Properties Pvt. Ltd. - Cloudinary Media & Image CDN Integration
+// Triangle Properties Pvt. Ltd. - Cloudinary Production Media & CDN Integration
 
 const CLOUDINARY_CONFIG = {
-  cloudName: "triangle-properties", // Replace with your Cloudinary Cloud Name
-  uploadPreset: "triangle_preset",   // Replace with your Unsigned Upload Preset
-  defaultFolder: "triangle_properties"
+  cloudName: "triangle-properties",
+  uploadPreset: "ltriw2oi",
+  defaultFolder: "triangle-properties/uploads"
 };
 
 /**
@@ -36,7 +36,7 @@ function getCloudinaryUrl(publicIdOrUrl, options = {}) {
  */
 function openCloudinaryWidget(callback) {
   if (typeof window.cloudinary === 'undefined') {
-    alert("Cloudinary script loading... Please ensure internet connection is active.");
+    alert("Cloudinary SDK loading... Please verify your internet connection.");
     return;
   }
 
