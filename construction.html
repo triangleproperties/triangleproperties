@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Turnkey Construction & Cost Estimator | Triangle Properties</title>
+  <meta name="description" content="Turnkey residential and commercial construction services in Chennai. Calculate your estimated building construction cost per sqft using our interactive calculator.">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            amber: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+            blue: { 600: '#2563eb', 700: '#1d4ed8' },
+            slate: { 900: '#0f172a', 950: '#020617' }
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+
+  <!-- NAVBAR -->
+  <header id="navbar" class="fixed top-0 left-0 right-0 z-40 glass-nav transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-20">
+        <a href="index.html" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-amber-500 flex items-center justify-center shadow-lg">
+            <svg class="w-6 h-6 text-slate-950 stroke-current stroke-2" fill="none" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5m0 0h4m-4 0v-8a2 2 0 012-2h2a2 2 0 012 2v8" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-xl font-black tracking-tight text-slate-900 dark:text-white font-heading block leading-none">
+              TRIANGLE <span class="text-amber-500">PROPERTIES</span>
+            </span>
+            <span class="text-[10px] uppercase font-bold tracking-widest text-slate-500 dark:text-slate-400 block mt-0.5">Turnkey Construction</span>
+          </div>
+        </a>
+
+        <nav class="hidden lg:flex items-center gap-7">
+          <a href="index.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">Home</a>
+          <a href="about.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">About Us</a>
+          <a href="services.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">Services</a>
+          <a href="properties.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">Properties</a>
+          <a href="construction.html" class="nav-link text-sm font-bold text-amber-500">Construction</a>
+          <a href="joint-venture.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">Joint Venture</a>
+          <a href="gallery.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">Gallery</a>
+          <a href="contact.html" class="nav-link text-sm font-medium text-slate-700 dark:text-slate-200 hover:text-amber-500">Contact</a>
+        </nav>
+
+        <div class="flex items-center gap-3">
+          <button type="button" class="theme-toggle-btn p-2.5 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+            <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+            <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+          </button>
+          <a href="contact.html" class="hidden sm:inline-flex px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm">Book Visit</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO SECTION -->
+  <section class="pt-32 pb-16 bg-slate-900 text-white relative overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      <span class="text-amber-400 text-xs font-bold uppercase tracking-widest block mb-2">Turnkey Civil Engineering</span>
+      <h1 class="text-3xl sm:text-5xl font-black font-heading mb-4">Turnkey House Construction Services</h1>
+      <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto">
+        From soil testing and structural design to Vastu execution and final interior key handover. Zero hidden costs, transparent material specifications.
+      </p>
+    </div>
+  </section>
+
+  <!-- INTERACTIVE COST ESTIMATOR TOOL -->
+  <section class="py-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="glass-card p-8 md:p-12 rounded-3xl shadow-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
+        <div class="text-center max-w-xl mx-auto mb-10">
+          <span class="text-amber-500 text-xs font-bold uppercase tracking-widest block mb-2">Instant Calculator</span>
+          <h2 class="text-2xl sm:text-3xl font-black font-heading">Construction Cost Estimator</h2>
+          <p class="text-slate-500 dark:text-slate-400 text-xs mt-1">Estimate your building budget based on built-up area and specification tier.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          
+          <!-- Input Form -->
+          <div class="space-y-6">
+            <!-- Area Input Slider -->
+            <div>
+              <div class="flex justify-between items-center mb-2">
+                <label class="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300">Total Built-Up Area (Sq.Ft)</label>
+                <span id="area-val-display" class="text-sm font-black text-amber-500 font-heading">2,000 Sq.Ft</span>
+              </div>
+              <input type="range" id="input-sqft" min="600" max="10000" step="100" value="2000" 
+                     class="w-full h-2 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-500">
+              <div class="flex justify-between text-[10px] text-slate-400 mt-1">
+                <span>600 sqft</span>
+                <span>5,000 sqft</span>
+                <span>10,000 sqft</span>
+              </div>
+            </div>
+
+            <!-- Specification Package Selector -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-3">Specification Tier</label>
+              <div class="grid grid-cols-3 gap-3">
+                <button type="button" onclick="setTier('standard')" id="tier-standard" 
+                        class="tier-btn p-3 rounded-2xl border text-center transition-all border-amber-500 bg-amber-500/10 text-slate-900 dark:text-white">
+                  <span class="block text-xs font-bold">Standard</span>
+                  <span class="block text-[10px] text-slate-400 mt-0.5">₹ 1,950/sqft</span>
+                </button>
+                <button type="button" onclick="setTier('premium')" id="tier-premium" 
+                        class="tier-btn p-3 rounded-2xl border text-center transition-all border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white">
+                  <span class="block text-xs font-bold">Premium</span>
+                  <span class="block text-[10px] text-slate-400 mt-0.5">₹ 2,450/sqft</span>
+                </button>
+                <button type="button" onclick="setTier('luxury')" id="tier-luxury" 
+                        class="tier-btn p-3 rounded-2xl border text-center transition-all border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white">
+                  <span class="block text-xs font-bold">Luxury</span>
+                  <span class="block text-[10px] text-slate-400 mt-0.5">₹ 3,200/sqft</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Number of Floors -->
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-2">Structure Type</label>
+              <select id="input-floors" class="w-full px-4 py-3 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-sm">
+                <option value="1">Ground Floor (G)</option>
+                <option value="1.05" selected>G + 1 Floor</option>
+                <option value="1.1">G + 2 Floors</option>
+                <option value="1.15">G + 3 Floors</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Calculation Result Card -->
+          <div class="p-8 rounded-3xl bg-slate-900 text-white border border-slate-800 shadow-2xl flex flex-col justify-between">
+            <div>
+              <span class="text-xs uppercase tracking-widest text-slate-400 font-bold block mb-1">Estimated Total Budget</span>
+              <div id="total-cost-display" class="text-4xl font-black text-amber-400 font-heading mb-6">
+                ₹ 40,95,000
+              </div>
+
+              <div class="space-y-3 pt-4 border-t border-slate-800 text-xs">
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Civil & Structure RCC (60%):</span>
+                  <span id="breakdown-civil" class="font-bold text-white">₹ 24,57,000</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Electrical & Plumbing (15%):</span>
+                  <span id="breakdown-services" class="font-bold text-white">₹ 6,14,250</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Flooring & Woodwork (15%):</span>
+                  <span id="breakdown-finishes" class="font-bold text-white">₹ 6,14,250</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-slate-400">Painting & Elevation (10%):</span>
+                  <span id="breakdown-paint" class="font-bold text-white">₹ 4,09,500</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-8">
+              <a href="contact.html" class="block w-full text-center py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-sm rounded-xl transition-all shadow-lg">
+                Get Itemized Detailed Quote
+              </a>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONSTRUCTION PACKAGES SPECIFICATION TABLE -->
+  <section class="py-16 bg-white dark:bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-xl mx-auto mb-12">
+        <h2 class="text-3xl font-black font-heading">Material & Brand Specifications</h2>
+        <p class="text-slate-500 text-xs mt-1">We maintain complete material transparency with guaranteed top-tier Indian brands.</p>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse text-xs">
+          <thead>
+            <tr class="bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white uppercase font-bold border-b border-slate-200 dark:border-slate-700">
+              <th class="p-4">Category</th>
+              <th class="p-4">Standard Package</th>
+              <th class="p-4">Premium Package</th>
+              <th class="p-4">Luxury Package</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-200 dark:divide-slate-800">
+            <tr>
+              <td class="p-4 font-bold text-amber-500">Steel & Cement</td>
+              <td class="p-4">JSW / Coromandel Fe500</td>
+              <td class="p-4">Tata Tiscon Fe550</td>
+              <td class="p-4">Tata Tiscon SD Super Premium</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-amber-500">Flooring Tiles</td>
+              <td class="p-4">Vitrified Tiles (2x2 ft)</td>
+              <td class="p-4">Somany / Kajaria (4x2 ft)</td>
+              <td class="p-4">Italian Marble / Naxos Quartz</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-amber-500">Electrical & Switches</td>
+              <td class="p-4">Finolex Wires + Anchor Switches</td>
+              <td class="p-4">Havells Wires + Legrand Switches</td>
+              <td class="p-4">Schneider Smart Home Automation</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-amber-500">Plumbing & Sanitary</td>
+              <td class="p-4">Parryware / Hindware</td>
+              <td class="p-4">Jaquar Premium Series</td>
+              <td class="p-4">Kohler / Grohe Thermostatic</td>
+            </tr>
+            <tr>
+              <td class="p-4 font-bold text-amber-500">Main Door Frame</td>
+              <td class="p-4">First Quality Teak Wood Frame</td>
+              <td class="p-4">Burma Teak Hand-Carved Door</td>
+              <td class="p-4">Custom Teak + Digital Smart Lock</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="bg-slate-950 text-slate-400 pt-12 pb-8 border-t border-slate-900 mt-auto text-center text-xs">
+    <p>© 2026 Triangle Properties & Constructions. All rights reserved.</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    let currentTier = 'standard';
+    const rateMap = { standard: 1950, premium: 2450, luxury: 3200 };
+
+    function setTier(tier) {
+      currentTier = tier;
+      document.querySelectorAll('.tier-btn').forEach(btn => {
+        btn.classList.remove('border-amber-500', 'bg-amber-500/10');
+        btn.classList.add('border-slate-300', 'dark:border-slate-700');
+      });
+      const activeBtn = document.getElementById('tier-' + tier);
+      activeBtn.classList.remove('border-slate-300', 'dark:border-slate-700');
+      activeBtn.classList.add('border-amber-500', 'bg-amber-500/10');
+      calculateCost();
+    }
+
+    function calculateCost() {
+      const sqft = parseFloat(document.getElementById('input-sqft').value);
+      const floorMult = parseFloat(document.getElementById('input-floors').value);
+      
+      document.getElementById('area-val-display').textContent = sqft.toLocaleString('en-IN') + ' Sq.Ft';
+
+      const baseRate = rateMap[currentTier];
+      const total = Math.round(sqft * baseRate * floorMult);
+
+      document.getElementById('total-cost-display').textContent = '₹ ' + total.toLocaleString('en-IN');
+      document.getElementById('breakdown-civil').textContent = '₹ ' + Math.round(total * 0.60).toLocaleString('en-IN');
+      document.getElementById('breakdown-services').textContent = '₹ ' + Math.round(total * 0.15).toLocaleString('en-IN');
+      document.getElementById('breakdown-finishes').textContent = '₹ ' + Math.round(total * 0.15).toLocaleString('en-IN');
+      document.getElementById('breakdown-paint').textContent = '₹ ' + Math.round(total * 0.10).toLocaleString('en-IN');
+    }
+
+    document.getElementById('input-sqft')?.addEventListener('input', calculateCost);
+    document.getElementById('input-floors')?.addEventListener('change', calculateCost);
+  </script>
+</body>
+</html>
