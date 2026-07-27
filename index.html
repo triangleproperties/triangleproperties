@@ -56,13 +56,13 @@
   }
   </script>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col">
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
   <!-- NAVBAR -->
   <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-16 py-4 flex items-center justify-between">
+    <div class="max-w-[1440px] mx-auto px-4 md:px-16 py-4 flex items-center justify-between">
       <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
-        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-11 w-auto object-contain transition-transform group-hover:scale-105" onerror="this.onerror=null; this.src='https://lh3.googleusercontent.com/aida-public/AB6AXuBzmgs0wPl1EXzVtMqCP8oi6eh2Gzd9WBcSlA8b9gqUF8XtLNqpht4_uqnplCyKoSQN3xjIleA6yUsmjJoC-SzMQJ95KBewDSIIwHDE723jK5g7pr-X0IA_9SUrs1BHdfGiwd6K1m-76306LF6UzW_cZoJkfOdKAo0X_EyIFzgeCKpbrIpHBIZe6SSphLuS07M4Xwb80QWxqv7g79xbypHDz9d5PqabiKdGeimnB2r68YSOLiVeTyCwEC6nFUILdPRM3jJmAOG6BQ';"/>
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105">
       </a>
 
       <nav class="hidden lg:flex items-center gap-7">
@@ -76,15 +76,15 @@
         <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <a href="tel:8838957874" aria-label="Direct Call" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-xl">call</span></a>
-        <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-xl">chat</span></a>
-        <button type="button" aria-label="Toggle theme" class="theme-toggle-btn p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-          <svg class="icon-sun w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          <svg class="icon-moon w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
+      <div class="flex items-center gap-2 sm:gap-3">
+        <a href="tel:8838957874" aria-label="Direct Call" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-lg sm:text-xl">call</span></a>
+        <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-lg sm:text-xl">chat</span></a>
+        <button type="button" aria-label="Toggle theme" class="theme-toggle-btn p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
+          <svg class="icon-sun w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+          <svg class="icon-moon w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
         </button>
         <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Site Visit</a>
-        <button id="mobile-menu-btn" type="button" class="lg:hidden p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span class="material-symbols-outlined text-xl">menu</span></button>
+        <button id="mobile-menu-btn" type="button" class="lg:hidden p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span class="material-symbols-outlined text-lg sm:text-xl">menu</span></button>
       </div>
     </div>
 
@@ -102,63 +102,101 @@
   </header>
 
   <main class="flex-grow">
-    <!-- EXECUTIVE BRAND PRESENTATION -->
-    <section class="py-20 md:py-28 px-6 md:px-16 max-w-[1440px] mx-auto border-b border-slate-200 dark:border-slate-800">
-      <div class="max-w-4xl">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-400 text-xs font-button uppercase tracking-widest mb-6">
-          <span>Chennai's Most Affordable Luxury Developer</span>
+    <!-- EXECUTIVE HERO WITH BACKGROUND CAROUSEL -->
+    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-slate-200 dark:border-slate-800">
+      
+      <!-- HERO BACKGROUND CAROUSEL SLIDES -->
+      <div id="hero-carousel" class="absolute inset-0 z-0">
+        <!-- Slide 1 -->
+        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 bg-cover bg-center scale-105 transition-transform duration-10000"
+             style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=85');">
         </div>
-
-        <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-light leading-tight mb-8">
-          Architecting Trust. <br/>
-          <span class="gold-gradient-text italic font-serif">Creating Value.</span>
-        </h1>
-
-        <p class="font-body text-base md:text-lg text-slate-600 dark:text-slate-300 max-w-2xl leading-relaxed mb-10">
-          Triangle Properties Pvt. Ltd. delivers uncompromised architectural refinement and legal title transparency across Vadapalani, ECR, Anna Nagar, and prime Chennai locations.
-        </p>
-
-        <!-- Quick Filter Panel -->
-        <div class="glass-card p-6 md:p-8 bg-white/80 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 rounded-2xl shadow-xl">
-          <form action="properties.html" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label for="search-location" class="block text-xs font-button uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Location</label>
-              <select id="search-location" name="location" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
-                <option value="">All Chennai Locations</option>
-                <option value="Vadapalani">Vadapalani (Headquarters)</option>
-                <option value="Anna Nagar">Anna Nagar</option>
-                <option value="ECR">ECR (East Coast Road)</option>
-                <option value="Velachery">Velachery</option>
-                <option value="OMR">OMR IT Corridor</option>
-              </select>
-            </div>
-
-            <div>
-              <label for="search-type" class="block text-xs font-button uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Property Category</label>
-              <select id="search-type" name="type" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
-                <option value="ALL">All Categories</option>
-                <option value="Apartment">Apartment / Flat</option>
-                <option value="Villa">Luxury Villa</option>
-                <option value="Plot">Gated Plot</option>
-                <option value="Commercial">Commercial Space</option>
-              </select>
-            </div>
-
-            <div class="flex items-end">
-              <button type="submit" class="w-full btn-primary text-xs uppercase tracking-widest flex items-center justify-center gap-2">
-                <span class="material-symbols-outlined text-base">search</span>
-                <span>Filter Listings</span>
-              </button>
-            </div>
-          </form>
+        <!-- Slide 2 -->
+        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
+             style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=2000&q=85');">
         </div>
+        <!-- Slide 3 -->
+        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
+             style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85');">
+        </div>
+      </div>
 
+      <!-- LEGIBILITY GRADIENT OVERLAY -->
+      <div class="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/50 backdrop-blur-[2px]"></div>
+
+      <!-- HERO CONTENT CONTAINER -->
+      <div class="relative z-20 max-w-[1440px] mx-auto px-4 md:px-16 py-20 md:py-28 w-full text-white">
+        <div class="max-w-4xl">
+          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-button uppercase tracking-widest mb-6">
+            <span>Chennai's Most Affordable Luxury Developer</span>
+          </div>
+
+          <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-light leading-tight mb-6 text-white drop-shadow-lg">
+            Architecting Trust. <br/>
+            <span class="gold-gradient-text italic font-serif">Creating Value.</span>
+          </h1>
+
+          <p class="font-body text-base md:text-lg text-slate-200 max-w-2xl leading-relaxed mb-10 drop-shadow-md">
+            Triangle Properties Pvt. Ltd. delivers uncompromised architectural refinement and legal title transparency across Vadapalani, ECR, Anna Nagar, and prime Chennai locations.
+          </p>
+
+          <!-- Quick Filter Panel -->
+          <div class="glass-card p-6 md:p-8 bg-slate-950/70 border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-md">
+            <form action="properties.html" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div>
+                <label for="search-location" class="block text-xs font-button uppercase tracking-wider text-slate-300 mb-2">Location</label>
+                <select id="search-location" name="location" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                  <option value="">All Chennai Locations</option>
+                  <option value="Vadapalani">Vadapalani (Headquarters)</option>
+                  <option value="Anna Nagar">Anna Nagar</option>
+                  <option value="ECR">ECR (East Coast Road)</option>
+                  <option value="Velachery">Velachery</option>
+                  <option value="OMR">OMR IT Corridor</option>
+                </select>
+              </div>
+
+              <div>
+                <label for="search-type" class="block text-xs font-button uppercase tracking-wider text-slate-300 mb-2">Property Category</label>
+                <select id="search-type" name="type" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                  <option value="ALL">All Categories</option>
+                  <option value="Apartment">Apartment / Flat</option>
+                  <option value="Villa">Luxury Villa</option>
+                  <option value="Plot">Gated Plot</option>
+                  <option value="Commercial">Commercial Space</option>
+                </select>
+              </div>
+
+              <div class="flex items-end">
+                <button type="submit" class="w-full btn-primary text-xs uppercase tracking-widest flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined text-base">search</span>
+                  <span>Filter Listings</span>
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- CAROUSEL CONTROLS & INDICATORS -->
+          <div class="flex items-center gap-4 mt-8">
+            <button id="hero-prev-btn" aria-label="Previous Slide" class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
+              <span class="material-symbols-outlined text-sm">arrow_back</span>
+            </button>
+            <div id="hero-indicators" class="flex items-center gap-2">
+              <button class="w-8 h-1.5 rounded-full bg-amber-500 transition-all hero-indicator" data-slide="0"></button>
+              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="1"></button>
+              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="2"></button>
+            </div>
+            <button id="hero-next-btn" aria-label="Next Slide" class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </button>
+          </div>
+
+        </div>
       </div>
     </section>
 
     <!-- STATS -->
     <section class="py-16 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
-      <div class="max-w-[1440px] mx-auto px-6 md:px-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+      <div class="max-w-[1440px] mx-auto px-4 md:px-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
         <div>
           <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="15" data-suffix="+">0+</span>
           <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Years Experience</span>
@@ -179,7 +217,7 @@
     </section>
 
     <!-- PORTFOLIO GRID -->
-    <section class="py-24 px-6 md:px-16 max-w-[1440px] mx-auto">
+    <section class="py-24 px-4 md:px-16 max-w-[1440px] mx-auto">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
         <div>
           <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Prime Listings</span>
@@ -198,7 +236,7 @@
 
     <!-- REAL GOOGLE REVIEWS SECTION -->
     <section class="py-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
-      <div class="max-w-[1440px] mx-auto px-6 md:px-16">
+      <div class="max-w-[1440px] mx-auto px-4 md:px-16">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
           <div>
             <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Verified Google Reviews</span>
@@ -273,35 +311,30 @@
     </section>
   </main>
 
-  <!-- FOOTER WITH OFFICIAL SOCIAL MEDIA LINKS (NO EMOJIS) -->
+  <!-- FOOTER -->
   <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-16 text-slate-600 dark:text-slate-400">
-    <div class="max-w-[1440px] mx-auto px-6 md:px-16 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+    <div class="max-w-[1440px] mx-auto px-4 md:px-16 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
       
       <div class="md:col-span-1">
         <a href="index.html" class="inline-block mb-4">
           <img src="assets/logo.png" alt="Triangle Properties Logo" class="h-10 w-auto object-contain">
         </a>
         <p class="font-body text-xs leading-relaxed mb-6">
-          Triangle Properties Pvt. Ltd. — Chennai's Most Affordable Luxury Developer. Vadapalani, Chennai.
+          Triangle Properties Pvt. Ltd. — Vadapalani, Chennai.
         </p>
 
-        <!-- Social Media Icons (Instagram, Facebook, Google) - NO EMOJIS -->
+        <!-- Social Media Icons (Instagram, Facebook, Google) -->
         <div class="flex items-center gap-4">
-          <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener noreferrer" 
-             aria-label="Instagram Page"
-             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 dark:hover:text-amber-400 hover:scale-110 transition-all border border-slate-300 dark:border-slate-800">
+          <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Page"
+             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
           </a>
-
-          <a href="https://www.facebook.com/Triangleproperties/?ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" 
-             aria-label="Facebook Page"
-             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 dark:hover:text-amber-400 hover:scale-110 transition-all border border-slate-300 dark:border-slate-800">
+          <a href="https://www.facebook.com/Triangleproperties/?ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page"
+             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/></svg>
           </a>
-
-          <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" 
-             aria-label="Google Reviews"
-             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 dark:hover:text-amber-400 hover:scale-110 transition-all border border-slate-300 dark:border-slate-800">
+          <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" aria-label="Google Reviews"
+             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
           </a>
         </div>
@@ -312,8 +345,6 @@
         <ul class="space-y-2.5 text-xs font-body">
           <li><a href="properties.html?type=Apartment" class="hover:text-amber-500 transition-colors">Residential Apartments</a></li>
           <li><a href="properties.html?type=Villa" class="hover:text-amber-500 transition-colors">Independent Villas</a></li>
-          <li><a href="properties.html?type=Plot" class="hover:text-amber-500 transition-colors">Gated Plots</a></li>
-          <li><a href="properties.html?type=Commercial" class="hover:text-amber-500 transition-colors">Commercial Spaces</a></li>
         </ul>
       </div>
 
@@ -321,9 +352,8 @@
         <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Services</h3>
         <ul class="space-y-2.5 text-xs font-body">
           <li><a href="construction.html" class="hover:text-amber-500 transition-colors">Turnkey Construction</a></li>
-          <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Joint Venture Landlords</a></li>
-          <li><a href="services.html" class="hover:text-amber-500 transition-colors">Property Management</a></li>
-          <li><a href="gallery.html" class="hover:text-amber-500 transition-colors">Project Gallery</a></li>
+          <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Joint Venture</a></li>
+          <li><a href="admin.html" class="hover:text-amber-500 transition-colors text-amber-500 font-bold">Admin Portal</a></li>
         </ul>
       </div>
 
@@ -333,7 +363,6 @@
           No.23, Pillaiyar Kovil Street, Vadapalani, Chennai - 600026
         </p>
         <p class="font-body text-xs">Phone: 8838957874 / 7200212759</p>
-        <p class="font-body text-xs">WhatsApp: 8838957874</p>
       </div>
 
     </div>
@@ -346,6 +375,7 @@
   <script src="js/data.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/admin.js"></script>
   <script src="js/properties.js"></script>
 </body>
 </html>

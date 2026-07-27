@@ -1,10 +1,11 @@
-// Triangle Properties Pvt. Ltd. - Main Application Logic (Mobile & UI Pass)
+// Triangle Properties Pvt. Ltd. - Main Application Logic (Mobile, Hero Carousel & Lead Persistence)
 
 document.addEventListener('DOMContentLoaded', () => {
   initScrollProgressBar();
   initScrollToTopButton();
   initThemeToggle();
   initNavigation();
+  initHeroCarousel();
   initFloatingButtons();
   initStatsCounters();
   initFaqAccordions();
@@ -130,7 +131,6 @@ function initNavigation() {
       mobileMenu.classList.toggle('hidden');
     });
 
-    // Close menu when tapping any link inside
     const mobileLinks = mobileMenu.querySelectorAll('a');
     mobileLinks.forEach(link => {
       link.addEventListener('click', () => {
@@ -138,7 +138,6 @@ function initNavigation() {
       });
     });
 
-    // Close menu when tapping outside
     document.addEventListener('click', (e) => {
       if (!mobileMenu.contains(e.target) && !mobileMenuBtn.contains(e.target)) {
         mobileMenu.classList.add('hidden');
@@ -146,7 +145,6 @@ function initNavigation() {
     });
   }
 
-  // Active page link indicator
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
   const navLinks = document.querySelectorAll('.nav-link');
   navLinks.forEach(link => {
@@ -158,7 +156,85 @@ function initNavigation() {
 }
 
 /* -------------------------------------------------------------
- * 4. Floating Action Buttons (WhatsApp & Call)
+ * 4. Hero Section Background Carousel
+ * ------------------------------------------------------------- */
+function initHeroCarousel() {
+  const slides = document.querySelectorAll('.hero-slide');
+  const indicators = document.querySelectorAll('.hero-indicator');
+  const prevBtn = document.getElementById('hero-prev-btn');
+  const nextBtn = document.getElementById('hero-next-btn');
+
+  if (slides.length === 0) return;
+
+  let currentSlide = 0;
+  let carouselTimer = null;
+
+  function showSlide(index) {
+    slides.forEach((slide, i) => {
+      if (i === index) {
+        slide.classList.remove('opacity-0');
+        slide.classList.add('opacity-100');
+      } else {
+        slide.classList.remove('opacity-100');
+        slide.classList.add('opacity-0');
+      }
+    });
+
+    indicators.forEach((ind, i) => {
+      if (i === index) {
+        ind.classList.remove('w-2.5', 'bg-slate-600');
+        ind.classList.add('w-8', 'bg-amber-500');
+      } else {
+        ind.classList.remove('w-8', 'bg-amber-500');
+        ind.classList.add('w-2.5', 'bg-slate-600');
+      }
+    });
+
+    currentSlide = index;
+  }
+
+  function nextSlide() {
+    let nextIndex = (currentSlide + 1) % slides.length;
+    showSlide(nextIndex);
+  }
+
+  function prevSlide() {
+    let prevIndex = (currentSlide - 1 + slides.length) % slides.length;
+    showSlide(prevIndex);
+  }
+
+  function startAutoCycle() {
+    stopAutoCycle();
+    carouselTimer = setInterval(nextSlide, 5000);
+  }
+
+  function stopAutoCycle() {
+    if (carouselTimer) clearInterval(carouselTimer);
+  }
+
+  nextBtn?.addEventListener('click', () => {
+    nextSlide();
+    startAutoCycle();
+  });
+
+  prevBtn?.addEventListener('click', () => {
+    prevSlide();
+    startAutoCycle();
+  });
+
+  indicators.forEach(ind => {
+    ind.addEventListener('click', () => {
+      const idx = parseInt(ind.getAttribute('data-slide') || '0', 10);
+      showSlide(idx);
+      startAutoCycle();
+    });
+  });
+
+  startAutoCycle();
+}
+
+/* -------------------------------------------------------------
+ * 5. Floating Action Buttons (WhatsApp & Call)
  * ------------------------------------------------------------- */
 function initFloatingButtons() {
   if (document.getElementById('floating-cta')) return;
@@ -191,7 +267,7 @@ function initFloatingButtons() {
        title="Chat on WhatsApp"
        class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white p-3 sm:p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none animate-pulse-glow">
       <svg class="w-5 h-5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24">
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
       </svg>
       <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1 hidden sm:inline">
         WhatsApp Us
@@ -203,7 +279,7 @@ function initFloatingButtons() {
 }
 
 /* -------------------------------------------------------------
- * 5. Animated Stats Counters
+ * 6. Animated Stats Counters
  * ------------------------------------------------------------- */
 function initStatsCounters() {
   const statElements = document.querySelectorAll('.stat-counter');
@@ -245,7 +321,7 @@ function animateValue(obj, start, end, duration, prefix, suffix) {
 }
 
 /* -------------------------------------------------------------
- * 6. FAQ Accordions
+ * 7. FAQ Accordions
  * ------------------------------------------------------------- */
 function initFaqAccordions() {
   const accordionButtons = document.querySelectorAll('.faq-accordion-btn');
@@ -268,7 +344,7 @@ function initFaqAccordions() {
 }
 
 /* -------------------------------------------------------------
- * 7. Inquiry Form Submission Handler
+ * 8. Inquiry Form Submission & Local CRM Lead Capture
  * ------------------------------------------------------------- */
 function initInquiryForms() {
   const forms = document.querySelectorAll('.triangle-inquiry-form');
@@ -299,13 +375,19 @@ function initInquiryForms() {
         sourcePage: window.location.pathname
       };
 
+      // Store in Admin CRM database
+      if (window.addCrmLead) {
+        window.addCrmLead(formData);
+      }
+
       try {
-        const result = await window.submitInquiry(formData);
-        showToast('Thank you! Your inquiry has been submitted to Triangle Properties Pvt. Ltd. Our team will call you shortly.', 'success');
+        if (window.submitInquiry) await window.submitInquiry(formData);
+        showToast('Thank you! Your inquiry has been logged in Triangle Properties CRM. Our advisor will connect with you shortly.', 'success');
         form.reset();
       } catch (err) {
         console.error('Submission error:', err);
-        showToast('Inquiry saved! Our sales team will connect with you soon.', 'info');
+        showToast('Inquiry logged in CRM! Our sales team will connect with you soon.', 'info');
+        form.reset();
       } finally {
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -317,7 +399,7 @@ function initInquiryForms() {
 }
 
 /* -------------------------------------------------------------
- * 8. Toast Notification Helper
+ * 9. Toast Notification Helper
  * ------------------------------------------------------------- */
 function showToast(message, type = 'info') {
   const existing = document.getElementById('triangle-toast');
