@@ -1,51 +1,51 @@
-/* Triangle Properties Pvt. Ltd. - Design Tokens & Variables */
+/* Triangle Properties Pvt. Ltd. - Executive Luxury Design System Tokens */
 
 :root {
-  /* Colors */
-  --color-primary: #FBBF24;          /* Golden Yellow */
-  --color-primary-hover: #D97706;
-  --color-secondary: #2563EB;        /* Royal Blue */
+  /* Logo Metallic Gold & Royal Theme */
+  --color-primary: #D4AF37;          /* Logo Metallic Gold */
+  --color-primary-hover: #B59226;
+  --color-secondary: #2563EB;        /* Royal Blue Accent */
   --color-secondary-hover: #1D4ED8;
-  --color-bg-dark: #0F172A;
+  
+  --color-bg-dark: #0B0F19;          /* Executive Obsidian Dark */
+  --color-bg-alt-dark: #060911;
   --color-bg-light: #FFFFFF;
   --color-bg-alt-light: #F8FAFC;
-  --color-bg-alt-dark: #020617;
   
-  --color-text-light: #111827;
+  --color-text-light: #0F172A;
   --color-text-dark: #F8FAFC;
   --color-text-muted-light: #475569;
   --color-text-muted-dark: #94A3B8;
   
   --color-card-light: #FFFFFF;
-  --color-card-dark: #1E293B;
+  --color-card-dark: #131B2E;
   --color-border-light: #E2E8F0;
-  --color-border-dark: #334155;
+  --color-border-dark: #1E293B;
   
   /* Status Badge Colors */
-  --color-badge-sale-bg: rgba(251, 191, 36, 0.15);
-  --color-badge-sale-text: #B45309;
+  --color-badge-sale-bg: rgba(212, 175, 55, 0.15);
+  --color-badge-sale-text: #B59226;
   --color-badge-construction-bg: rgba(37, 99, 235, 0.15);
   --color-badge-construction-text: #2563EB;
   --color-badge-rent-bg: rgba(16, 185, 129, 0.15);
   --color-badge-rent-text: #047857;
 
   /* Typography */
-  --font-heading: 'Poppins', sans-serif;
+  --font-heading: 'Poppins', serif, sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   
-  /* Radii */
-  --radius-sm: 0.5rem;    /* 8px */
-  --radius-md: 0.75rem;   /* 12px */
-  --radius-lg: 1rem;      /* 16px */
-  --radius-2xl: 1.5rem;   /* 24px */
+  /* Radii & Shadows */
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-2xl: 1.5rem;
   --radius-full: 9999px;
   
-  /* Shadows */
   --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.08);
-  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
-  --shadow-glow-gold: 0 10px 30px -5px rgba(251, 191, 36, 0.3);
+  --shadow-lg: 0 12px 24px -4px rgba(0, 0, 0, 0.12);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-glow-gold: 0 10px 30px -5px rgba(212, 175, 55, 0.35);
 
   /* Transitions */
   --transition-fast: 150ms ease-out;
@@ -53,20 +53,16 @@
 }
 
 .dark {
-  --color-badge-sale-text: #FBBF24;
+  --color-badge-sale-text: #E5C158;
   --color-badge-construction-text: #60A5FA;
   --color-badge-rent-text: #34D399;
 }
 
-/* Reduced Motion Compliance */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  .animate-ping, .animate-pulse-glow, .animate-float {
-    animation: none !important;
   }
 }

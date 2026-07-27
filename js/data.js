@@ -1,11 +1,12 @@
-// Triangle Properties Pvt. Ltd. - Static Data & PRD Configuration
+// Triangle Properties Pvt. Ltd. - Corporate Data Module
 
 const TRIANGLE_DATA = {
   company: {
     name: "Triangle Properties Pvt. Ltd.",
     shortName: "Triangle Properties",
-    tagline: "Chennai's Most Affordable Property Developer 💛",
+    tagline: "Chennai's Most Affordable Property Developer",
     altTagline: "Building Dreams. Creating Value.",
+    logoPath: "assets/logo.png",
     phone1: "8838957874",
     phone2: "7200212759",
     phoneDisplay: "+91 88389 57874 / +91 72002 12759",
@@ -21,18 +22,18 @@ const TRIANGLE_DATA = {
   stats: [
     { label: "Years of Experience", value: 15, prefix: "", suffix: "+" },
     { label: "Completed Projects", value: 120, prefix: "", suffix: "+" },
-    { label: "Happy Customers", value: 650, prefix: "", suffix: "+" },
-    { label: "Properties Managed", value: 2.5, prefix: "", suffix: "M+ sqft" }
+    { label: "Satisfied Homeowners", value: 650, prefix: "", suffix: "+" },
+    { label: "Square Feet Developed", value: 2.5, prefix: "", suffix: "M+ sqft" }
   ],
 
   processSteps: [
-    { step: "01", title: "Consultation", desc: "Understanding your budget, preferences, Vastu requirements, and location priorities." },
-    { step: "02", title: "Property Selection", desc: "Shortlisting 100% legal-clear apartments, villas, plots, or commercial spaces." },
-    { step: "03", title: "Site Visit", desc: "Free guided transport & site walkthrough with senior project advisors." },
-    { step: "04", title: "Documentation", desc: "Legal title deed verification, CMDA/DTCP approval checks, & bank loan processing." },
-    { step: "05", title: "Registration", desc: "Assistance with stamp duty, land office registration, and EC generation." },
-    { step: "06", title: "Construction", desc: "Itemized turnkey civil execution with daily photo/video updates (if custom build)." },
-    { step: "07", title: "Handover", desc: "Key handover with 1-year warranty & post-occupancy property management." }
+    { step: "01", title: "Consultation", desc: "Understanding budget, Vastu preferences, structural scope, and location criteria." },
+    { step: "02", title: "Property Selection", desc: "Shortlisting 100% legal-clear apartments, villas, plots, or commercial layouts." },
+    { step: "03", title: "Site Visit", desc: "Guided site walkthrough with senior engineering project advisors." },
+    { step: "04", title: "Documentation", desc: "Title deed verification, CMDA/DTCP clearance, & bank home loan sanction." },
+    { step: "05", title: "Registration", desc: "Sub-registrar office registration assistance and encumbrance certificate generation." },
+    { step: "06", title: "Construction", desc: "Itemized civil execution with weekly structural progress updates." },
+    { step: "07", title: "Handover", desc: "Formal key handover with 1-year structural warranty & ongoing property management." }
   ],
 
   properties: [
@@ -57,8 +58,8 @@ const TRIANGLE_DATA = {
         "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Affordable luxury 3 BHK apartments in the heart of Vadapalani. Featuring 100% Vastu compliance, covered car parking, lift backup, and proximity to Vadapalani Metro station.",
-      amenities: ["Covered Parking", "24/7 Power Backup", "Elevator", "CCTV Security", "Vastu Compliant", "EV Charging Station"],
+      description: "Executive 3 BHK apartments in prime Vadapalani. Featuring 100% Vastu compliance, covered car parking, elevator backup, and proximity to Vadapalani Metro station.",
+      amenities: ["Covered Parking", "24/7 Power Backup", "Elevator Access", "CCTV Security", "Vastu Compliant Layout", "EV Charging Point"],
       specs: {
         facing: "East",
         floor: "2nd Floor of 5",
@@ -86,8 +87,8 @@ const TRIANGLE_DATA = {
         "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Exclusive sea-facing luxury villa offering private swimming pool, private terrace garden, double-height living room, and contemporary architectural design.",
-      amenities: ["Private Pool", "Private Garden", "Home Theater", "Solar Panel Grid", "24/7 Gated Security"],
+      description: "Exclusive sea-facing luxury villa offering private swimming pool, private terrace garden, double-height living room, and modern architectural finishes.",
+      amenities: ["Private Pool", "Private Garden", "Home Theater Room", "Solar Panel Grid", "24/7 Gated Security"],
       specs: {
         facing: "North-East",
         floor: "G+2 Independent Villa",
@@ -114,8 +115,8 @@ const TRIANGLE_DATA = {
         "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Chennai's most affordable premium 2 BHK budget apartments strategically located near IT parks and metro links. High rental yield potential.",
-      amenities: ["Clubhouse", "Lift Access", "Badminton Court", "Water Treatment Plant", "Visitor Parking"],
+      description: "Premium 2 BHK budget apartments strategically located near IT corridors and metro links. Excellent capital growth and rental yield potential.",
+      amenities: ["Clubhouse Facilities", "Elevator Access", "Badminton Court", "Water Treatment Plant", "Visitor Parking"],
       specs: {
         facing: "North",
         floor: "3rd Floor of 8",
@@ -143,7 +144,7 @@ const TRIANGLE_DATA = {
       ],
       featured: false,
       description: "Grade-A plug-and-play office workspace ready for IT, corporate headquarters, or showroom setup. High visibility main road frontage.",
-      amenities: ["Centralized AC", "100% Power Backup", "High-Speed Elevators", "Fire Safety", "Valet Parking"],
+      amenities: ["Centralized AC", "100% Power Backup", "High-Speed Elevators", "Fire Safety Systems", "Valet Parking"],
       specs: {
         facing: "East",
         floor: "1st Floor",
@@ -170,8 +171,8 @@ const TRIANGLE_DATA = {
         "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: false,
-      description: "Affordable DTCP & RERA approved villa plots in a fully developed gated township with 30ft wide blacktop roads and LED streetlights.",
-      amenities: ["Gated Community", "30ft Wide Roads", "Underground Electricity", "Water Connection", "Park"],
+      description: "DTCP & RERA approved villa plots in a fully developed gated township with 30ft wide blacktop roads and LED streetlights.",
+      amenities: ["Gated Community", "30ft Wide Roads", "Underground Electrical Lines", "Water Connection Ready", "Park & Track"],
       specs: {
         facing: "South-East",
         floor: "Plot / Land",
@@ -198,8 +199,8 @@ const TRIANGLE_DATA = {
         "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Ultra-prime 3 BHK apartment with Italian marble flooring, teak wood finishings, and smart security systems in Anna Nagar.",
-      amenities: ["Covered Parking", "Lift Access", "Intercom", "Power Backup", "CCTV"],
+      description: "Ultra-prime 3 BHK apartment with Italian marble flooring, teak wood finishings, and smart security systems in Anna Nagar East.",
+      amenities: ["Covered Parking", "Elevator Access", "Intercom Facility", "Power Backup", "CCTV Surveillance"],
       specs: {
         facing: "East",
         floor: "3rd Floor",
@@ -213,7 +214,7 @@ const TRIANGLE_DATA = {
     {
       id: "serv-1",
       icon: "building-office-2",
-      title: "Real Estate Sales & Marketing",
+      title: "Real Estate Sales & Advisory",
       shortDesc: "End-to-end assistance for residential apartments, independent houses, luxury villas, gated plots, and commercial spaces.",
       fullDesc: "We help home buyers find legal-clear, affordable properties in Chennai and guide property owners to get maximum market valuation with zero stress."
     },
@@ -247,7 +248,7 @@ const TRIANGLE_DATA = {
       role: "Apartment Buyers (Vadapalani)",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-      content: "Triangle Properties Pvt. Ltd. is truly Chennai's most affordable developer! The purchase of our Vadapalani apartment was 100% transparent and delivered right on time."
+      content: "Triangle Properties Pvt. Ltd. delivers outstanding real estate quality. The purchase of our Vadapalani apartment was transparent and completed right on schedule."
     },
     {
       id: "test-2",
@@ -255,7 +256,7 @@ const TRIANGLE_DATA = {
       role: "Landowner - Joint Venture Partner",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-      content: "I gave my plot for Joint Venture development with Triangle Properties. They constructed an 8-flat luxury apartment complex with top quality materials and zero hassle."
+      content: "I entrusted my land for Joint Venture development with Triangle Properties. They constructed an 8-flat luxury apartment complex with top-grade materials."
     },
     {
       id: "test-3",
@@ -263,7 +264,7 @@ const TRIANGLE_DATA = {
       role: "Villa Owner (ECR)",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-      content: "Their turnkey construction service is outstanding. Itemized estimates, zero hidden costs, daily WhatsApp updates, and great Vastu planning."
+      content: "Their turnkey construction team is exceptional. Itemized estimates, zero hidden costs, weekly progress reports, and great Vastu layout."
     }
   ],
 
@@ -276,7 +277,7 @@ const TRIANGLE_DATA = {
     },
     {
       id: "gal-2",
-      title: "Modern Living Room Interior",
+      title: "Executive Living Room Interior",
       category: "Interior",
       image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80"
     },
@@ -288,7 +289,7 @@ const TRIANGLE_DATA = {
     },
     {
       id: "gal-4",
-      title: "Site Concreting Supervision",
+      title: "Site Structural Supervision",
       category: "Construction",
       image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=800&q=80"
     },
@@ -300,7 +301,7 @@ const TRIANGLE_DATA = {
     },
     {
       id: "gal-6",
-      title: "Master Bedroom Interior",
+      title: "Master Suite Interior",
       category: "Interior",
       image: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80"
     }
@@ -308,20 +309,20 @@ const TRIANGLE_DATA = {
 
   faqs: [
     {
-      question: "Why is Triangle Properties Pvt. Ltd. known as Chennai's Most Affordable Property Developer?",
-      answer: "We streamline architectural design, bulk-procure construction materials directly from manufacturers, and maintain direct legal clearance to eliminate middlemen, passing 100% of cost savings to buyers."
+      question: "Why choose Triangle Properties Pvt. Ltd. for property development in Chennai?",
+      answer: "We combine architectural innovation, direct manufacturer material sourcing, and comprehensive legal clearance to deliver high-end properties at accessible market prices."
     },
     {
       question: "Are all Triangle Properties projects DTCP/CMDA and RERA approved?",
-      answer: "Yes! 100% of our residential and commercial projects hold mandatory CMDA/DTCP approvals, legal title clearance certificates from senior advocates, and official RERA registrations."
+      answer: "Yes, 100% of our residential and commercial developments hold mandatory CMDA/DTCP approvals, legal title clearance certificates, and official RERA registrations."
     },
     {
       question: "How does the Joint Venture (JV) land development process work?",
-      answer: "Landowners provide the plot, while Triangle Properties Pvt. Ltd. handles architectural planning, statutory approvals, construction, and marketing. Built-up area or profits are shared fairly based on a legally binding contract."
+      answer: "Landowners provide the plot, while Triangle Properties Pvt. Ltd. manages architectural planning, statutory approvals, construction, and sales. Built-up area or revenues are shared transparently under a legal JDA contract."
     },
     {
       question: "Where is the head office of Triangle Properties Pvt. Ltd. located?",
-      answer: "Our head office is located at No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India. (Near Vadapalani Metro station)."
+      answer: "Our head office is located at No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India. (Near Vadapalani Metro Station)."
     },
     {
       question: "What are your customer contact mobile and WhatsApp numbers?",
