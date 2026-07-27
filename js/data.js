@@ -1,78 +1,93 @@
-// Triangle Properties - Static Data & Fallback Storage
+// Triangle Properties Pvt. Ltd. - Static Data & PRD Configuration
 
 const TRIANGLE_DATA = {
   company: {
-    name: "Triangle Properties & Constructions",
-    tagline: "Building Dreams, Creating Legacies",
-    phone: "+91 98765 43210",
-    phoneRaw: "+919876543210",
-    whatsapp: "+919876543210",
+    name: "Triangle Properties Pvt. Ltd.",
+    shortName: "Triangle Properties",
+    tagline: "Chennai's Most Affordable Property Developer 💛",
+    altTagline: "Building Dreams. Creating Value.",
+    phone1: "8838957874",
+    phone2: "7200212759",
+    phoneDisplay: "+91 88389 57874 / +91 72002 12759",
+    phoneRaw: "+918838957874",
+    whatsapp: "918838957874",
     email: "info@triangleproperties.in",
-    address: "123 Prime Estate Avenue, Anna Nagar, Chennai, Tamil Nadu - 600040",
-    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.0024479907727!2d80.2078563!3d13.0850029!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5264269e8bb435%3A0x2897585097f4806a!2sAnna%20Nagar%2C%20Chennai%2C%20Tamil%20Nadu!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
+    address: "No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India",
+    domains: ["triangleproperties.in", "trianglepropertiespvt.com"],
+    mapEmbedUrl: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3886.6872580436444!2d80.2089901!3d13.0506307!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a5266c1f1f280a9%3A0x6b801a2f64d0d0f5!2sVadapalani%2C%20Chennai%2C%20Tamil%20Nadu%20600026!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin",
     workingHours: "Mon - Sat: 9:00 AM - 7:30 PM | Sun: By Appointment"
   },
   
   stats: [
+    { label: "Years of Experience", value: 15, prefix: "", suffix: "+" },
     { label: "Completed Projects", value: 120, prefix: "", suffix: "+" },
-    { label: "Happy Families", value: 650, prefix: "", suffix: "+" },
-    { label: "Years of Trust", value: 15, prefix: "", suffix: "+" },
-    { label: "Sq.Ft Developed", value: 2.5, prefix: "", suffix: "M+" }
+    { label: "Happy Customers", value: 650, prefix: "", suffix: "+" },
+    { label: "Properties Managed", value: 2.5, prefix: "", suffix: "M+ sqft" }
+  ],
+
+  processSteps: [
+    { step: "01", title: "Consultation", desc: "Understanding your budget, preferences, Vastu requirements, and location priorities." },
+    { step: "02", title: "Property Selection", desc: "Shortlisting 100% legal-clear apartments, villas, plots, or commercial spaces." },
+    { step: "03", title: "Site Visit", desc: "Free guided transport & site walkthrough with senior project advisors." },
+    { step: "04", title: "Documentation", desc: "Legal title deed verification, CMDA/DTCP approval checks, & bank loan processing." },
+    { step: "05", title: "Registration", desc: "Assistance with stamp duty, land office registration, and EC generation." },
+    { step: "06", title: "Construction", desc: "Itemized turnkey civil execution with daily photo/video updates (if custom build)." },
+    { step: "07", title: "Handover", desc: "Key handover with 1-year warranty & post-occupancy property management." }
   ],
 
   properties: [
     {
       id: "prop-101",
-      title: "The Golden Crest Residency",
+      title: "Vadapalani Luxury Crest Apartments",
       category: "Apartment",
       status: "For Sale",
-      price: "₹ 1.25 Cr",
-      priceRaw: 12500000,
-      location: "Anna Nagar, Chennai",
-      address: "Plot 42, 4th Main Road, Anna Nagar West, Chennai",
+      price: "₹ 88 Lakhs",
+      priceRaw: 8800000,
+      location: "Vadapalani, Chennai",
+      address: "Near Vadapalani Metro & Forum Mall, Chennai - 600026",
       bedrooms: 3,
-      bathrooms: 3,
-      areaSqft: 1850,
+      bathrooms: 2,
+      parking: "Covered Car & Bike",
+      areaSqft: 1450,
       builtYear: 2024,
       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
       gallery: [
         "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
         "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Experience ultra-luxury living at The Golden Crest Residency. Featuring premium teak wood finishings, Italian marble flooring, 100% Vastu compliance, and state-of-the-art smart home integration.",
-      amenities: ["Covered Car Parking", "24/7 Power Backup", "Gymnasium", "Rooftop Garden", "CCTV Security", "EV Charging Point", "Children's Play Area"],
+      description: "Affordable luxury 3 BHK apartments in the heart of Vadapalani. Featuring 100% Vastu compliance, covered car parking, lift backup, and proximity to Vadapalani Metro station.",
+      amenities: ["Covered Parking", "24/7 Power Backup", "Elevator", "CCTV Security", "Vastu Compliant", "EV Charging Station"],
       specs: {
         facing: "East",
-        floor: "3rd Floor of 5",
+        floor: "2nd Floor of 5",
         possession: "Ready to Move",
         approval: "CMDA Approved"
       }
     },
     {
       id: "prop-102",
-      title: "Royal Emerald Villa",
+      title: "Royal Emerald Oceanfront Villa",
       category: "Villa",
       status: "For Sale",
-      price: "₹ 3.80 Cr",
-      priceRaw: 38000000,
+      price: "₹ 3.40 Cr",
+      priceRaw: 34000000,
       location: "ECR, Chennai",
       address: "East Coast Road, Near Kovalam Beach, Chennai",
       bedrooms: 4,
       bathrooms: 5,
-      areaSqft: 3400,
+      parking: "Private 3 Cars",
+      areaSqft: 3200,
       builtYear: 2024,
       image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80",
       gallery: [
         "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
       description: "Exclusive sea-facing luxury villa offering private swimming pool, private terrace garden, double-height living room, and contemporary architectural design.",
-      amenities: ["Private Pool", "Private Garden", "Home Theater Room", "Solar Panel Grid", "24/7 Gated Security", "Hydro-Pneumatic Water System"],
+      amenities: ["Private Pool", "Private Garden", "Home Theater", "Solar Panel Grid", "24/7 Gated Security"],
       specs: {
         facing: "North-East",
         floor: "G+2 Independent Villa",
@@ -85,50 +100,50 @@ const TRIANGLE_DATA = {
       title: "Triangle Grand Horizon",
       category: "Apartment",
       status: "Under Construction",
-      price: "₹ 85 Lakhs",
-      priceRaw: 8500000,
+      price: "₹ 65 Lakhs",
+      priceRaw: 6500000,
       location: "Velachery, Chennai",
       address: "100 Feet Bypass Road, Velachery, Chennai",
       bedrooms: 2,
       bathrooms: 2,
-      areaSqft: 1220,
+      parking: "Covered Parking",
+      areaSqft: 1120,
       builtYear: 2025,
       image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
       gallery: [
-        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Modern budget-friendly premium apartments strategically located near IT parks and metro links. High rental yield potential and rapid capital appreciation.",
-      amenities: ["Clubhouse", "Lift Access", "Badminton Court", "Water Treatment Plant", "Intercom", "Visitor Parking"],
+      description: "Chennai's most affordable premium 2 BHK budget apartments strategically located near IT parks and metro links. High rental yield potential.",
+      amenities: ["Clubhouse", "Lift Access", "Badminton Court", "Water Treatment Plant", "Visitor Parking"],
       specs: {
         facing: "North",
-        floor: "2nd Floor of 8",
+        floor: "3rd Floor of 8",
         possession: "December 2025",
         approval: "RERA Registered"
       }
     },
     {
       id: "prop-104",
-      title: "Sapphire Commercial Enclave",
+      title: "Sapphire Commercial Workspace",
       category: "Commercial",
       status: "For Rent",
-      price: "₹ 1.8 Lakhs / mo",
-      priceRaw: 180000,
+      price: "₹ 1.5 Lakhs / mo",
+      priceRaw: 150000,
       location: "OMR, Chennai",
       address: "Perungudi OMR IT Corridor, Chennai",
       bedrooms: 0,
       bathrooms: 4,
-      areaSqft: 4200,
+      parking: "5 Cars & 10 Bikes",
+      areaSqft: 3800,
       builtYear: 2023,
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
       gallery: [
-        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: false,
-      description: "Grade-A plug-and-play office workspace ready for IT, corporate headquarters, or showroom setup. High visibility main road frontage with ample car parking.",
-      amenities: ["Centralized AC", "100% Power Backup", "High-Speed Elevators", "Fire Safety System", "Valet Parking"],
+      description: "Grade-A plug-and-play office workspace ready for IT, corporate headquarters, or showroom setup. High visibility main road frontage.",
+      amenities: ["Centralized AC", "100% Power Backup", "High-Speed Elevators", "Fire Safety", "Valet Parking"],
       specs: {
         facing: "East",
         floor: "1st Floor",
@@ -141,21 +156,22 @@ const TRIANGLE_DATA = {
       title: "Green Meadows Gated Plots",
       category: "Plot",
       status: "For Sale",
-      price: "₹ 48 Lakhs",
-      priceRaw: 4800000,
+      price: "₹ 36 Lakhs",
+      priceRaw: 3600000,
       location: "Tambaram, Chennai",
       address: "Near MEPZ, Tambaram West, Chennai",
       bedrooms: 0,
       bathrooms: 0,
-      areaSqft: 2400,
+      parking: "Plot Space",
+      areaSqft: 1800,
       builtYear: 2024,
       image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
       gallery: [
         "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: false,
-      description: "Premium villa plots in a fully developed gated township featuring 30ft wide blacktop roads, avenue trees, LED streetlights, and compound wall security.",
-      amenities: ["Gated Community", "30ft Wide Roads", "Underground Electricity Lines", "Water Connection Ready", "Park & Walking Track"],
+      description: "Affordable DTCP & RERA approved villa plots in a fully developed gated township with 30ft wide blacktop roads and LED streetlights.",
+      amenities: ["Gated Community", "30ft Wide Roads", "Underground Electricity", "Water Connection", "Park"],
       specs: {
         facing: "South-East",
         floor: "Plot / Land",
@@ -165,28 +181,28 @@ const TRIANGLE_DATA = {
     },
     {
       id: "prop-106",
-      title: "The Vantage Sky Penthouse",
+      title: "Anna Nagar Prime Residency",
       category: "Apartment",
       status: "For Sale",
-      price: "₹ 2.65 Cr",
-      priceRaw: 26500000,
-      location: "Adyar, Chennai",
-      address: "Lattice Bridge Road, Adyar, Chennai",
-      bedrooms: 4,
-      bathrooms: 4,
-      areaSqft: 2950,
+      price: "₹ 1.45 Cr",
+      priceRaw: 14500000,
+      location: "Anna Nagar, Chennai",
+      address: "2nd Avenue, Anna Nagar East, Chennai",
+      bedrooms: 3,
+      bathrooms: 3,
+      parking: "Reserved Car Parking",
+      areaSqft: 1680,
       builtYear: 2024,
       image: "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=1200&q=80",
       gallery: [
-        "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Duplex penthouse with panoramic cityscape views, private deck, Jacuzzi, Italian modular kitchen, and smart automated lighting.",
-      amenities: ["Private Jacuzzi", "Duplex Layout", "Automated Lighting", "Dedicated 3 Car Parking", "Concierge Service"],
+      description: "Ultra-prime 3 BHK apartment with Italian marble flooring, teak wood finishings, and smart security systems in Anna Nagar.",
+      amenities: ["Covered Parking", "Lift Access", "Intercom", "Power Backup", "CCTV"],
       specs: {
         facing: "East",
-        floor: "12th & 13th Floor",
+        floor: "3rd Floor",
         possession: "Ready to Move",
         approval: "CMDA Approved"
       }
@@ -197,30 +213,30 @@ const TRIANGLE_DATA = {
     {
       id: "serv-1",
       icon: "building-office-2",
-      title: "Property Sales & Marketing",
-      shortDesc: "End-to-end guidance for buying and selling residential apartments, luxury villas, commercial spaces, and verified plot layouts.",
-      fullDesc: "We assist buyers in finding legal-clear, prime property investments and help sellers get maximum market value through targeted marketing campaigns, professional staging, and clear negotiations."
+      title: "Real Estate Sales & Marketing",
+      shortDesc: "End-to-end assistance for residential apartments, independent houses, luxury villas, gated plots, and commercial spaces.",
+      fullDesc: "We help home buyers find legal-clear, affordable properties in Chennai and guide property owners to get maximum market valuation with zero stress."
     },
     {
       id: "serv-2",
       icon: "wrench-screwdriver",
-      title: "Turnkey Construction",
-      shortDesc: "Architectural design, structural execution, interior styling, and project management with transparent material specs.",
-      fullDesc: "From soil testing and foundation to interior design and key handover, our engineering team manages complete turnkey residential and commercial building construction on time and within budget."
+      title: "Residential & Commercial Construction",
+      shortDesc: "Turnkey house construction, building planning, structural design, interior works, and renovation with transparent material pricing.",
+      fullDesc: "From architectural drawings and soil testing to RCC framework and final keys, our civil engineering team delivers on time and within budget."
     },
     {
       id: "serv-3",
       icon: "handshake",
-      title: "Joint Venture Development",
-      shortDesc: "Maximize land value with zero investment through transparent development agreements and high profit sharing ratio.",
-      fullDesc: "We partner with prime landowners in Chennai and surrounding districts to construct modern residential complexes and commercial centers, offering maximum built-up ratio or revenue share."
+      title: "Joint Venture Land Development",
+      shortDesc: "Partner with Triangle Properties Pvt. Ltd. to convert your land into high-value apartments with attractive revenue or area sharing.",
+      fullDesc: "We partner with prime landowners in Vadapalani, Anna Nagar, ECR, and across Chennai to build modern residential complexes with zero land-owner capital required."
     },
     {
       id: "serv-4",
       icon: "document-text",
-      title: "Legal & Valuation Services",
-      shortDesc: "Strict title scrutiny, CMDA/DTCP/RERA verification, property valuation, bank loan processing, and registration support.",
-      fullDesc: "Our legal experts review all mother documents, encumbrance certificates, and statutory approvals to guarantee 100% hassle-free title transfers and quick home loan approvals."
+      title: "Property Management & Legal Documentation",
+      shortDesc: "Rental management, tenant vetting, property inspection, title deed clearance, encumbrance certificates, and registration support.",
+      fullDesc: "Our legal advocates and property managers look after your investment portfolio, handle tenant contracts, and ensure 100% legal title safety."
     }
   ],
 
@@ -228,10 +244,10 @@ const TRIANGLE_DATA = {
     {
       id: "test-1",
       name: "Ramesh & Sunitha",
-      role: "Apartment Buyers (Anna Nagar)",
+      role: "Apartment Buyers (Vadapalani)",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
-      content: "Triangle Properties made our dream home purchase effortless. From title verification to hand-over, every detail was handled transparently. Quality of construction is top-notch!"
+      content: "Triangle Properties Pvt. Ltd. is truly Chennai's most affordable developer! The purchase of our Vadapalani apartment was 100% transparent and delivered right on time."
     },
     {
       id: "test-2",
@@ -239,7 +255,7 @@ const TRIANGLE_DATA = {
       role: "Landowner - Joint Venture Partner",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
-      content: "I gave my 3-ground plot for JV development with Triangle Properties. They delivered the apartment building 2 months ahead of schedule with exceptional build finish. Highly trustworthy team!"
+      content: "I gave my plot for Joint Venture development with Triangle Properties. They constructed an 8-flat luxury apartment complex with top quality materials and zero hassle."
     },
     {
       id: "test-3",
@@ -247,20 +263,20 @@ const TRIANGLE_DATA = {
       role: "Villa Owner (ECR)",
       rating: 5,
       avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
-      content: "Their turnkey construction service is outstanding. Clear itemized estimates, zero hidden costs, daily WhatsApp photo updates during construction, and excellent Vastu layout."
+      content: "Their turnkey construction service is outstanding. Itemized estimates, zero hidden costs, daily WhatsApp updates, and great Vastu planning."
     }
   ],
 
   gallery: [
     {
       id: "gal-1",
-      title: "Golden Crest Exterior Elevation",
+      title: "Vadapalani Luxury Crest Elevation",
       category: "Elevation",
       image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80"
     },
     {
       id: "gal-2",
-      title: "Luxury Living Room Interior",
+      title: "Modern Living Room Interior",
       category: "Interior",
       image: "https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80"
     },
@@ -272,19 +288,19 @@ const TRIANGLE_DATA = {
     },
     {
       id: "gal-4",
-      title: "Ongoing Structural Concreting Work",
+      title: "Site Concreting Supervision",
       category: "Construction",
       image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=800&q=80"
     },
     {
       id: "gal-5",
-      title: "Royal Emerald Villa Night View",
+      title: "Royal Emerald ECR Villa View",
       category: "Completed",
       image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=800&q=80"
     },
     {
       id: "gal-6",
-      title: "Master Bedroom Suite Design",
+      title: "Master Bedroom Interior",
       category: "Interior",
       image: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80"
     }
@@ -292,29 +308,28 @@ const TRIANGLE_DATA = {
 
   faqs: [
     {
+      question: "Why is Triangle Properties Pvt. Ltd. known as Chennai's Most Affordable Property Developer?",
+      answer: "We streamline architectural design, bulk-procure construction materials directly from manufacturers, and maintain direct legal clearance to eliminate middlemen, passing 100% of cost savings to buyers."
+    },
+    {
       question: "Are all Triangle Properties projects DTCP/CMDA and RERA approved?",
-      answer: "Yes, 100% of our residential and commercial projects hold mandatory CMDA/DTCP approvals, legal title clearance certificates, and official RERA registration numbers."
+      answer: "Yes! 100% of our residential and commercial projects hold mandatory CMDA/DTCP approvals, legal title clearance certificates from senior advocates, and official RERA registrations."
     },
     {
       question: "How does the Joint Venture (JV) land development process work?",
-      answer: "Landowners provide the plot, while Triangle Properties handles architectural design, statutory approvals, construction, marketing, and sales. Profits or built-up area are split based on a mutually agreed, legally binding agreement."
+      answer: "Landowners provide the plot, while Triangle Properties Pvt. Ltd. handles architectural planning, statutory approvals, construction, and marketing. Built-up area or profits are shared fairly based on a legally binding contract."
     },
     {
-      question: "Do you offer custom interior customization for under-construction apartments?",
-      answer: "Absolutely! Buyers booking during the construction phase can select custom flooring tiles, wall paint palettes, bathroom fittings, electrical point layouts, and modular kitchen designs."
+      question: "Where is the head office of Triangle Properties Pvt. Ltd. located?",
+      answer: "Our head office is located at No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India. (Near Vadapalani Metro station)."
     },
     {
-      question: "Can Triangle Properties assist with home loans?",
-      answer: "Yes. All our projects are pre-approved by leading banks including HDFC, SBI, ICICI, Axis Bank, and LIC Housing Finance for hassle-free 80-90% home loan processing."
-    },
-    {
-      question: "What is included in your Turnkey Construction packages?",
-      answer: "Our turnkey construction covers complete architectural & structural drawings, soil testing, foundation, RCC structure, brickwork, plastering, electrical, plumbing, flooring, painting, doors, windows, and elevation features."
+      question: "What are your customer contact mobile and WhatsApp numbers?",
+      answer: "You can reach our sales and advisory team directly via Phone or WhatsApp at 8838957874 or 7200212759."
     }
   ]
 };
 
-// Export to window object for global usage in vanilla JS
 if (typeof window !== 'undefined') {
   window.TRIANGLE_DATA = TRIANGLE_DATA;
 }
