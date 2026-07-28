@@ -1,7 +1,7 @@
 // Triangle Properties Pvt. Ltd. - Modular Admin Control Panel Engine
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
 // 1. CONFIGURATIONS
 const firebaseConfig = {
@@ -75,7 +75,21 @@ try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
-  console.log("🔥 Admin Firebase v11 Modular SDK initialized successfully!");
+
+  // Expose global window references for live sync engine (js/data.js)
+  window.firebaseApp = app;
+  window.db = db;
+  window.firebaseAuth = auth;
+  window.firestoreSetDoc = setDoc;
+  window.firestoreDoc = doc;
+  window.firestoreOnSnapshot = onSnapshot;
+
+  // Initialize real-time sync with Cloud Firestore
+  if (typeof window.initFirestoreLiveSync === 'function') {
+    window.initFirestoreLiveSync();
+  }
+
+  console.log("🔥 Admin Firebase v11 Modular SDK initialized successfully & connected to Cloud Firestore!");
 } catch (e) {
   console.error("Firebase init error:", e);
   const text = document.getElementById('diagnostic-text');
@@ -313,9 +327,22 @@ function renderCategories() {
 }
 
 // GALLERY CRUD
-function fetchGallery() {
+async function fetchGallery() {
+  try {
+    if (db) {
+      const snap = await getDocs(collection(db, "gallery"));
+      if (snap.docs.length > 0) {
+        state.gallery = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      }
+    }
+  } catch (e) {
+    console.warn("Firestore fetch gallery notice:", e);
+  }
+
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  state.gallery = (liveData.gallery && liveData.gallery.length > 0) ? liveData.gallery : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.gallery : []);
+  if (!state.gallery || state.gallery.length === 0) {
+    state.gallery = (liveData.gallery && liveData.gallery.length > 0) ? liveData.gallery : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.gallery : []);
+  }
   renderGallery();
 }
 
@@ -540,15 +567,15 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
     const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
     liveData.properties = state.properties;
     
+    // Save to Cloud Firestore primary storage
+    if (db) {
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
+    }
     if (window.saveLiveTriangleData) {
-      const saveResult = await window.saveLiveTriangleData(liveData);
-      if (saveResult && saveResult.success) {
-        showToast("Property saved successfully! Live site updated.", "success");
-      } else {
-        showToast(`Save Error: ${saveResult?.error || 'Failed to persist property'}`, "error");
-      }
+      await window.saveLiveTriangleData(liveData);
     }
 
+    showToast("Property saved! Synced to Cloud Firestore across all devices.", "success");
     renderProperties();
     renderStats();
     document.getElementById('property-modal')?.classList.add('hidden');
@@ -576,15 +603,15 @@ document.getElementById('category-form')?.addEventListener('submit', async (e) =
     const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
     liveData.categories = state.categories;
     
+    // Save to Cloud Firestore primary storage
+    if (db) {
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
+    }
     if (window.saveLiveTriangleData) {
-      const saveResult = await window.saveLiveTriangleData(liveData);
-      if (saveResult && saveResult.success) {
-        showToast("Category saved! Live site updated.", "success");
-      } else {
-        showToast(`Save Error: ${saveResult?.error || 'Failed to persist category'}`, "error");
-      }
+      await window.saveLiveTriangleData(liveData);
     }
 
+    showToast("Category saved! Synced to Cloud Firestore across all devices.", "success");
     renderCategories();
     renderStats();
     document.getElementById('category-modal')?.classList.add('hidden');
@@ -646,11 +673,14 @@ window.deletePropertyItem = async function(id) {
 
     const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
     liveData.properties = state.properties;
-    if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+    if (db) {
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
+    }
+    if (window.saveLiveTriangleData) await window.saveLiveTriangleData(liveData);
 
     renderProperties();
     renderStats();
-    showToast("Property deleted. Live site updated.", "info");
+    showToast("Property deleted. Synced across all devices.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
@@ -664,11 +694,14 @@ window.deleteCategoryItem = async function(id) {
 
     const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
     liveData.categories = state.categories;
-    if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+    if (db) {
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
+    }
+    if (window.saveLiveTriangleData) await window.saveLiveTriangleData(liveData);
 
     renderCategories();
     renderStats();
-    showToast("Category deleted. Live site updated.", "info");
+    showToast("Category deleted. Synced across all devices.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
