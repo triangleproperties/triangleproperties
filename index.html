@@ -1,11 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
+
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Triangle Properties | Chennai's Most Affordable Luxury Developer</title>
-  <meta name="description" content="Triangle Properties Pvt. Ltd. - Chennai's Most Affordable Luxury Developer. Experience uncompromised architectural excellence in Vadapalani & Chennai."/>
-  
+  <meta name="description"
+    content="Triangle Properties Pvt. Ltd. - Chennai's Most Affordable Luxury Developer. Experience uncompromised architectural excellence in Vadapalani & Chennai." />
+
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -31,10 +43,12 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap"
+    rel="stylesheet" />
 
-  <link rel="stylesheet" href="css/variables.css"/>
-  <link rel="stylesheet" href="css/styles.css"/>
+  <link rel="stylesheet" href="css/variables.css" />
+  <link rel="stylesheet" href="css/styles.css" />
 
   <script type="application/ld+json">
   {
@@ -56,57 +70,69 @@
   }
   </script>
 </head>
-<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
+
+<body class="bg-slate-50 dark:bg-[#16130B] text-slate-900 dark:text-[#EAE1D4] font-body selection:bg-amber-500/30 min-h-screen flex flex-col overflow-x-hidden transition-colors duration-300">
 
   <!-- DYNAMIC NAVBAR CONTAINER (Loaded from components/navbar.html) -->
   <div id="navbar-container"></div>
-  <script src="js/navbar-loader.js"></script>
 
   <main class="flex-grow">
     <!-- EXECUTIVE HERO WITH BACKGROUND CAROUSEL -->
-    <section class="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-slate-200 dark:border-slate-800">
-      
+    <section
+      class="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-slate-200 dark:border-slate-800">
+
       <!-- HERO BACKGROUND CAROUSEL SLIDES -->
       <div id="hero-carousel" class="absolute inset-0 z-0">
         <!-- Slide 1 -->
-        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 bg-cover bg-center scale-105 transition-transform duration-10000"
-             style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=85');">
+        <div
+          class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 bg-cover bg-center scale-105 transition-transform duration-10000"
+          style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=85');">
         </div>
         <!-- Slide 2 -->
-        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
-             style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=2000&q=85');">
+        <div
+          class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
+          style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=2000&q=85');">
         </div>
         <!-- Slide 3 -->
-        <div class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
-             style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85');">
+        <div
+          class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
+          style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85');">
         </div>
       </div>
 
       <!-- LEGIBILITY GRADIENT OVERLAY -->
-      <div class="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/50 backdrop-blur-[2px]"></div>
+      <div
+        class="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/50 backdrop-blur-[2px]">
+      </div>
 
       <!-- HERO CONTENT CONTAINER -->
       <div class="relative z-20 max-w-[1440px] mx-auto px-4 md:px-16 py-20 md:py-28 w-full text-white">
         <div class="max-w-4xl">
-          <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-button uppercase tracking-widest mb-6">
+          <div
+            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-button uppercase tracking-widest mb-6">
             <span>Chennai's Most Affordable Luxury Developer</span>
           </div>
 
-          <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-light leading-tight mb-6 text-white drop-shadow-lg">
-            Architecting Trust. <br/>
+          <h1
+            class="font-display text-4xl sm:text-6xl lg:text-7xl font-light leading-tight mb-6 text-white drop-shadow-lg">
+            Architecting Trust. <br />
             <span class="gold-gradient-text italic font-serif">Creating Value.</span>
           </h1>
 
           <p class="font-body text-base md:text-lg text-slate-200 max-w-2xl leading-relaxed mb-10 drop-shadow-md">
-            Triangle Properties Pvt. Ltd. delivers uncompromised architectural refinement and legal title transparency across Vadapalani, ECR, Anna Nagar, and prime Chennai locations.
+            Triangle Properties Pvt. Ltd. delivers uncompromised architectural refinement and legal title transparency
+            across Vadapalani, ECR, Anna Nagar, and prime Chennai locations.
           </p>
 
           <!-- Quick Filter Panel -->
-          <div class="glass-card p-6 md:p-8 bg-slate-950/70 border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-md">
+          <div
+            class="glass-card p-6 md:p-8 bg-slate-950/70 border border-slate-700/80 rounded-2xl shadow-2xl backdrop-blur-md">
             <form action="properties.html" method="GET" class="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div>
-                <label for="search-location" class="block text-xs font-button uppercase tracking-wider text-slate-300 mb-2">Location</label>
-                <select id="search-location" name="location" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                <label for="search-location"
+                  class="block text-xs font-button uppercase tracking-wider text-slate-300 mb-2">Location</label>
+                <select id="search-location" name="location"
+                  class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
                   <option value="">All Chennai Locations</option>
                   <option value="Vadapalani">Vadapalani (Headquarters)</option>
                   <option value="Anna Nagar">Anna Nagar</option>
@@ -117,18 +143,22 @@
               </div>
 
               <div>
-                <label for="search-type" class="block text-xs font-button uppercase tracking-wider text-slate-300 mb-2">Property Category</label>
-                <select id="search-type" name="type" class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
-                  <option value="ALL">All Categories</option>
-                  <option value="Apartment">Apartment / Flat</option>
-                  <option value="Villa">Luxury Villa</option>
-                  <option value="Plot">Gated Plot</option>
-                  <option value="Commercial">Commercial Space</option>
+                <label for="search-type"
+                  class="block text-xs font-button uppercase tracking-wider text-slate-300 mb-2">Plot Category</label>
+                <select id="search-type" name="type"
+                  class="w-full px-4 py-3 rounded-xl bg-slate-900 border border-slate-700 text-white text-sm focus:outline-none focus:border-amber-500">
+                  <option value="ALL">All Approved Layouts</option>
+                  <option value="CMDA Approved Plot">CMDA Approved Plot</option>
+                  <option value="DTCP Approved Plot">DTCP Approved Plot</option>
+                  <option value="Gated Villa Plot">Gated Villa Plot</option>
+                  <option value="Commercial Land">Commercial Land</option>
+                  <option value="Farm & Agricultural Land">Farm & Agricultural Land</option>
                 </select>
               </div>
 
               <div class="flex items-end">
-                <button type="submit" class="w-full btn-primary text-xs uppercase tracking-widest flex items-center justify-center gap-2">
+                <button type="submit"
+                  class="w-full btn-primary text-xs uppercase tracking-widest flex items-center justify-center gap-2">
                   <span class="material-symbols-outlined text-base">search</span>
                   <span>Filter Listings</span>
                 </button>
@@ -138,15 +168,19 @@
 
           <!-- CAROUSEL CONTROLS & INDICATORS -->
           <div class="flex items-center gap-4 mt-8">
-            <button id="hero-prev-btn" aria-label="Previous Slide" class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
+            <button id="hero-prev-btn" aria-label="Previous Slide"
+              class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
               <span class="material-symbols-outlined text-sm">arrow_back</span>
             </button>
             <div id="hero-indicators" class="flex items-center gap-2">
               <button class="w-8 h-1.5 rounded-full bg-amber-500 transition-all hero-indicator" data-slide="0"></button>
-              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="1"></button>
-              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="2"></button>
+              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator"
+                data-slide="1"></button>
+              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator"
+                data-slide="2"></button>
             </div>
-            <button id="hero-next-btn" aria-label="Next Slide" class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
+            <button id="hero-next-btn" aria-label="Next Slide"
+              class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
               <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
           </div>
@@ -159,20 +193,32 @@
     <section class="py-16 bg-slate-50 dark:bg-slate-950 border-b border-slate-200 dark:border-slate-800">
       <div class="max-w-[1440px] mx-auto px-4 md:px-16 grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
         <div>
-          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="15" data-suffix="+">0+</span>
-          <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Years Experience</span>
+          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="15"
+            data-suffix="+">0+</span>
+          <span
+            class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Years
+            Experience</span>
         </div>
         <div>
-          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="120" data-suffix="+">0+</span>
-          <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Projects Handed Over</span>
+          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="120"
+            data-suffix="+">0+</span>
+          <span
+            class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Projects
+            Handed Over</span>
         </div>
         <div>
-          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="650" data-suffix="+">0+</span>
-          <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Satisfied Owners</span>
+          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="650"
+            data-suffix="+">0+</span>
+          <span
+            class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Satisfied
+            Owners</span>
         </div>
         <div>
-          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="2.5" data-suffix="M+ sqft">0M+</span>
-          <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Square Feet Developed</span>
+          <span class="stat-counter font-display text-4xl sm:text-6xl text-amber-500 font-bold block" data-target="2.5"
+            data-suffix="M+ sqft">0M+</span>
+          <span
+            class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 mt-2 block">Square
+            Feet Developed</span>
         </div>
       </div>
     </section>
@@ -181,10 +227,11 @@
     <section id="collections" class="py-24 px-4 md:px-16 max-w-[1440px] mx-auto">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
         <div>
-          <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Prime Listings</span>
-          <h2 class="font-display text-3xl sm:text-5xl font-light">The Signature Collection</h2>
+          <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">100% Legal Clear Layouts</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-light">Approved Plot Portfolio & EMI Options</h2>
         </div>
-        <a href="properties.html" class="mt-4 md:mt-0 font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-2 font-bold">
+        <a href="properties.html"
+          class="mt-4 md:mt-0 font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-2 font-bold">
           <span>View Full Portfolio</span>
           <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </a>
@@ -200,52 +247,36 @@
       <div class="max-w-[1440px] mx-auto px-4 md:px-16">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
-            <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Verified Client Experiences</span>
+            <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Verified Client
+              Experiences</span>
             <h2 class="font-display text-3xl sm:text-5xl font-light">What Our Clients Say</h2>
           </div>
           <div class="mt-4 md:mt-0 flex items-center gap-3">
-            <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" 
-               class="font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-1 font-bold mr-2 hidden sm:flex">
+            <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank"
+              rel="noopener noreferrer"
+              class="font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-1 font-bold mr-2 hidden sm:flex">
               <span>50+ Google Reviews</span>
               <span class="material-symbols-outlined text-sm">open_in_new</span>
             </a>
-            <button id="testimonial-prev-btn" type="button" aria-label="Previous Testimonial" class="p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-all focus:outline-none shadow-md">
+            <button id="testimonial-prev-btn" type="button" aria-label="Previous Testimonial"
+              class="p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-all focus:outline-none shadow-md">
               <span class="material-symbols-outlined text-xl">arrow_back</span>
             </button>
-            <button id="testimonial-next-btn" type="button" aria-label="Next Testimonial" class="p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-all focus:outline-none shadow-md">
+            <button id="testimonial-next-btn" type="button" aria-label="Next Testimonial"
+              class="p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-all focus:outline-none shadow-md">
               <span class="material-symbols-outlined text-xl">arrow_forward</span>
             </button>
           </div>
         </div>
 
-        <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500">
+        <div id="testimonials-grid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500">
           <!-- Rendered dynamically by initTestimonialsSlider() -->
         </div>
       </div>
     </section>
   </main>
 
-  <!-- FOOTER -->
-  <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-16 text-slate-600 dark:text-slate-400">
-    <div class="max-w-[1440px] mx-auto px-4 md:px-16 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-      
-      <div class="md:col-span-1">
-        <a href="index.html" class="inline-block mb-4">
-          <img src="assets/logo.png" alt="Triangle Properties Logo" class="h-10 w-auto object-contain">
-        </a>
-        <p class="font-body text-xs leading-relaxed mb-6">
-          Triangle Properties Pvt. Ltd. — Vadapalani, Chennai.
-        </p>
-
-        <!-- Social Media Icons (Instagram, Facebook, Google) -->
-        <div class="flex items-center gap-4">
-          <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Page"
-             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-          </a>
-          <a href="https://www.facebook.com/Triangleproperties/?ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page"
-             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/></svg>
   <div id="footer-container"></div>
   <div id="floating-contact-container"></div>
 

@@ -336,16 +336,34 @@ function renderGallery() {
       </div>
       <div class="p-4 flex items-center justify-between">
         <div>
-          <h3 class="font-display font-bold text-white text-sm">${escapeHtml(g.title)}</h3>
+          <h3 class="font-display font-bold text-white text-sm line-clamp-1">${escapeHtml(g.title)}</h3>
           <span class="font-button text-[10px] text-amber-400 uppercase">${escapeHtml(g.category)}</span>
         </div>
-        <button onclick="window.deleteGalleryItem('${g.id}')" title="Delete Photo" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all">
-          <span class="material-symbols-outlined text-base">delete</span>
-        </button>
+        <div class="flex items-center gap-1.5">
+          <button onclick="window.editGalleryItem('${g.id}')" title="Edit Photo" class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 transition-all">
+            <span class="material-symbols-outlined text-base">edit</span>
+          </button>
+          <button onclick="window.deleteGalleryItem('${g.id}')" title="Delete Photo" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all">
+            <span class="material-symbols-outlined text-base">delete</span>
+          </button>
+        </div>
       </div>
     </div>
   `).join('');
 }
+
+window.editGalleryItem = function(id) {
+  const item = (state.gallery || []).find(g => g.id === id);
+  if (!item) return;
+  document.getElementById('gal-doc-id').value = item.id;
+  document.getElementById('gal-title').value = item.title || '';
+  document.getElementById('gal-category').value = item.category || 'Completed';
+  document.getElementById('gal-image-url').value = item.image || '';
+
+  const titleEl = document.getElementById('gal-modal-title');
+  if (titleEl) titleEl.textContent = 'Edit Gallery Photo';
+  document.getElementById('gallery-modal')?.classList.remove('hidden');
+};
 
 window.deleteGalleryItem = function(id) {
   if (!confirm("Delete photo from gallery?")) return;
@@ -377,7 +395,10 @@ function renderServices() {
         </div>
         <p class="font-body text-xs text-on-surface-variant leading-relaxed mb-4">${escapeHtml(s.shortDesc)}</p>
       </div>
-      <div class="flex items-center justify-end border-t border-slate-800 pt-3">
+      <div class="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
+        <button onclick="window.editServiceItem('${s.id}')" title="Edit Service" class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 transition-all">
+          <span class="material-symbols-outlined text-base">edit</span>
+        </button>
         <button onclick="window.deleteServiceItem('${s.id}')" title="Delete Service" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all">
           <span class="material-symbols-outlined text-base">delete</span>
         </button>
@@ -385,6 +406,23 @@ function renderServices() {
     </div>
   `).join('');
 }
+
+window.editServiceItem = function(id) {
+  const s = (state.services || []).find(item => item.id === id);
+  if (!s) return;
+  document.getElementById('serv-doc-id').value = s.id;
+  document.getElementById('serv-title').value = s.title || '';
+  document.getElementById('serv-icon').value = s.icon || 'landscape';
+  if (document.getElementById('serv-icon-custom')) {
+    document.getElementById('serv-icon-custom').value = s.icon || '';
+  }
+  document.getElementById('serv-short-desc').value = s.shortDesc || '';
+  document.getElementById('serv-full-desc').value = s.fullDesc || s.shortDesc || '';
+  
+  const modalTitle = document.getElementById('serv-modal-title');
+  if (modalTitle) modalTitle.textContent = 'Edit Service';
+  document.getElementById('service-modal')?.classList.remove('hidden');
+};
 
 window.deleteServiceItem = function(id) {
   if (!confirm("Delete this service?")) return;
@@ -489,7 +527,20 @@ document.getElementById('add-category-btn')?.addEventListener('click', () => {
 
 document.getElementById('add-gallery-btn')?.addEventListener('click', () => {
   document.getElementById('gallery-form')?.reset();
+  const docId = document.getElementById('gal-doc-id');
+  if (docId) docId.value = '';
+  const titleEl = document.getElementById('gal-modal-title');
+  if (titleEl) titleEl.textContent = 'Add Gallery Photo';
   document.getElementById('gallery-modal')?.classList.remove('hidden');
+});
+
+document.getElementById('add-service-btn')?.addEventListener('click', () => {
+  document.getElementById('service-form')?.reset();
+  const docId = document.getElementById('serv-doc-id');
+  if (docId) docId.value = '';
+  const modalTitle = document.getElementById('serv-modal-title');
+  if (modalTitle) modalTitle.textContent = 'Add New Service';
+  document.getElementById('service-modal')?.classList.remove('hidden');
 });
 
 document.getElementById('prop-cloudinary-file')?.addEventListener('change', async (e) => {
@@ -530,8 +581,11 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
     title: document.getElementById('prop-title').value,
     category: document.getElementById('prop-category').value,
     price: document.getElementById('prop-price').value,
-    status: document.getElementById('prop-status').value,
+    emiOption: document.getElementById('prop-emi')?.value || "EMI Options Available",
+    status: "For Sale",
     location: document.getElementById('prop-location').value,
+    areaSqft: parseInt(document.getElementById('prop-sqft')?.value || 1200),
+    plotDimensions: document.getElementById('prop-dimensions')?.value || "30ft × 40ft",
     image: document.getElementById('prop-image-url').value,
     description: document.getElementById('prop-desc').value,
     createdAt: new Date().toISOString()
@@ -590,15 +644,25 @@ document.getElementById('category-form')?.addEventListener('submit', async (e) =
 
 document.getElementById('gallery-form')?.addEventListener('submit', (e) => {
   e.preventDefault();
-  const newPhoto = {
-    id: "gal-" + Date.now(),
+  const docId = document.getElementById('gal-doc-id')?.value;
+  const photoData = {
+    id: docId || ("gal-" + Date.now()),
     title: document.getElementById('gal-title').value,
     category: document.getElementById('gal-category').value,
     image: document.getElementById('gal-image-url').value
   };
 
   state.gallery = state.gallery || [];
-  state.gallery.unshift(newPhoto);
+  if (docId) {
+    const idx = state.gallery.findIndex(g => g.id === docId);
+    if (idx !== -1) {
+      state.gallery[idx] = photoData;
+    } else {
+      state.gallery.unshift(photoData);
+    }
+  } else {
+    state.gallery.unshift(photoData);
+  }
 
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.gallery = state.gallery;
@@ -606,7 +670,42 @@ document.getElementById('gallery-form')?.addEventListener('submit', (e) => {
 
   renderGallery();
   document.getElementById('gallery-modal')?.classList.add('hidden');
-  showToast("Gallery photo added! Live site updated.", "success");
+  showToast("Gallery photo saved! Live site updated.", "success");
+});
+
+document.getElementById('service-form')?.addEventListener('submit', (e) => {
+  e.preventDefault();
+  const docId = document.getElementById('serv-doc-id')?.value;
+  const customIcon = document.getElementById('serv-icon-custom')?.value?.trim();
+  const selectedIcon = document.getElementById('serv-icon')?.value || 'landscape';
+  
+  const servData = {
+    id: docId || ("serv-" + Date.now()),
+    title: document.getElementById('serv-title').value,
+    icon: customIcon || selectedIcon,
+    shortDesc: document.getElementById('serv-short-desc').value,
+    fullDesc: document.getElementById('serv-full-desc').value
+  };
+
+  state.services = state.services || [];
+  if (docId) {
+    const idx = state.services.findIndex(s => s.id === docId);
+    if (idx !== -1) {
+      state.services[idx] = servData;
+    } else {
+      state.services.unshift(servData);
+    }
+  } else {
+    state.services.unshift(servData);
+  }
+
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  liveData.services = state.services;
+  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+
+  renderServices();
+  document.getElementById('service-modal')?.classList.add('hidden');
+  showToast("Service saved successfully! Live site updated.", "success");
 });
 
 document.getElementById('construction-settings-form')?.addEventListener('submit', (e) => {

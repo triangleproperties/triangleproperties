@@ -37,7 +37,7 @@ const LocalInquiryStore = {
 (async function initFirebase() {
   try {
     const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-    const { getFirestore, collection, addDoc, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+    const { getFirestore, collection, addDoc, doc, setDoc, onSnapshot, serverTimestamp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
     const { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
     const { getStorage, ref, uploadBytesResumable, getDownloadURL } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-storage.js");
     const { getAnalytics } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js");
@@ -56,11 +56,18 @@ const LocalInquiryStore = {
     window.analytics = analytics;
     window.firestoreAddDoc = addDoc;
     window.firestoreCollection = collection;
+    window.firestoreDoc = doc;
+    window.firestoreSetDoc = setDoc;
+    window.firestoreOnSnapshot = onSnapshot;
     window.firestoreTimestamp = serverTimestamp;
 
     window.firebaseSignIn = (email, pass) => signInWithEmailAndPassword(auth, email, pass);
     window.firebaseSignOut = () => signOut(auth);
     window.onFirebaseAuthStateChanged = (callback) => onAuthStateChanged(auth, callback);
+
+    if (typeof window.initFirestoreLiveSync === 'function') {
+      window.initFirestoreLiveSync();
+    }
 
     // Global Firebase Cloud Storage File Upload Helper
     window.uploadFileToFirebaseStorage = function(file, folderName = 'uploads', onProgress, onSuccess, onError) {

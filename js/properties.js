@@ -3,6 +3,16 @@
 document.addEventListener('DOMContentLoaded', () => {
   initPropertyGrid();
   initPropertySearch();
+
+  // Listen for Cloud Firestore real-time updates across devices & browser storage
+  window.addEventListener('triangle_data_updated', () => {
+    initPropertyGrid();
+  });
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'triangle_custom_data') {
+      initPropertyGrid();
+    }
+  });
 });
 
 function getLiveProperties() {
@@ -54,9 +64,10 @@ function createPropertyCardHTML(prop) {
     <div class="glass-card card-hover-lift rounded-3xl overflow-hidden group flex flex-col h-full border border-slate-200 dark:border-slate-800 shadow-md">
       <!-- Thumbnail & Badges -->
       <div class="relative aspect-[4/3] overflow-hidden bg-slate-900">
-        <img src="${prop.image}" 
+        <img src="${prop.image || 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80'}" 
              alt="${prop.title}" 
              loading="lazy"
+             onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80';"
              class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out" />
         
         <div class="absolute top-4 left-4 z-10">
@@ -97,17 +108,23 @@ function createPropertyCardHTML(prop) {
         <!-- Specs Grid Bar -->
         <div class="grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/60 mb-4 text-center">
           <div>
-            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">Beds</span>
-            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${prop.bedrooms > 0 ? prop.bedrooms + ' BHK' : 'N/A'}</span>
+            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">Plot Size</span>
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${prop.areaSqft} sq.ft</span>
           </div>
           <div>
-            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">Baths</span>
-            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${prop.bathrooms > 0 ? prop.bathrooms : 'N/A'}</span>
+            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">Dimensions</span>
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${prop.plotDimensions || prop.specs?.dimensions || 'Standard'}</span>
           </div>
           <div>
-            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">Area</span>
-            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${prop.areaSqft} sqft</span>
+            <span class="block text-[10px] uppercase tracking-wider text-slate-400 font-bold">Road Access</span>
+            <span class="text-xs font-bold text-slate-800 dark:text-slate-200">${prop.roadWidth || prop.specs?.roadWidth || '30ft Tar'}</span>
           </div>
+        </div>
+
+        <div class="mb-4">
+          <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/30 block text-center">
+            💳 ${prop.emiOption || 'Easy Monthly EMI Options Available'}
+          </span>
         </div>
 
         <p class="text-slate-600 dark:text-slate-400 text-xs line-clamp-2 mb-6 flex-grow leading-relaxed">
@@ -252,20 +269,20 @@ function openPropertyModal(propertyId) {
 
         <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
           <div>
-            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Bedrooms</span>
-            <span class="text-lg font-bold text-slate-900 dark:text-white">${prop.bedrooms > 0 ? prop.bedrooms + ' BHK' : 'N/A'}</span>
+            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Plot Size</span>
+            <span class="text-lg font-bold text-slate-900 dark:text-white">${prop.areaSqft} sq.ft</span>
           </div>
           <div>
-            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Bathrooms</span>
-            <span class="text-lg font-bold text-slate-900 dark:text-white">${prop.bathrooms > 0 ? prop.bathrooms : 'N/A'}</span>
+            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Dimensions</span>
+            <span class="text-lg font-bold text-slate-900 dark:text-white">${prop.plotDimensions || prop.specs?.dimensions || '30ft × 40ft'}</span>
           </div>
           <div>
-            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Built Area</span>
-            <span class="text-lg font-bold text-slate-900 dark:text-white">${prop.areaSqft} sqft</span>
+            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">EMI Option</span>
+            <span class="text-lg font-bold text-amber-400">${prop.emiOption || prop.specs?.emi || 'Easy EMI'}</span>
           </div>
           <div>
-            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Approval</span>
-            <span class="text-lg font-bold text-amber-500">${prop.specs?.approval || 'Approved'}</span>
+            <span class="text-xs text-slate-400 block font-medium uppercase tracking-wider">Approval Authority</span>
+            <span class="text-lg font-bold text-emerald-400">${prop.specs?.approval || prop.category || 'CMDA Approved'}</span>
           </div>
         </div>
 

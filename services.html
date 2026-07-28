@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Services | Triangle Properties Vadapalani</title>
-  <meta name="description" content="Explore real estate sales, turnkey house construction, joint venture land development, and concierge property management services by Triangle Properties."/>
+  <title>Our Services | Triangle Properties Pvt. Ltd.</title>
+  <meta name="description" content="Explore end-to-end real estate plot sales, turnkey house construction, joint venture land development, and legal title management in Vadapalani & Chennai."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -47,44 +57,14 @@
     <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Real Estate Solutions</span>
     <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Our Lifecycle Services</h1>
     <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-      End-to-end property advisory, civil construction, JV partnerships, and legal title management.
+      End-to-end plot layout sales, turnkey civil construction, JV partnerships, and legal title management in Vadapalani & Chennai.
     </p>
   </section>
 
-  <!-- SERVICES GRID -->
+  <!-- DYNAMIC SERVICES GRID -->
   <main class="py-12 sm:py-16 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow">
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-      <div class="glass-card p-6 sm:p-10">
-        <span class="material-symbols-outlined text-3xl sm:text-4xl text-amber-500 mb-4">apartment</span>
-        <h2 class="font-display text-xl sm:text-2xl font-bold mb-3">Real Estate Sales & Advisory</h2>
-        <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-          Assisting buyers and investors in shortlisting 100% legal-clear apartments, luxury villas, gated plots, and commercial offices with pre-approved bank loans.
-        </p>
-      </div>
-
-      <div class="glass-card p-6 sm:p-10">
-        <span class="material-symbols-outlined text-3xl sm:text-4xl text-amber-500 mb-4">foundation</span>
-        <h2 class="font-display text-xl sm:text-2xl font-bold mb-3">Turnkey Civil Construction</h2>
-        <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-          Complete house construction from architectural design, soil testing, and RCC framing to interior finishing with itemized cost transparency.
-        </p>
-      </div>
-
-      <div class="glass-card p-6 sm:p-10">
-        <span class="material-symbols-outlined text-3xl sm:text-4xl text-amber-500 mb-4">handshake</span>
-        <h2 class="font-display text-xl sm:text-2xl font-bold mb-3">Joint Venture Land Development</h2>
-        <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-          Partnering with landowners to construct premium residential apartment buildings with attractive built-up area sharing and zero landowner capital.
-        </p>
-      </div>
-
-      <div class="glass-card p-6 sm:p-10">
-        <span class="material-symbols-outlined text-3xl sm:text-4xl text-amber-500 mb-4">policy</span>
-        <h2 class="font-display text-xl sm:text-2xl font-bold mb-3">Property & Legal Management</h2>
-        <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-          Encumbrance certificate (EC) generation, title deed verification, sub-registrar registration assistance, and post-handover rental management.
-        </p>
-      </div>
+    <div id="services-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
+      <!-- Dynamically populated from Live Admin/Firestore Data -->
     </div>
   </main>
 
@@ -95,5 +75,59 @@
   <script src="js/component-loader.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderPublicServices();
+
+      window.addEventListener('triangle_data_updated', () => {
+        renderPublicServices();
+      });
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'triangle_custom_data') {
+          renderPublicServices();
+        }
+      });
+    });
+
+    function renderPublicServices() {
+      const container = document.getElementById('services-grid');
+      if (!container) return;
+
+      const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+      const servicesList = (liveData.services && liveData.services.length > 0) 
+        ? liveData.services 
+        : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.services : []);
+
+      if (!servicesList || servicesList.length === 0) {
+        container.innerHTML = `<p class="text-center text-slate-500 text-sm col-span-2 py-12">No services registered yet.</p>`;
+        return;
+      }
+
+      container.innerHTML = servicesList.map(s => `
+        <div class="glass-card p-6 sm:p-10 card-hover-lift flex flex-col justify-between border border-slate-200 dark:border-slate-800 shadow-md">
+          <div>
+            <span class="material-symbols-outlined text-3xl sm:text-4xl text-amber-500 mb-4 inline-block">${s.icon || 'star'}</span>
+            <h2 class="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-3">${s.title}</h2>
+            <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mb-4">
+              ${s.shortDesc || s.fullDesc || ''}
+            </p>
+            ${s.fullDesc && s.fullDesc !== s.shortDesc ? `
+              <p class="font-body text-slate-500 dark:text-slate-400 text-xs leading-relaxed border-t border-slate-100 dark:border-slate-800/80 pt-3 mt-3">
+                ${s.fullDesc}
+              </p>
+            ` : ''}
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <a href="contact.html?subject=${encodeURIComponent('Inquiry regarding service: ' + s.title)}" 
+               class="font-button text-xs font-bold text-amber-500 hover:text-amber-600 uppercase tracking-widest flex items-center gap-1">
+              <span>Book Consultation</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+      `).join('');
+    }
+  </script>
 </body>
 </html>

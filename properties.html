@@ -1,6 +1,16 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Collections & Portfolio | Triangle Properties</title>
@@ -44,10 +54,10 @@
 
   <!-- BANNER -->
   <section id="collections" class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
-    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Exclusive Portfolio</span>
-    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Signature Real Estate Collections</h1>
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">100% Legal Clear Layouts</span>
+    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">CMDA & DTCP Approved Plot Layouts</h1>
     <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-      CMDA & DTCP approved luxury apartments, beach villas, gated plots, and commercial spaces in Vadapalani & Chennai.
+      Verified residential plots, gated villa sites, commercial land, and farm lands in Vadapalani & Chennai with easy monthly EMI options.
     </p>
   </section>
 
@@ -55,27 +65,26 @@
   <section class="py-4 sm:py-6 px-4 md:px-16 max-w-[1440px] mx-auto sticky top-16 sm:top-20 z-30 glass-nav border-b border-slate-200 dark:border-slate-800">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3 items-center">
       <div class="lg:col-span-2 relative">
-        <input type="text" id="search-keyword" placeholder="Search location (Vadapalani, ECR...)" 
+        <input type="text" id="search-keyword" placeholder="Search location (Vadapalani, ECR, Tambaram...)" 
                class="w-full pl-10 pr-4 py-2.5 sm:py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs sm:text-sm focus:outline-none focus:border-amber-500">
         <span class="material-symbols-outlined absolute left-3 top-2.5 sm:top-3 text-slate-400 text-base">search</span>
       </div>
 
       <div>
         <select id="filter-type" class="w-full px-3 py-2.5 sm:py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs sm:text-sm font-button uppercase">
-          <option value="ALL">All Categories</option>
-          <option value="Apartment">Apartments</option>
-          <option value="Villa">Villas</option>
-          <option value="Plot">Gated Plots</option>
-          <option value="Commercial">Commercial</option>
+          <option value="ALL">All Plot Categories</option>
+          <option value="CMDA Approved Plot">CMDA Approved Plots</option>
+          <option value="DTCP Approved Plot">DTCP Approved Plots</option>
+          <option value="Gated Villa Plot">Gated Villa Plots</option>
+          <option value="Commercial Land">Commercial Land</option>
+          <option value="Farm & Agricultural Land">Farm & Agricultural Lands</option>
         </select>
       </div>
 
       <div>
         <select id="filter-status" class="w-full px-3 py-2.5 sm:py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs sm:text-sm font-button uppercase">
-          <option value="ALL">All Statuses</option>
-          <option value="For Sale">For Sale</option>
-          <option value="Under Construction">Under Construction</option>
-          <option value="For Rent">For Rent</option>
+          <option value="ALL">All Layout Types</option>
+          <option value="For Sale">For Sale (Immediate Registration)</option>
         </select>
       </div>
 
@@ -98,16 +107,6 @@
     </div>
   </main>
 
-  <footer class="bg-slate-100 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800 py-12 sm:py-16 text-slate-600 dark:text-slate-400">
-    <div class="max-w-[1440px] mx-auto px-4 md:px-16 grid grid-cols-1 md:grid-cols-4 gap-8 sm:gap-12 mb-12">
-      <div class="md:col-span-1">
-        <a href="index.html" class="inline-block mb-4">
-          <img src="assets/logo.png" alt="Triangle Properties Logo" class="h-9 sm:h-10 w-auto object-contain">
-        </a>
-        <p class="font-body text-xs leading-relaxed mb-4">Triangle Properties Pvt. Ltd. — Vadapalani, Chennai.</p>
-        <div class="flex items-center gap-4">
-          <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
   <div id="footer-container"></div>
   <div id="floating-contact-container"></div>
 

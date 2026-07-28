@@ -1,4 +1,50 @@
-// Triangle Properties Pvt. Ltd. - Dynamic Component Loader & Theme Engine
+// Triangle Properties Pvt. Ltd. - Dynamic Component Loader & Universal Dual Theme Engine
+
+// Global Unified Theme State Functions
+function getSavedTheme() {
+  return localStorage.getItem('triangle_theme') || localStorage.getItem('theme') || 'dark';
+}
+
+function applyTriangleTheme(theme) {
+  if (theme === 'light') {
+    document.documentElement.classList.remove('dark');
+  } else {
+    document.documentElement.classList.add('dark');
+  }
+  localStorage.setItem('triangle_theme', theme);
+  localStorage.setItem('theme', theme);
+  updateThemeIcons();
+}
+
+function updateThemeIcons() {
+  const isDark = document.documentElement.classList.contains('dark');
+  
+  // Sun icon is displayed in Dark mode (click to switch to Light)
+  document.querySelectorAll('.icon-sun').forEach(el => {
+    if (isDark) {
+      el.classList.remove('hidden');
+    } else {
+      el.classList.add('hidden');
+    }
+  });
+
+  // Moon icon is displayed in Light mode (click to switch to Dark)
+  document.querySelectorAll('.icon-moon').forEach(el => {
+    if (isDark) {
+      el.classList.add('hidden');
+    } else {
+      el.classList.remove('hidden');
+    }
+  });
+}
+
+// 1. Immediate Theme Initialization (Guarantees zero theme flash on navigation)
+(function initTheme() {
+  applyTriangleTheme(getSavedTheme());
+})();
+
+window.applyTriangleTheme = applyTriangleTheme;
+window.updateThemeIcons = updateThemeIcons;
 
 document.addEventListener('DOMContentLoaded', async () => {
   await Promise.all([
@@ -6,7 +52,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     loadComponent('footer-container', 'components/footer.html'),
     loadComponent('floating-contact-container', 'components/floating-contact.html')
   ]);
+  // Re-sync theme state & icons after async components finish mounting
+  updateThemeIcons();
+  updateFooterCompanyInfo();
+
+  window.addEventListener('triangle_data_updated', updateFooterCompanyInfo);
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'triangle_custom_data') updateFooterCompanyInfo();
+  });
 });
+
+function updateFooterCompanyInfo() {
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  const company = liveData.company || (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.company : {});
+  if (!company) return;
+
+  const footerContainer = document.getElementById('footer-container');
+  if (!footerContainer) return;
+
+  const addressP = footerContainer.querySelector('footer div:nth-child(4) p');
+  if (addressP && company.address) {
+    addressP.textContent = company.address;
+  }
+
+  const phoneLinks = footerContainer.querySelectorAll('a[href^="tel:"]');
+  if (phoneLinks.length > 0 && company.phone1) {
+    phoneLinks[0].textContent = company.phone1;
+    phoneLinks[0].href = `tel:${company.phone1}`;
+  }
+  if (phoneLinks.length > 1 && company.phone2) {
+    phoneLinks[1].textContent = company.phone2;
+    phoneLinks[1].href = `tel:${company.phone2}`;
+  }
+
+  const waLinks = document.querySelectorAll('a[href*="wa.me"]');
+  if (company.whatsapp) {
+    const cleanWa = company.whatsapp.replace(/\D/g, '');
+    waLinks.forEach(link => {
+      link.href = `https://wa.me/91${cleanWa}`;
+    });
+  }
+}
 
 async function loadComponent(containerId, componentUrl, callback) {
   const container = document.getElementById(containerId);
@@ -24,7 +110,7 @@ async function loadComponent(containerId, componentUrl, callback) {
 }
 
 function initNavbarScript() {
-  // Highlight active link
+  // Highlight active link based on current page
   const currentPath = window.location.pathname.split('/').pop() || 'index.html';
   const navLinks = document.querySelectorAll('.nav-link, #mobile-menu a');
 
@@ -41,33 +127,21 @@ function initNavbarScript() {
   const mobileMenu = document.getElementById('mobile-menu');
 
   if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', () => {
+    menuBtn.onclick = () => {
       mobileMenu.classList.toggle('hidden');
-    });
+    };
   }
 
-  // Theme toggle engine
+  // Theme toggle engine (Sun/Moon Dual Theme Switcher)
   const themeBtns = document.querySelectorAll('.theme-toggle-btn');
   themeBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const isDark = document.documentElement.classList.toggle('dark');
-      localStorage.setItem('theme', isDark ? 'dark' : 'light');
-      updateThemeIcons();
-    });
+    btn.onclick = (e) => {
+      e.preventDefault();
+      const isDark = document.documentElement.classList.contains('dark');
+      const newTheme = isDark ? 'light' : 'dark';
+      applyTriangleTheme(newTheme);
+    };
   });
 
   updateThemeIcons();
-}
-
-function updateThemeIcons() {
-  const isDark = document.documentElement.classList.contains('dark');
-  document.querySelectorAll('.icon-sun').forEach(el => el.classList.toggle('hidden', !isDark));
-  document.querySelectorAll('.icon-moon').forEach(el => el.classList.toggle('hidden', isDark));
-}
-
-// Global Theme Initialization
-if (localStorage.getItem('theme') === 'light') {
-  document.documentElement.classList.remove('dark');
-} else {
-  document.documentElement.classList.add('dark');
 }

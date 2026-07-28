@@ -1,16 +1,22 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>About Us | Triangle Properties Vadapalani</title>
-  <meta name="description" content="Learn about Triangle Properties Pvt. Ltd. - 15+ years of real estate excellence and 120+ completed projects in Vadapalani & Chennai."/>
+  <title>About Us & Company Heritage | Triangle Properties</title>
+  <meta name="description" content="Learn about Triangle Properties Pvt. Ltd. — 17+ years of engineering excellence, CMDA & DTCP approved plot layouts, and turnkey civil developments in Vadapalani & Chennai."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
-
   <script>
     tailwind.config = {
       darkMode: "class",
@@ -33,6 +39,10 @@
     }
   </script>
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
   <link rel="stylesheet" href="css/variables.css"/>
   <link rel="stylesheet" href="css/styles.css"/>
 </head>
@@ -44,39 +54,68 @@
 
   <!-- BANNER -->
   <section class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
-    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Our Heritage</span>
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Our Corporate Heritage</span>
     <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Architecting Trust Since 2009</h1>
-    <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-      Triangle Properties Pvt. Ltd. — 15+ years of structural precision, 120+ projects delivered, and 650+ satisfied homeowners.
+    <p id="about-banner-subtitle" class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+      Triangle Properties Pvt. Ltd. — 17+ years of structural precision, 120+ CMDA & DTCP layout projects delivered, and 650+ satisfied plot owners across Chennai.
     </p>
   </section>
 
-  <!-- CONTENT -->
+  <!-- MAIN CONTENT AREA -->
   <main class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow space-y-12 sm:space-y-16">
+    
+    <!-- HERITAGE KPI METRICS SUMMARY -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+      <div class="glass-card p-6 sm:p-8 text-center rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md">
+        <span class="material-symbols-outlined text-4xl text-amber-500 mb-3 block">history_edu</span>
+        <span id="kpi-years" class="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white block mb-1">17+ Years</span>
+        <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold">Years of Heritage</span>
+      </div>
+
+      <div class="glass-card p-6 sm:p-8 text-center rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md">
+        <span class="material-symbols-outlined text-4xl text-amber-500 mb-3 block">domain_verification</span>
+        <span id="kpi-completed" class="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white block mb-1">120+ Layouts</span>
+        <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold">Completed Layout Projects</span>
+      </div>
+
+      <div class="glass-card p-6 sm:p-8 text-center rounded-3xl border border-slate-200 dark:border-slate-800 shadow-md">
+        <span class="material-symbols-outlined text-4xl text-amber-500 mb-3 block">family_restroom</span>
+        <span id="kpi-families" class="font-display text-3xl sm:text-4xl font-bold text-slate-900 dark:text-white block mb-1">650+ Owners</span>
+        <span class="font-button text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400 font-bold">Satisfied Plot Families</span>
+      </div>
+    </div>
+
+    <!-- PROFILE & VISION GRID -->
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
       <div>
         <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Company Profile</span>
-        <h2 class="font-display text-2xl sm:text-5xl font-light mb-4 sm:mb-6">15+ Years of Engineering Excellence</h2>
+        <h2 id="about-main-headline" class="font-display text-2xl sm:text-5xl font-light mb-4 sm:mb-6">17+ Years of Engineering Excellence</h2>
         <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed mb-4 sm:mb-6">
-          Founded with a vision to make quality real estate accessible without compromised materials or hidden costs, Triangle Properties Pvt. Ltd. has grown into one of Vadapalani's most trusted developers.
+          Headquartered in Vadapalani, Chennai, Triangle Properties Pvt. Ltd. was founded with a singular focus on delivering 100% legal-clear CMDA & DTCP approved plot layouts, gated villa townships, and turnkey civil construction without hidden costs or legal ambiguities.
         </p>
         <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
-          We handle architectural design, municipal approvals, civil execution, and legal documentation under one roof.
+          We handle architectural design, municipal approvals, civil execution, sub-registrar office registration, and flexible monthly EMI payment options under one roof.
         </p>
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-        <div class="glass-card p-6 sm:p-8">
-          <h3 class="font-display text-xl sm:text-2xl text-amber-500 mb-2 sm:mb-3">Our Vision</h3>
-          <p class="font-body text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-            To be Chennai's benchmark property developer known for structural longevity, Vastu compliance, and 100% legal title safety.
+        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-amber-500">visibility</span>
+            <h3 class="font-display text-xl sm:text-2xl text-amber-500 font-bold">Our Vision</h3>
+          </div>
+          <p id="about-vision-text" class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+            To deliver transparent, CMDA & DTCP approved, architecturally superior residential plot layouts and turnkey civil developments across Chennai with uncompromised trust and legal title safety.
           </p>
         </div>
 
-        <div class="glass-card p-6 sm:p-8">
-          <h3 class="font-display text-xl sm:text-2xl text-amber-500 mb-2 sm:mb-3">Our Mission</h3>
-          <p class="font-body text-slate-600 dark:text-slate-300 text-xs leading-relaxed">
-            Delivering eco-friendly, architecturally refined residential and commercial developments on time with transparent itemized civil quotes.
+        <div class="glass-card p-6 sm:p-8 rounded-3xl border border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-2 mb-3">
+            <span class="material-symbols-outlined text-amber-500">flag</span>
+            <h3 class="font-display text-xl sm:text-2xl text-amber-500 font-bold">Our Mission</h3>
+          </div>
+          <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm leading-relaxed">
+            Delivering legal-clear gated plot layouts and architecturally refined civil projects on time with easy monthly EMI payment schemes and 100% bank loan sanction support.
           </p>
         </div>
       </div>
@@ -90,5 +129,46 @@
   <script src="js/component-loader.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderLiveAboutPage();
+
+      // Listen for Live Admin Firestore Updates across devices & storage
+      window.addEventListener('triangle_data_updated', () => {
+        renderLiveAboutPage();
+      });
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'triangle_custom_data') {
+          renderLiveAboutPage();
+        }
+      });
+    });
+
+    function renderLiveAboutPage() {
+      const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+      const aboutData = liveData.about || (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.about : {});
+
+      const years = aboutData.years || "17+ Years";
+      const completed = aboutData.completed || "120+ Layout Projects";
+      const families = aboutData.families || "650+ Happy Owners";
+      const vision = aboutData.vision || "To deliver transparent, CMDA & DTCP approved residential plot layouts across Chennai.";
+
+      const kpiYears = document.getElementById('kpi-years');
+      const kpiCompleted = document.getElementById('kpi-completed');
+      const kpiFamilies = document.getElementById('kpi-families');
+
+      const headlineEl = document.getElementById('about-main-headline');
+      const subtitleEl = document.getElementById('about-banner-subtitle');
+      const visionEl = document.getElementById('about-vision-text');
+
+      if (kpiYears) kpiYears.textContent = years;
+      if (kpiCompleted) kpiCompleted.textContent = completed;
+      if (kpiFamilies) kpiFamilies.textContent = families;
+
+      if (headlineEl) headlineEl.textContent = `${years} of Engineering & Layout Excellence`;
+      if (subtitleEl) subtitleEl.textContent = `Triangle Properties Pvt. Ltd. — ${years} of corporate heritage, ${completed} delivered, and ${families} across Vadapalani & Chennai.`;
+      if (visionEl) visionEl.textContent = vision;
+    }
+  </script>
 </body>
 </html>

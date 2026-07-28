@@ -25,164 +25,161 @@ const BASE_TRIANGLE_DATA = {
   },
   
   stats: [
-    { label: "Years of Experience", value: 15, prefix: "", suffix: "+" },
-    { label: "Completed Projects", value: 120, prefix: "", suffix: "+" },
-    { label: "Satisfied Homeowners", value: 650, prefix: "", suffix: "+" },
+    { label: "Years of Excellence", value: 15, prefix: "", suffix: "+" },
+    { label: "Approved Layouts", value: 120, prefix: "", suffix: "+" },
+    { label: "Satisfied Plot Owners", value: 650, prefix: "", suffix: "+" },
     { label: "Square Feet Developed", value: 2.5, prefix: "", suffix: "M+ sqft" }
   ],
 
   processSteps: [
-    { step: "01", title: "Consultation", desc: "Understanding budget, Vastu preferences, structural scope, and location criteria." },
-    { step: "02", title: "Property Selection", desc: "Shortlisting 100% legal-clear apartments, villas, plots, or commercial layouts." },
-    { step: "03", title: "Site Visit", desc: "Guided site walkthrough with senior engineering project advisors." },
-    { step: "04", title: "Documentation", desc: "Title deed verification, CMDA/DTCP clearance, & bank home loan sanction." },
-    { step: "05", title: "Registration", desc: "Sub-registrar office registration assistance and encumbrance certificate generation." },
-    { step: "06", title: "Construction", desc: "Itemized civil execution with weekly structural progress updates." },
-    { step: "07", title: "Handover", desc: "Formal key handover with 1-year structural warranty & ongoing property management." }
+    { step: "01", title: "Site Selection", desc: "Browse 100% legal-clear CMDA & DTCP approved plots, commercial land, or farm land." },
+    { step: "02", title: "Guided Site Visit", desc: "Free site visit with our land advisors to inspect layout roads and plot dimensions." },
+    { step: "03", title: "EMI & Loan Plan", desc: "Select flexible monthly EMI options or 80% bank loan approval with 0% hidden fee." },
+    { step: "04", title: "Documentation", desc: "Title deed verification, parent document audit, and Encumbrance Certificate (EC) check." },
+    { step: "05", title: "Registration", desc: "Sub-registrar office registration assistance and immediate physical plot handover." }
   ],
 
   properties: [
     {
       id: "prop-101",
-      title: "Vadapalani Luxury Crest Apartments",
-      category: "Apartment",
+      title: "Vadapalani Metro Enclave Plot",
+      category: "CMDA Approved Plot",
       status: "For Sale",
-      price: "₹ 88 Lakhs",
-      priceRaw: 8800000,
+      price: "₹ 48 Lakhs",
+      priceRaw: 4800000,
+      emiOption: "EMI from ₹22,500/mo",
       location: "Vadapalani, Chennai",
       address: "Near Vadapalani Metro & Forum Mall, Chennai - 600026",
-      bedrooms: 3,
-      bathrooms: 2,
-      parking: "Covered Car & Bike",
-      areaSqft: 1450,
-      builtYear: 2024,
-      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+      areaSqft: 1200,
+      plotDimensions: "30ft × 40ft",
+      roadWidth: "30ft Tar Road",
+      image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
       gallery: [
-        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Executive 3 BHK apartments in prime Vadapalani. Featuring 100% Vastu compliance, covered car parking, elevator backup, and proximity to Vadapalani Metro station.",
-      amenities: ["Covered Parking", "24/7 Power Backup", "Elevator Access", "CCTV Security", "Vastu Compliant Layout", "EV Charging Point"],
-      specs: { facing: "East", floor: "2nd Floor of 5", possession: "Ready to Move", approval: "CMDA Approved" }
+      description: "Prime CMDA approved residential plot situated in Vadapalani near Metro Station. 100% Vastu compliant layout, clear title deed, immediate registration, and 80% bank loan approval with easy monthly EMI options.",
+      amenities: ["CMDA Approved", "30ft Wide Tar Road", "Underground Water Line", "Electricity Connection", "Compound Wall", "80% Bank Loan Approved"],
+      specs: { facing: "East", dimensions: "30ft × 40ft", emi: "₹22,500/mo", approval: "CMDA P.P. No. 142/2024", roadWidth: "30ft Blacktop" }
     },
     {
       id: "prop-102",
-      title: "Royal Emerald Oceanfront Villa",
-      category: "Villa",
+      title: "ECR Seaside Gated Villa Plot",
+      category: "Gated Villa Plot",
       status: "For Sale",
-      price: "₹ 3.40 Cr",
-      priceRaw: 34000000,
-      location: "ECR, Chennai",
+      price: "₹ 75 Lakhs",
+      priceRaw: 7500000,
+      emiOption: "EMI from ₹35,000/mo",
+      location: "ECR Kovalam, Chennai",
       address: "East Coast Road, Near Kovalam Beach, Chennai",
-      bedrooms: 4,
-      bathrooms: 5,
-      parking: "Private 3 Cars",
-      areaSqft: 3200,
-      builtYear: 2024,
+      areaSqft: 2400,
+      plotDimensions: "40ft × 60ft",
+      roadWidth: "40ft Blacktop Road",
       image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80",
       gallery: [
-        "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80",
-        "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
+        "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Exclusive sea-facing luxury villa offering private swimming pool, private terrace garden, double-height living room, and modern architectural finishes.",
-      amenities: ["Private Pool", "Private Garden", "Home Theater Room", "Solar Panel Grid", "24/7 Gated Security"],
-      specs: { facing: "North-East", floor: "G+2 Independent Villa", possession: "Immediate", approval: "DTCP Approved" }
+      description: "Exclusive ocean-breeze DTCP approved villa plot in gated enclave on East Coast Road. Features avenue trees, street lights, 24/7 security gate, and zero-interest EMI payment terms.",
+      amenities: ["DTCP Approved", "Gated Security", "40ft Avenue Road", "Avenue Trees", "Streetlights", "Easy EMI Payment Plan"],
+      specs: { facing: "North-East", dimensions: "40ft × 60ft", emi: "₹35,000/mo", approval: "DTCP L.P. No. 88/2024", roadWidth: "40ft Avenue" }
     },
     {
       id: "prop-103",
-      title: "Triangle Grand Horizon",
-      category: "Apartment",
-      status: "Under Construction",
-      price: "₹ 65 Lakhs",
-      priceRaw: 6500000,
-      location: "Velachery, Chennai",
-      address: "100 Feet Bypass Road, Velachery, Chennai",
-      bedrooms: 2,
-      bathrooms: 2,
-      parking: "Covered Parking",
-      areaSqft: 1120,
-      builtYear: 2025,
+      title: "Tambaram Green City Plots",
+      category: "DTCP Approved Plot",
+      status: "For Sale",
+      price: "₹ 24 Lakhs",
+      priceRaw: 2400000,
+      emiOption: "EMI from ₹12,000/mo",
+      location: "Tambaram West, Chennai",
+      address: "Near MEPZ & Outer Ring Road, Tambaram, Chennai",
+      areaSqft: 800,
+      plotDimensions: "20ft × 40ft",
+      roadWidth: "30ft Blacktop Road",
       image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80",
       gallery: [
         "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: true,
-      description: "Premium 2 BHK budget apartments strategically located near IT corridors and metro links. Excellent capital growth and rental yield potential.",
-      amenities: ["Clubhouse Facilities", "Elevator Access", "Badminton Court", "Water Treatment Plant", "Visitor Parking"],
-      specs: { facing: "North", floor: "3rd Floor of 8", possession: "December 2025", approval: "RERA Registered" }
+      description: "Budget-friendly DTCP approved residential plot in rapidly developing Tambaram West corridor. 100% legal clearance with 36-month easy EMI payment flexibility.",
+      amenities: ["DTCP Approved", "30ft Tar Road", "Park & Children Play Area", "Street Lights", "Rainwater Harvesting", "Bank Loan Assistance"],
+      specs: { facing: "North", dimensions: "20ft × 40ft", emi: "₹12,000/mo", approval: "DTCP Approved 2024", roadWidth: "30ft Tar" }
     },
     {
       id: "prop-104",
-      title: "Sapphire Commercial Workspace",
-      category: "Commercial",
-      status: "For Rent",
-      price: "₹ 1.5 Lakhs / mo",
-      priceRaw: 150000,
-      location: "OMR, Chennai",
-      address: "Perungudi OMR IT Corridor, Chennai",
-      bedrooms: 0,
-      bathrooms: 4,
-      parking: "5 Cars & 10 Bikes",
-      areaSqft: 3800,
-      builtYear: 2023,
+      title: "OMR Commercial Highway Plot",
+      category: "Commercial Land",
+      status: "For Sale",
+      price: "₹ 1.80 Cr",
+      priceRaw: 18000000,
+      emiOption: "Commercial EMI Available",
+      location: "OMR IT Corridor, Chennai",
+      address: "Main Road Frontage, Perungudi OMR, Chennai",
+      areaSqft: 4800,
+      plotDimensions: "60ft × 80ft",
+      roadWidth: "60ft Main Road",
       image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80",
       gallery: [
         "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: false,
-      description: "Grade-A plug-and-play office workspace ready for IT, corporate headquarters, or showroom setup. High visibility main road frontage.",
-      amenities: ["Centralized AC", "100% Power Backup", "High-Speed Elevators", "Fire Safety Systems", "Valet Parking"],
-      specs: { facing: "East", floor: "1st Floor", possession: "Immediate", approval: "CMDA Commercial" }
+      description: "Prime CMDA commercial plot with 60ft main road frontage along OMR IT Corridor. Ideal for corporate office building, commercial complex, or showroom.",
+      amenities: ["CMDA Commercial", "60ft Main Road", "High Visibility", "3-Phase Power Ready", "Commercial Loan 80%"],
+      specs: { facing: "East", dimensions: "60ft × 80ft", emi: "Commercial Loan Available", approval: "CMDA Commercial Approved", roadWidth: "60ft Main Road" }
     },
     {
       id: "prop-105",
-      title: "Green Meadows Gated Plots",
-      category: "Plot",
+      title: "Poonamallee Smart Township Plots",
+      category: "CMDA Approved Plot",
       status: "For Sale",
       price: "₹ 36 Lakhs",
       priceRaw: 3600000,
-      location: "Tambaram, Chennai",
-      address: "Near MEPZ, Tambaram West, Chennai",
-      bedrooms: 0,
-      bathrooms: 0,
-      parking: "Plot Space",
-      areaSqft: 1800,
-      builtYear: 2024,
+      emiOption: "EMI from ₹16,500/mo",
+      location: "Poonamallee, Chennai",
+      address: "Near Poonamallee Bus Terminus & Upcoming Metro, Chennai",
+      areaSqft: 1500,
+      plotDimensions: "30ft × 50ft",
+      roadWidth: "30ft Tar Road",
+      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+      gallery: [
+        "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80"
+      ],
+      featured: true,
+      description: "CMDA approved residential plots in Poonamallee smart township. High capital appreciation zone near Chennai-Bengaluru highway & Metro extension.",
+      amenities: ["CMDA Approved", "Gated Township", "Underground Drainage", "EB Connection", "24/7 Security Guard"],
+      specs: { facing: "East", dimensions: "30ft × 50ft", emi: "₹16,500/mo", approval: "CMDA Approved", roadWidth: "30ft Blacktop" }
+    },
+    {
+      id: "prop-106",
+      title: "Sriperumbudur Eco Farm Lands",
+      category: "Farm & Agricultural Land",
+      status: "For Sale",
+      price: "₹ 18 Lakhs / Acre",
+      priceRaw: 1800000,
+      emiOption: "EMI from ₹9,999/mo",
+      location: "Sriperumbudur, Chennai",
+      address: "Near Industrial Corridor, Sriperumbudur, Chennai",
+      areaSqft: 43560,
+      plotDimensions: "1 Acre (100 Cents)",
+      roadWidth: "24ft Panchayat Road",
       image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
       gallery: [
         "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
       ],
       featured: false,
-      description: "DTCP & RERA approved villa plots in a fully developed gated township with 30ft wide blacktop roads and LED streetlights.",
-      amenities: ["Gated Community", "30ft Wide Roads", "Underground Electrical Lines", "Water Connection Ready", "Park & Track"],
-      specs: { facing: "South-East", floor: "Plot / Land", possession: "Immediate Registration", approval: "DTCP & RERA Approved" }
-    },
-    {
-      id: "prop-106",
-      title: "Anna Nagar Prime Residency",
-      category: "Apartment",
-      status: "For Sale",
-      price: "₹ 1.45 Cr",
-      priceRaw: 14500000,
-      location: "Anna Nagar, Chennai",
-      address: "2nd Avenue, Anna Nagar East, Chennai",
-      bedrooms: 3,
-      bathrooms: 3,
-      parking: "Reserved Car Parking",
-      areaSqft: 1680,
-      builtYear: 2024,
-      image: "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=1200&q=80",
-      gallery: [
-        "https://images.unsplash.com/photo-1567496898669-ee935f5f647a?auto=format&fit=crop&w=1200&q=80"
-      ],
-      featured: true,
-      description: "Ultra-prime 3 BHK apartment with Italian marble flooring, teak wood finishings, and smart security systems in Anna Nagar East.",
-      amenities: ["Covered Parking", "Elevator Access", "Intercom Facility", "Power Backup", "CCTV Surveillance"],
-      specs: { facing: "East", floor: "3rd Floor", possession: "Ready to Move", approval: "CMDA Approved" }
+      description: "Fertile agricultural and farm land plots ideal for farmhouse, organic cultivation, or long-term investment. Clear title deed with easy EMI options.",
+      amenities: ["Clear Title Deed", "Good Groundwater Table", "Fencing Completed", "24ft Access Road", "Easy EMI"],
+      specs: { facing: "South-East", dimensions: "1 Acre", emi: "₹9,999/mo", approval: "Panchayat Clearance", roadWidth: "24ft Road" }
     }
+  ],
+
+  categories: [
+    { id: "cat-1", name: "CMDA Approved Plots", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80" },
+    { id: "cat-2", name: "DTCP Approved Plots", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=600&q=80" },
+    { id: "cat-3", name: "Gated Villa Plots", image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=600&q=80" },
+    { id: "cat-4", name: "Commercial Land", image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80" },
+    { id: "cat-5", name: "Farm & Agricultural Lands", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=600&q=80" }
   ],
 
   services: [
@@ -301,7 +298,27 @@ const BASE_TRIANGLE_DATA = {
       category: "Interior",
       image: "https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&fit=crop&w=800&q=80"
     }
-  ]
+  ],
+
+  construction: {
+    basicRate: 2100,
+    premiumRate: 2450,
+    luxuryRate: 2950,
+    note: "All construction rates include structural engineering drawings, CMDA/DTCP building plan sanction assistance, RCC frame structure (Fe550 TMT steel), UltraTech/Dalmia cement, premium vitrified tile flooring, teak wood main door, Kohler/Jaquar sanitary fittings, and 1-year structural warranty."
+  },
+
+  about: {
+    years: "17+ Years",
+    completed: "120+ Layout Projects",
+    families: "650+ Happy Owners",
+    vision: "To deliver transparent, CMDA & DTCP approved, architecturally superior residential plot layouts and turnkey civil developments across Chennai with uncompromised trust and legal title safety."
+  },
+
+  jointVenture: {
+    sharingRatio: "50:50 / 60:40 Area Sharing",
+    minLand: "2 Grounds (4,800 Sq.Ft) & Above",
+    benefits: "Zero Landowner Capital Investment, 100% Legal Sanction Approval by Developer, Transparent Built-up Area Sharing, Bank Guarantee & Sub-Registrar Agreement Assurance."
+  }
 };
 
 // Retrieve live merged data (Baseline + Dynamic Admin Overrides)
@@ -347,9 +364,39 @@ function saveLiveTriangleData(newData) {
     };
     localStorage.setItem('triangle_custom_data', JSON.stringify(merged));
     window.TRIANGLE_DATA = merged;
-    console.log("Live TRIANGLE_DATA updated and saved successfully!");
+    
+    // Broadcast live event for active tabs
+    window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: merged }));
+    
+    // Cloud Firestore Sync (Multi-Device & Multi-Browser Sync)
+    if (window.db && window.firestoreSetDoc && window.firestoreDoc) {
+      const docRef = window.firestoreDoc(window.db, 'app_data', 'triangle_custom_data');
+      window.firestoreSetDoc(docRef, merged, { merge: true })
+        .then(() => console.log("🔥 Cloud Firestore multi-device sync complete!"))
+        .catch(err => console.warn("Firestore cloud sync notice:", err));
+    }
   } catch (e) {
     console.error("Error saving dynamic custom data:", e);
+  }
+}
+
+// Subscribe to Cloud Firestore Realtime Updates
+function initFirestoreLiveSync() {
+  if (window.db && window.firestoreOnSnapshot && window.firestoreDoc) {
+    try {
+      const docRef = window.firestoreDoc(window.db, 'app_data', 'triangle_custom_data');
+      window.firestoreOnSnapshot(docRef, (snapshot) => {
+        if (snapshot.exists()) {
+          const cloudData = snapshot.data();
+          console.log("🔥 Received real-time Cloud Firestore update from Admin!");
+          localStorage.setItem('triangle_custom_data', JSON.stringify(cloudData));
+          window.TRIANGLE_DATA = loadLiveTriangleData();
+          window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: window.TRIANGLE_DATA }));
+        }
+      });
+    } catch (err) {
+      console.warn("Firestore live snapshot listener notice:", err);
+    }
   }
 }
 
@@ -361,4 +408,5 @@ if (typeof window !== 'undefined') {
   window.TRIANGLE_DATA = TRIANGLE_DATA;
   window.loadLiveTriangleData = loadLiveTriangleData;
   window.saveLiveTriangleData = saveLiveTriangleData;
+  window.initFirestoreLiveSync = initFirestoreLiveSync;
 }

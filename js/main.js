@@ -63,10 +63,10 @@ function initScrollToTopButton() {
  * 2. Dark / Light Theme Toggle System
  * ------------------------------------------------------------- */
 function initThemeToggle() {
-  const savedTheme = localStorage.getItem('triangle_theme') || 
-    (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    
-  applyTheme(savedTheme);
+  const savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme') || 'dark';
+  if (typeof window.applyTriangleTheme === 'function') {
+    window.applyTriangleTheme(savedTheme);
+  }
 
   const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
   toggleBtns.forEach(btn => {
@@ -78,38 +78,13 @@ function initThemeToggle() {
       btn.classList.add('theme-icon-animate');
       setTimeout(() => btn.classList.remove('theme-icon-animate'), 400);
 
-      applyTheme(newTheme);
+      if (typeof window.applyTriangleTheme === 'function') {
+        window.applyTriangleTheme(newTheme);
+      }
     };
   });
 }
 window.initThemeToggle = initThemeToggle;
-
-function applyTheme(theme) {
-  if (theme === 'dark') {
-    document.documentElement.classList.add('dark');
-  } else {
-    document.documentElement.classList.remove('dark');
-  }
-  localStorage.setItem('triangle_theme', theme);
-  updateThemeIcons(theme);
-}
-
-function updateThemeIcons(theme) {
-  const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
-  toggleBtns.forEach(btn => {
-    const sunIcon = btn.querySelector('.icon-sun');
-    const moonIcon = btn.querySelector('.icon-moon');
-    if (sunIcon && moonIcon) {
-      if (theme === 'dark') {
-        sunIcon.classList.remove('hidden');
-        moonIcon.classList.add('hidden');
-      } else {
-        sunIcon.classList.add('hidden');
-        moonIcon.classList.remove('hidden');
-      }
-    }
-  });
-}
 
 /* -------------------------------------------------------------
  * 3. Sticky Navbar & Mobile Menu Drawer
@@ -240,7 +215,7 @@ function initHeroCarousel() {
  * 5. Floating Action Buttons (WhatsApp & Call)
  * ------------------------------------------------------------- */
 function initFloatingButtons() {
-  if (document.getElementById('floating-cta')) return;
+  if (document.getElementById('floating-cta') || document.getElementById('floating-contact-bar') || document.getElementById('floating-contact-container')) return;
 
   const whatsappNum = "918838957874";
   const phoneNum = "+918838957874";
@@ -270,7 +245,7 @@ function initFloatingButtons() {
        title="Chat on WhatsApp"
        class="flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white p-3 sm:p-3.5 rounded-full shadow-2xl transition-all hover:scale-110 group focus:outline-none animate-pulse-glow">
       <svg class="w-5 h-5 sm:w-6 sm:h-6 fill-current" viewBox="0 0 24 24">
-        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
+        <path d="M12.012 2c-5.506 0-9.989 4.478-9.99 9.984 0 1.76.459 3.477 1.33 4.987l-1.412 5.157 5.281-1.385c1.455.793 3.09 1.213 4.788 1.215h.004c5.505 0 9.988-4.478 9.99-9.985 0-2.667-1.037-5.176-2.923-7.062a9.924 9.924 0 0 0-7.068-2.931z"/>
       </svg>
       <span class="max-w-0 overflow-hidden group-hover:max-w-xs transition-all duration-300 ease-in-out whitespace-nowrap text-xs font-bold pr-1 hidden sm:inline">
         WhatsApp Us

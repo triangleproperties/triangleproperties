@@ -1,4 +1,5 @@
 /* Aurelian Estate System - Light & Dark Dual Theme Stylesheet */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap');
 @import url('variables.css');
 
 *:focus-visible {
@@ -89,12 +90,6 @@ h2, h3 { font-weight: 400; line-height: 1.2; }
 }
 
 .gold-gradient-text {
-  background: linear-gradient(135deg, #d4af37 0%, #f2ca50 50%, #b59226 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-html.dark .gold-gradient-text {
   background: linear-gradient(135deg, #ffe088 0%, #f2ca50 50%, #d4af37 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

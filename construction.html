@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<html lang="en" class="scroll-smooth">
 <head>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
+      if (savedTheme === 'light') {
+        document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
+      }
+    })();
+  </script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Turnkey House Construction & Estimator | Triangle Properties</title>
-  <meta name="description" content="Turnkey house construction services in Vadapalani & Chennai. Calculate your building construction cost using our interactive calculator widget."/>
+  <meta name="description" content="Turnkey house construction services in Vadapalani & Chennai. Calculate your building construction cost using our live interactive calculator widget."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -44,18 +54,20 @@
 
   <!-- BANNER -->
   <section class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
-    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Turnkey Execution</span>
-    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Construction & Cost Calculator</h1>
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Turnkey Civil Execution</span>
+    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Construction Packages & Cost Estimator</h1>
     <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-      Calculate itemized building construction estimates with transparent material specifications.
+      Calculate itemized building construction estimates with live transparent pricing and premium material specifications in Chennai.
     </p>
   </section>
 
-  <!-- CALCULATOR WIDGET SECTION -->
+  <!-- MAIN CONTAINER -->
   <main class="py-12 sm:py-16 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow space-y-16">
+    
+    <!-- CALCULATOR WIDGET SECTION -->
     <div class="glass-card p-6 sm:p-12 border-amber-500/30 max-w-4xl mx-auto shadow-2xl">
       <div class="text-center mb-8">
-        <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-1">Interactive Estimator</span>
+        <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-1">Live Estimator Widget</span>
         <h2 class="font-display text-2xl sm:text-3xl font-light">Turnkey Construction Cost Calculator</h2>
       </div>
 
@@ -70,6 +82,7 @@
         <div>
           <label for="package-tier" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-2">Quality Specification Tier</label>
           <select id="package-tier" class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white font-bold text-xs sm:text-sm focus:outline-none focus:border-amber-500">
+            <!-- Dynamically populated from Live Admin Data -->
             <option value="2100">Standard Tier (₹ 2,100 / sqft)</option>
             <option value="2450" selected>Premium Luxury Tier (₹ 2,450 / sqft)</option>
             <option value="2950">Ultra Luxury Villa Tier (₹ 2,950 / sqft)</option>
@@ -81,9 +94,147 @@
       <div class="p-6 sm:p-8 rounded-2xl bg-amber-500/10 border border-amber-500/40 text-center">
         <span class="font-button text-xs uppercase tracking-widest text-amber-500 block mb-1">Estimated Civil Construction Cost</span>
         <span id="calculated-cost" class="font-display text-3xl sm:text-6xl font-bold text-amber-500 block mb-2">₹ 44.10 Lakhs</span>
-        <p class="font-body text-xs text-slate-500 dark:text-slate-400">Includes architectural design, structural RCC framing, premium tile flooring, teak wood doors, and sanitary fittings.</p>
+        <p id="cost-breakdown-note" class="font-body text-xs text-slate-500 dark:text-slate-400">Includes architectural design, structural RCC framing, premium tile flooring, teak wood doors, and sanitary fittings.</p>
       </div>
     </div>
+
+    <!-- DYNAMIC PACKAGE COMPARISON CARDS -->
+    <div>
+      <div class="text-center mb-12">
+        <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-1">Material Specifications</span>
+        <h2 class="font-display text-3xl sm:text-4xl font-light">Turnkey Construction Packages</h2>
+      </div>
+
+      <div id="construction-packages-grid" class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Package 1: Basic -->
+        <div class="glass-card p-8 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-lg">
+          <div>
+            <span class="font-button text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Basic Package</span>
+            <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2">Standard Quality</h3>
+            <div class="text-3xl font-black text-amber-500 font-heading mb-6">
+              <span id="pkg-basic-rate">₹ 2,100</span> <span class="text-xs text-slate-400 font-normal">/ sq.ft</span>
+            </div>
+
+            <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-300 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Structural RCC Frame (Fe550 TMT Steel)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Standard Vitrified Tile Flooring (2×2 ft)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Teak Frame Main Door & Flush Doors</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Anchor / Legrand Modular Switches & Wiring</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Parryware / Cera CP & Sanitary Fittings</span>
+              </li>
+            </ul>
+          </div>
+
+          <a href="contact.html?subject=Basic%20Construction%20Package" class="w-full btn-secondary text-xs uppercase tracking-widest text-center py-3">Inquire Basic Package</a>
+        </div>
+
+        <!-- Package 2: Premium (Featured) -->
+        <div class="glass-card p-8 rounded-3xl border-2 border-amber-500 flex flex-col justify-between shadow-2xl relative bg-amber-500/5">
+          <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-amber-500 text-slate-950 font-button text-[10px] uppercase font-bold tracking-widest shadow-md">
+            Most Popular
+          </div>
+
+          <div>
+            <span class="font-button text-[10px] uppercase tracking-widest text-amber-500 block mb-1">Premium Package</span>
+            <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2">Premium Luxury</h3>
+            <div class="text-3xl font-black text-amber-500 font-heading mb-6">
+              <span id="pkg-premium-rate">₹ 2,450</span> <span class="text-xs text-slate-400 font-normal">/ sq.ft</span>
+            </div>
+
+            <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-300 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>UltraTech / Dalmia Cement & Fe550 Steel</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Double Charged Vitrified Tiles (4×2 ft)</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>First Quality Teak Main Door & Frames</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Finolex / Havells Wiring & Modular Grid</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Jaquar / Kohler Designer Sanitaryware</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>3D Architectural Elevation & Plan Approval</span>
+              </li>
+            </ul>
+          </div>
+
+          <a href="contact.html?subject=Premium%20Construction%20Package" class="w-full btn-primary text-xs uppercase tracking-widest text-center py-3">Inquire Premium Package</a>
+        </div>
+
+        <!-- Package 3: Luxury -->
+        <div class="glass-card p-8 rounded-3xl border border-slate-200 dark:border-slate-800 flex flex-col justify-between shadow-lg">
+          <div>
+            <span class="font-button text-[10px] uppercase tracking-widest text-slate-500 block mb-1">Luxury Villa Package</span>
+            <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2">Ultra Luxury Villa</h3>
+            <div class="text-3xl font-black text-amber-500 font-heading mb-6">
+              <span id="pkg-luxury-rate">₹ 2,950</span> <span class="text-xs text-slate-400 font-normal">/ sq.ft</span>
+            </div>
+
+            <ul class="space-y-3 text-xs text-slate-600 dark:text-slate-300 mb-8">
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Architectural RCC Structural Engineering</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Italian Marble Flooring & Wooden Bedrooms</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Teak Doors & UPVC Soundproof Windows</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Smart Touch Switches & Automation Ready</span>
+              </li>
+              <li class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-amber-500 text-sm">check_circle</span>
+                <span>Grohe / Kohler Fittings & Solar Water Grid</span>
+              </li>
+            </ul>
+          </div>
+
+          <a href="contact.html?subject=Ultra%20Luxury%20Villa%20Package" class="w-full btn-secondary text-xs uppercase tracking-widest text-center py-3">Inquire Ultra Luxury</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- DYNAMIC ADMIN NOTE & TERMS -->
+    <div class="glass-card p-8 rounded-3xl border border-slate-200 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-950/50">
+      <div class="flex items-center gap-3 mb-4">
+        <span class="material-symbols-outlined text-amber-500 text-2xl">verified</span>
+        <h3 class="font-display text-xl font-bold text-slate-900 dark:text-white">Construction Terms & Warranty Assurance</h3>
+      </div>
+      <p id="admin-construction-note" class="font-body text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+        All construction rates include structural engineering drawings, CMDA/DTCP building plan sanction assistance, RCC frame structure (Fe550 TMT steel), UltraTech/Dalmia cement, premium vitrified tile flooring, teak wood main door, Kohler/Jaquar sanitary fittings, and 1-year structural warranty.
+      </p>
+    </div>
+
   </main>
 
   <div id="footer-container"></div>
@@ -95,14 +246,61 @@
   <script src="js/main.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      initConstructionPage();
+
+      // Listen for Live Admin Firestore Updates across devices & storage
+      window.addEventListener('triangle_data_updated', () => {
+        initConstructionPage();
+      });
+      window.addEventListener('storage', (e) => {
+        if (e.key === 'triangle_custom_data') {
+          initConstructionPage();
+        }
+      });
+    });
+
+    function initConstructionPage() {
       const areaInput = document.getElementById('builtup-area');
       const areaSlider = document.getElementById('builtup-slider');
       const tierSelect = document.getElementById('package-tier');
       const resultDisplay = document.getElementById('calculated-cost');
+      const noteDisplay = document.getElementById('admin-construction-note');
+
+      const pkgBasicRate = document.getElementById('pkg-basic-rate');
+      const pkgPremiumRate = document.getElementById('pkg-premium-rate');
+      const pkgLuxuryRate = document.getElementById('pkg-luxury-rate');
+
+      // Fetch live dynamic rates set from Admin
+      const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+      const constData = liveData.construction || (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.construction : {});
+
+      const basicRate = parseFloat(constData.basicRate) || 2100;
+      const premiumRate = parseFloat(constData.premiumRate) || 2450;
+      const luxuryRate = parseFloat(constData.luxuryRate) || 2950;
+
+      // Update Select Tier Options
+      if (tierSelect) {
+        const selectedVal = tierSelect.value;
+        tierSelect.innerHTML = `
+          <option value="${basicRate}">Standard Tier (₹ ${basicRate.toLocaleString('en-IN')} / sqft)</option>
+          <option value="${premiumRate}" ${selectedVal == premiumRate || !selectedVal ? 'selected' : ''}>Premium Luxury Tier (₹ ${premiumRate.toLocaleString('en-IN')} / sqft)</option>
+          <option value="${luxuryRate}">Ultra Luxury Villa Tier (₹ ${luxuryRate.toLocaleString('en-IN')} / sqft)</option>
+        `;
+      }
+
+      // Update Card Rates Display
+      if (pkgBasicRate) pkgBasicRate.textContent = `₹ ${basicRate.toLocaleString('en-IN')}`;
+      if (pkgPremiumRate) pkgPremiumRate.textContent = `₹ ${premiumRate.toLocaleString('en-IN')}`;
+      if (pkgLuxuryRate) pkgLuxuryRate.textContent = `₹ ${luxuryRate.toLocaleString('en-IN')}`;
+
+      // Update Admin Note
+      if (noteDisplay && constData.note) {
+        noteDisplay.textContent = constData.note;
+      }
 
       function calculateCost() {
         const area = parseFloat(areaInput.value) || 0;
-        const rate = parseFloat(tierSelect.value) || 2450;
+        const rate = parseFloat(tierSelect.value) || premiumRate;
         const total = area * rate;
 
         if (total >= 10000000) {
@@ -123,7 +321,9 @@
       });
 
       tierSelect?.addEventListener('change', calculateCost);
-    });
+
+      calculateCost();
+    }
   </script>
 </body>
 </html>
