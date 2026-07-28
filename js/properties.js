@@ -5,7 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
   initPropertySearch();
 });
 
-let allProperties = window.TRIANGLE_DATA?.properties || [];
+function getLiveProperties() {
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : window.TRIANGLE_DATA;
+  return liveData?.properties || [];
+}
 
 /* -------------------------------------------------------------
  * 1. Render Property Grid Cards
@@ -14,7 +17,7 @@ function initPropertyGrid() {
   const gridContainer = document.getElementById('properties-grid');
   if (!gridContainer) return;
 
-  renderProperties(allProperties, gridContainer);
+  renderProperties(getLiveProperties(), gridContainer);
 }
 
 function renderProperties(propertiesList, container) {
@@ -150,7 +153,7 @@ function initPropertySearch() {
     const selectedStatus = statusFilter?.value || 'ALL';
     const maxPrice = parseFloat(maxPriceFilter?.value || '9999999999');
 
-    const filtered = allProperties.filter(prop => {
+    const filtered = getLiveProperties().filter(prop => {
       const matchKeyword = !keyword || 
         prop.title.toLowerCase().includes(keyword) || 
         prop.location.toLowerCase().includes(keyword) ||

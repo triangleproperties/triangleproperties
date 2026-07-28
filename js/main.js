@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initStatsCounters();
   initFaqAccordions();
   initInquiryForms();
+  initTestimonialsSlider();
 });
 
 /* -------------------------------------------------------------
@@ -69,7 +70,7 @@ function initThemeToggle() {
 
   const toggleBtns = document.querySelectorAll('.theme-toggle-btn');
   toggleBtns.forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    btn.onclick = (e) => {
       e.stopPropagation();
       const currentTheme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
       const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
@@ -78,9 +79,10 @@ function initThemeToggle() {
       setTimeout(() => btn.classList.remove('theme-icon-animate'), 400);
 
       applyTheme(newTheme);
-    });
+    };
   });
 }
+window.initThemeToggle = initThemeToggle;
 
 function applyTheme(theme) {
   if (theme === 'dark') {
@@ -154,6 +156,7 @@ function initNavigation() {
     }
   });
 }
+window.initNavigation = initNavigation;
 
 /* -------------------------------------------------------------
  * 4. Hero Section Background Carousel
@@ -444,6 +447,80 @@ function showToast(message, type = 'info') {
     toast.classList.add('opacity-0', '-translate-y-2');
     setTimeout(() => toast.remove(), 300);
   }, 4000);
+}
+
+/* -------------------------------------------------------------
+ * 10. Testimonials Left/Right Slider
+ * ------------------------------------------------------------- */
+function initTestimonialsSlider() {
+  const container = document.getElementById('testimonials-grid');
+  if (!container) return;
+
+  let currentIndex = 0;
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : { testimonials: [] };
+  const items = liveData.testimonials || [];
+
+  if (items.length === 0) return;
+
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function renderSlide() {
+    const visibleCount = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
+    const sliced = [];
+    for (let i = 0; i < visibleCount; i++) {
+      sliced.push(items[(currentIndex + i) % items.length]);
+    }
+
+    container.innerHTML = sliced.map(t => `
+      <div class="glass-card p-8 flex flex-col justify-between transition-all duration-500 hover:-translate-y-1">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <span class="text-amber-400 text-sm tracking-widest">${'★'.repeat(t.rating || 5)}</span>
+            <span class="text-xs text-slate-400 font-button">Google Review</span>
+          </div>
+          <p class="font-body text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
+            "${escapeHtml(t.content)}"
+          </p>
+        </div>
+        <div class="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+          <img src="${escapeHtml(t.avatar || 'assets/logo.png')}" alt="${escapeHtml(t.name)}" class="w-10 h-10 rounded-full object-cover border border-amber-500/30">
+          <div>
+            <h3 class="font-display text-base font-bold text-slate-900 dark:text-white">${escapeHtml(t.name)}</h3>
+            <p class="font-button text-[10px] uppercase text-slate-500">${escapeHtml(t.role)} • ${escapeHtml(t.time || 'Verified')}</p>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  const prevBtn = document.getElementById('testimonial-prev-btn');
+  const nextBtn = document.getElementById('testimonial-next-btn');
+
+  prevBtn?.addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + items.length) % items.length;
+    renderSlide();
+  });
+
+  nextBtn?.addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % items.length;
+    renderSlide();
+  });
+
+  renderSlide();
+  window.addEventListener('resize', renderSlide);
+
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % items.length;
+    renderSlide();
+  }, 6000);
 }
 
 window.showToast = showToast;

@@ -313,13 +313,18 @@ function loadLiveTriangleData() {
   try {
     const custom = JSON.parse(customDataStr);
     return {
+      ...BASE_TRIANGLE_DATA,
       company: { ...BASE_TRIANGLE_DATA.company, ...(custom.company || {}) },
       stats: custom.stats || BASE_TRIANGLE_DATA.stats,
       processSteps: custom.processSteps || BASE_TRIANGLE_DATA.processSteps,
-      properties: custom.properties || BASE_TRIANGLE_DATA.properties,
-      services: custom.services || BASE_TRIANGLE_DATA.services,
-      testimonials: custom.testimonials || BASE_TRIANGLE_DATA.testimonials,
-      gallery: custom.gallery || BASE_TRIANGLE_DATA.gallery
+      properties: (custom.properties && Array.isArray(custom.properties) && custom.properties.length > 0) ? custom.properties : BASE_TRIANGLE_DATA.properties,
+      categories: (custom.categories && Array.isArray(custom.categories) && custom.categories.length > 0) ? custom.categories : (BASE_TRIANGLE_DATA.categories || []),
+      services: (custom.services && Array.isArray(custom.services) && custom.services.length > 0) ? custom.services : BASE_TRIANGLE_DATA.services,
+      testimonials: (custom.testimonials && Array.isArray(custom.testimonials) && custom.testimonials.length > 0) ? custom.testimonials : BASE_TRIANGLE_DATA.testimonials,
+      gallery: (custom.gallery && Array.isArray(custom.gallery) && custom.gallery.length > 0) ? custom.gallery : BASE_TRIANGLE_DATA.gallery,
+      construction: custom.construction || BASE_TRIANGLE_DATA.construction,
+      about: custom.about || BASE_TRIANGLE_DATA.about,
+      jointVenture: custom.jointVenture || BASE_TRIANGLE_DATA.jointVenture
     };
   } catch (e) {
     console.error("Error loading custom data overrides:", e);
@@ -329,8 +334,19 @@ function loadLiveTriangleData() {
 
 function saveLiveTriangleData(newData) {
   try {
-    localStorage.setItem('triangle_custom_data', JSON.stringify(newData));
-    window.TRIANGLE_DATA = newData;
+    const existing = loadLiveTriangleData();
+    const merged = {
+      ...existing,
+      ...newData,
+      company: { ...existing.company, ...(newData.company || {}) },
+      properties: newData.properties || existing.properties,
+      categories: newData.categories || existing.categories,
+      gallery: newData.gallery || existing.gallery,
+      services: newData.services || existing.services,
+      testimonials: newData.testimonials || existing.testimonials
+    };
+    localStorage.setItem('triangle_custom_data', JSON.stringify(merged));
+    window.TRIANGLE_DATA = merged;
     console.log("Live TRIANGLE_DATA updated and saved successfully!");
   } catch (e) {
     console.error("Error saving dynamic custom data:", e);

@@ -58,48 +58,9 @@
 </head>
 <body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
 
-  <!-- NAVBAR -->
-  <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
-    <div class="max-w-[1440px] mx-auto px-4 md:px-16 py-4 flex items-center justify-between">
-      <a href="index.html" class="flex items-center gap-3 group focus:outline-none">
-        <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55" class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105">
-      </a>
-
-      <nav class="hidden lg:flex items-center gap-7">
-        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Portfolio</a>
-        <a href="properties.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Collections</a>
-        <a href="construction.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Construction</a>
-        <a href="joint-venture.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Joint Venture</a>
-        <a href="gallery.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Gallery</a>
-        <a href="about.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">About</a>
-        <a href="services.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Services</a>
-        <a href="contact.html" class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
-      </nav>
-
-      <div class="flex items-center gap-2 sm:gap-3">
-        <a href="tel:8838957874" aria-label="Direct Call" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span class="material-symbols-outlined text-lg sm:text-xl">call</span></a>
-        <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span class="material-symbols-outlined text-lg sm:text-xl">chat</span></a>
-        <button type="button" aria-label="Toggle theme" class="theme-toggle-btn p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200">
-          <svg class="icon-sun w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
-          <svg class="icon-moon w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
-        </button>
-        <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Site Visit</a>
-        <button id="mobile-menu-btn" type="button" class="lg:hidden p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span class="material-symbols-outlined text-lg sm:text-xl">menu</span></button>
-      </div>
-    </div>
-
-    <!-- Mobile Drawer -->
-    <div id="mobile-menu" class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-6 space-y-3 font-button text-xs uppercase tracking-widest">
-      <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Portfolio</a>
-      <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Collections</a>
-      <a href="construction.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Construction</a>
-      <a href="joint-venture.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Joint Venture</a>
-      <a href="gallery.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Gallery</a>
-      <a href="about.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">About</a>
-      <a href="services.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Services</a>
-      <a href="contact.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Contact</a>
-    </div>
-  </header>
+  <!-- DYNAMIC NAVBAR CONTAINER (Loaded from components/navbar.html) -->
+  <div id="navbar-container"></div>
+  <script src="js/navbar-loader.js"></script>
 
   <main class="flex-grow">
     <!-- EXECUTIVE HERO WITH BACKGROUND CAROUSEL -->
@@ -237,75 +198,28 @@
     <!-- REAL GOOGLE REVIEWS SECTION -->
     <section class="py-24 bg-slate-50 dark:bg-slate-950 border-t border-slate-200 dark:border-slate-800">
       <div class="max-w-[1440px] mx-auto px-4 md:px-16">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
           <div>
-            <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Verified Google Reviews</span>
+            <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Verified Client Experiences</span>
             <h2 class="font-display text-3xl sm:text-5xl font-light">What Our Clients Say</h2>
           </div>
-          <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" 
-             class="mt-4 md:mt-0 font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-2 font-bold">
-            <span>Read 50+ Reviews on Google</span>
-            <span class="material-symbols-outlined text-sm">open_in_new</span>
-          </a>
+          <div class="mt-4 md:mt-0 flex items-center gap-3">
+            <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" 
+               class="font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-1 font-bold mr-2 hidden sm:flex">
+              <span>50+ Google Reviews</span>
+              <span class="material-symbols-outlined text-sm">open_in_new</span>
+            </a>
+            <button id="testimonial-prev-btn" type="button" aria-label="Previous Testimonial" class="p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-all focus:outline-none shadow-md">
+              <span class="material-symbols-outlined text-xl">arrow_back</span>
+            </button>
+            <button id="testimonial-next-btn" type="button" aria-label="Next Testimonial" class="p-3 rounded-full bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-amber-500 hover:text-slate-950 transition-all focus:outline-none shadow-md">
+              <span class="material-symbols-outlined text-xl">arrow_forward</span>
+            </button>
+          </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <div class="glass-card p-8 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
-                <span class="text-xs text-slate-400 font-button">Google Review</span>
-              </div>
-              <p class="font-body text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
-                "Excellent service from start to finish. The team was professional, transparent, and very supportive throughout the entire process. They helped us find the perfect property with clear guidance and quick responses."
-              </p>
-            </div>
-            <div class="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-              <div class="w-10 h-10 rounded-full bg-amber-500 text-slate-950 font-bold flex items-center justify-center font-button text-sm">S</div>
-              <div>
-                <h3 class="font-display text-base font-bold">Suryamech</h3>
-                <p class="font-button text-[10px] uppercase text-slate-500">Verified Client • 2 months ago</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="glass-card p-8 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
-                <span class="text-xs text-slate-400 font-button">Google Review</span>
-              </div>
-              <p class="font-body text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
-                "Perfect location! Perfect choice! Perfect partner! Perfect price! Triangle Properties service is professional, organized, and customer-friendly."
-              </p>
-            </div>
-            <div class="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-              <div class="w-10 h-10 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center font-button text-sm">D</div>
-              <div>
-                <h3 class="font-display text-base font-bold">Dillibabu Ramu</h3>
-                <p class="font-button text-[10px] uppercase text-slate-500">Local Guide • 8 Reviews</p>
-              </div>
-            </div>
-          </div>
-
-          <div class="glass-card p-8 flex flex-col justify-between">
-            <div>
-              <div class="flex items-center gap-2 mb-4">
-                <span class="text-amber-400 text-sm tracking-widest">★★★★★</span>
-                <span class="text-xs text-slate-400 font-button">Google Review</span>
-              </div>
-              <p class="font-body text-slate-600 dark:text-slate-300 text-sm leading-relaxed mb-6">
-                "Very happy with our land purchase experience. The team was very trustworthy and guided clearly according to our budget. Every step was transparent, and felt money was completely safe."
-              </p>
-            </div>
-            <div class="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-              <div class="w-10 h-10 rounded-full bg-emerald-600 text-white font-bold flex items-center justify-center font-button text-sm">S</div>
-              <div>
-                <h3 class="font-display text-base font-bold">Sandhiya Jagadeesan</h3>
-                <p class="font-button text-[10px] uppercase text-slate-500">Verified Buyer • 2 months ago</p>
-              </div>
-            </div>
-          </div>
+        <div id="testimonials-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-500">
+          <!-- Rendered dynamically by initTestimonialsSlider() -->
         </div>
       </div>
     </section>
@@ -332,50 +246,13 @@
           <a href="https://www.facebook.com/Triangleproperties/?ref=NONE_xav_ig_profile_page_web#" target="_blank" rel="noopener noreferrer" aria-label="Facebook Page"
              class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
             <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M9 8H6v4h3v12h5V12h3.642L18 8h-4V6.333C14 5.374 14.5 5 15.5 5H18V0h-3.808C10.592 0 9 1.583 9 4.615V8z"/></svg>
-          </a>
-          <a href="https://www.google.com/search?q=trianglepropertiespvt+google+reviews" target="_blank" rel="noopener noreferrer" aria-label="Google Reviews"
-             class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-slate-700 dark:text-slate-300 hover:text-amber-500 transition-all border border-slate-300 dark:border-slate-800">
-            <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M12.48 10.92v3.28h7.84c-.24 1.84-.853 3.187-1.787 4.133-1.147 1.147-2.933 2.4-6.053 2.4-4.827 0-8.6-3.893-8.6-8.72s3.773-8.72 8.6-8.72c2.6 0 4.507 1.027 5.907 2.347l2.307-2.307C18.747 1.44 16.133 0 12.48 0 5.867 0 .307 5.387.307 12s5.56 12 12.173 12c3.573 0 6.267-1.173 8.373-3.36 2.16-2.16 2.84-5.213 2.84-7.667 0-.76-.053-1.467-.173-2.053H12.48z"/></svg>
-          </a>
-        </div>
-      </div>
-
-      <div>
-        <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Portfolio</h3>
-        <ul class="space-y-2.5 text-xs font-body">
-          <li><a href="properties.html?type=Apartment" class="hover:text-amber-500 transition-colors">Residential Apartments</a></li>
-          <li><a href="properties.html?type=Villa" class="hover:text-amber-500 transition-colors">Independent Villas</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Services</h3>
-        <ul class="space-y-2.5 text-xs font-body">
-          <li><a href="construction.html" class="hover:text-amber-500 transition-colors">Turnkey Construction</a></li>
-          <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Joint Venture</a></li>
-          <li><a href="admin.html" class="hover:text-amber-500 transition-colors text-amber-500 font-bold">Admin Portal</a></li>
-        </ul>
-      </div>
-
-      <div>
-        <h3 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Vadapalani HQ</h3>
-        <p class="font-body text-xs leading-relaxed mb-2">
-          No.23, Pillaiyar Kovil Street, Vadapalani, Chennai - 600026
-        </p>
-        <p class="font-body text-xs">Phone: 8838957874 / 7200212759</p>
-      </div>
-
-    </div>
-
-    <div class="border-t border-slate-200 dark:border-slate-900 pt-8 text-center text-xs font-body text-slate-500">
-      <p>© 2026 Triangle Properties Pvt. Ltd. All rights reserved.</p>
-    </div>
-  </footer>
+  <div id="footer-container"></div>
+  <div id="floating-contact-container"></div>
 
   <script src="js/data.js"></script>
+  <script src="js/component-loader.js"></script>
   <script src="js/firebase-config.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/admin.js"></script>
   <script src="js/properties.js"></script>
 </body>
 </html>

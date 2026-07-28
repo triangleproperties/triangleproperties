@@ -3,31 +3,47 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 1. Inquiries Collection: Public website visitors can create leads; only authenticated Admins can read, update, or delete.
+    // 1. Inquiries Collection (CRM Leads)
+    // - Public website clients can submit (create) inquiries/forms
+    // - Only Firebase Authenticated Admins can view (read), update status, or delete leads
     match /inquiries/{inquiryId} {
       allow create: if true;
       allow read, update, delete: if request.auth != null;
     }
 
-    // 2. Properties Collection: Public can view active listings; only authenticated Admins can write.
+    // 2. Properties Collection
+    // - Public visitors can view properties
+    // - Only Firebase Authenticated Admins can create, update, or delete properties
     match /properties/{propertyId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // 3. Gallery Collection: Public can view photos; only authenticated Admins can write.
+    // 3. Categories Collection
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 4. Gallery Collection
     match /gallery/{imageId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // 4. Testimonials Collection: Public can view reviews; only authenticated Admins can write.
+    // 5. Testimonials / Reviews Collection
     match /testimonials/{reviewId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // 5. Default fallback: Deny all unhandled paths
+    // 6. Company Settings Collection
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 7. Default Fallback: Lock down all other document paths
     match /{document=**} {
       allow read, write: if false;
     }
