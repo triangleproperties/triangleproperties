@@ -1,7 +1,7 @@
 // Triangle Properties Pvt. Ltd. - Modular Admin Control Panel Engine
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
-import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
 
 // 1. CONFIGURATIONS
 const firebaseConfig = {
@@ -204,12 +204,7 @@ tabBtns.forEach(btn => {
     if (pageTitle) {
       pageTitle.textContent = tab === 'properties' ? 'Signature Properties' :
                               tab === 'categories' ? 'Real Estate Categories' :
-                              tab === 'construction' ? 'Construction Cost & Packages' :
-                              tab === 'joint-venture' ? 'Joint Venture Terms' :
-                              tab === 'gallery' ? 'Architectural Photo Gallery' :
-                              tab === 'about' ? 'About Us & Heritage' :
-                              tab === 'services' ? 'Services Offered' :
-                              tab === 'contact' ? 'Vadapalani HQ & Contact Info' : 'Customer Enquiries & Leads';
+                              tab === 'gallery' ? 'Architectural Photo Gallery' : 'Customer Enquiries & Leads';
     }
   });
 });
@@ -218,7 +213,6 @@ tabBtns.forEach(btn => {
 async function loadDashboardData() {
   await Promise.all([fetchProperties(), fetchCategories(), fetchEnquiries()]);
   fetchGallery();
-  fetchServices();
   renderStats();
 }
 
@@ -365,74 +359,25 @@ window.editGalleryItem = function(id) {
   document.getElementById('gallery-modal')?.classList.remove('hidden');
 };
 
-window.deleteGalleryItem = function(id) {
+window.deleteGalleryItem = async function(id) {
   if (!confirm("Delete photo from gallery?")) return;
   state.gallery = state.gallery.filter(g => g.id !== id);
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.gallery = state.gallery;
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
-  renderGallery();
-  showToast("Gallery photo deleted. Live site updated.", "info");
-};
-
-// SERVICES CRUD
-function fetchServices() {
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  state.services = (liveData.services && liveData.services.length > 0) ? liveData.services : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.services : []);
-  renderServices();
-}
-
-function renderServices() {
-  const container = document.getElementById('services-list');
-  if (!container) return;
-
-  container.innerHTML = (state.services || []).map(s => `
-    <div class="glass-card p-5 rounded-xl flex flex-col justify-between">
-      <div>
-        <div class="flex items-center gap-2 mb-2">
-          <span class="material-symbols-outlined text-primary text-xl">${escapeHtml(s.icon || 'star')}</span>
-          <h3 class="font-display font-bold text-white text-base">${escapeHtml(s.title)}</h3>
-        </div>
-        <p class="font-body text-xs text-on-surface-variant leading-relaxed mb-4">${escapeHtml(s.shortDesc)}</p>
-      </div>
-      <div class="flex items-center justify-end gap-2 border-t border-slate-800 pt-3">
-        <button onclick="window.editServiceItem('${s.id}')" title="Edit Service" class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 transition-all">
-          <span class="material-symbols-outlined text-base">edit</span>
-        </button>
-        <button onclick="window.deleteServiceItem('${s.id}')" title="Delete Service" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all">
-          <span class="material-symbols-outlined text-base">delete</span>
-        </button>
-      </div>
-    </div>
-  `).join('');
-}
-
-window.editServiceItem = function(id) {
-  const s = (state.services || []).find(item => item.id === id);
-  if (!s) return;
-  document.getElementById('serv-doc-id').value = s.id;
-  document.getElementById('serv-title').value = s.title || '';
-  document.getElementById('serv-icon').value = s.icon || 'landscape';
-  if (document.getElementById('serv-icon-custom')) {
-    document.getElementById('serv-icon-custom').value = s.icon || '';
+  try {
+    const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+    liveData.gallery = state.gallery;
+    try { localStorage.setItem('triangle_custom_data', JSON.stringify(liveData)); } catch(le) {}
+    window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: liveData }));
+    if (db) {
+      await deleteDoc(doc(db, 'gallery', id));
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
+    }
+    showToast("Gallery photo deleted. Live site updated.", "info");
+  } catch (e) {
+    showToast(`Delete error: ${e.message}`, "error");
   }
-  document.getElementById('serv-short-desc').value = s.shortDesc || '';
-  document.getElementById('serv-full-desc').value = s.fullDesc || s.shortDesc || '';
-  
-  const modalTitle = document.getElementById('serv-modal-title');
-  if (modalTitle) modalTitle.textContent = 'Edit Service';
-  document.getElementById('service-modal')?.classList.remove('hidden');
+  renderGallery();
 };
 
-window.deleteServiceItem = function(id) {
-  if (!confirm("Delete this service?")) return;
-  state.services = (state.services || []).filter(s => s.id !== id);
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.services = state.services;
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
-  renderServices();
-  showToast("Service deleted! Live site updated.", "info");
-};
 
 // ENQUIRIES CRUD
 async function fetchEnquiries() {
@@ -534,14 +479,6 @@ document.getElementById('add-gallery-btn')?.addEventListener('click', () => {
   document.getElementById('gallery-modal')?.classList.remove('hidden');
 });
 
-document.getElementById('add-service-btn')?.addEventListener('click', () => {
-  document.getElementById('service-form')?.reset();
-  const docId = document.getElementById('serv-doc-id');
-  if (docId) docId.value = '';
-  const modalTitle = document.getElementById('serv-modal-title');
-  if (modalTitle) modalTitle.textContent = 'Add New Service';
-  document.getElementById('service-modal')?.classList.remove('hidden');
-});
 
 document.getElementById('prop-cloudinary-file')?.addEventListener('change', async (e) => {
   const file = e.target.files[0];
@@ -678,148 +615,27 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
     state.gallery.unshift(photoData);
   }
 
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.gallery = state.gallery;
-  
-  if (window.saveLiveTriangleData) {
-    const saveResult = await window.saveLiveTriangleData(liveData);
-    if (saveResult && saveResult.success) {
-      showToast("Gallery photo saved! Live site updated.", "success");
-    } else {
-      showToast(`Save Error: ${saveResult?.error || 'Failed to persist photo'}`, "error");
+  try {
+    // 1. Write to LocalStorage (offline cache)
+    const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+    liveData.gallery = state.gallery;
+    try { localStorage.setItem('triangle_custom_data', JSON.stringify(liveData)); } catch(le) {}
+    window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: liveData }));
+
+    // 2. Write to Firestore using admin's LOCAL db
+    if (db) {
+      await setDoc(doc(db, 'gallery', photoData.id), { title: photoData.title, category: photoData.category, image: photoData.image }, { merge: true });
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
     }
+    showToast("Gallery photo saved! Live site updated.", "success");
+  } catch (err) {
+    showToast(`Save Error: ${err.message}`, "error");
   }
 
   renderGallery();
   document.getElementById('gallery-modal')?.classList.add('hidden');
 });
 
-document.getElementById('service-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const docId = document.getElementById('serv-doc-id')?.value;
-  const customIcon = document.getElementById('serv-icon-custom')?.value?.trim();
-  const selectedIcon = document.getElementById('serv-icon')?.value || 'landscape';
-  
-  const servData = {
-    id: docId || ("serv-" + Date.now()),
-    title: document.getElementById('serv-title').value,
-    icon: customIcon || selectedIcon,
-    shortDesc: document.getElementById('serv-short-desc').value,
-    fullDesc: document.getElementById('serv-full-desc').value
-  };
-
-  state.services = state.services || [];
-  if (docId) {
-    const idx = state.services.findIndex(s => s.id === docId);
-    if (idx !== -1) {
-      state.services[idx] = servData;
-    } else {
-      state.services.unshift(servData);
-    }
-  } else {
-    state.services.unshift(servData);
-  }
-
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.services = state.services;
-  
-  if (window.saveLiveTriangleData) {
-    const saveResult = await window.saveLiveTriangleData(liveData);
-    if (saveResult && saveResult.success) {
-      showToast("Service saved successfully! Live site updated.", "success");
-    } else {
-      showToast(`Save Error: ${saveResult?.error || 'Failed to persist service'}`, "error");
-    }
-  }
-
-  renderServices();
-  document.getElementById('service-modal')?.classList.add('hidden');
-});
-
-document.getElementById('construction-settings-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.construction = {
-    basicRate: document.getElementById('const-basic-rate').value,
-    premiumRate: document.getElementById('const-premium-rate').value,
-    luxuryRate: document.getElementById('const-luxury-rate').value,
-    note: document.getElementById('const-note').value
-  };
-  
-  if (window.saveLiveTriangleData) {
-    const saveResult = await window.saveLiveTriangleData(liveData);
-    if (saveResult && saveResult.success) {
-      showToast("Construction Settings saved! Live site updated.", "success");
-    } else {
-      showToast(`Save Error: ${saveResult?.error || 'Failed to persist settings'}`, "error");
-    }
-  }
-});
-
-document.getElementById('jv-settings-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.jointVenture = {
-    sharingRatio: document.getElementById('jv-sharing-ratio').value,
-    minLand: document.getElementById('jv-min-land').value,
-    benefits: document.getElementById('jv-benefits').value
-  };
-  
-  if (window.saveLiveTriangleData) {
-    const saveResult = await window.saveLiveTriangleData(liveData);
-    if (saveResult && saveResult.success) {
-      showToast("Joint Venture Commercial Terms saved! Live site updated.", "success");
-    } else {
-      showToast(`Save Error: ${saveResult?.error || 'Failed to persist JV terms'}`, "error");
-    }
-  }
-});
-
-document.getElementById('about-settings-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.about = {
-    years: document.getElementById('about-years').value,
-    completed: document.getElementById('about-completed').value,
-    families: document.getElementById('about-families').value,
-    vision: document.getElementById('about-vision').value
-  };
-  
-  if (window.saveLiveTriangleData) {
-    const saveResult = await window.saveLiveTriangleData(liveData);
-    if (saveResult && saveResult.success) {
-      showToast("About Us Details saved! Live site updated.", "success");
-    } else {
-      showToast(`Save Error: ${saveResult?.error || 'Failed to persist details'}`, "error");
-    }
-  }
-});
-
-document.getElementById('contact-settings-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  liveData.company = {
-    ...liveData.company,
-    phone1: document.getElementById('contact-phone1').value,
-    phone2: document.getElementById('contact-phone2').value,
-    whatsapp: document.getElementById('contact-whatsapp').value,
-    address: document.getElementById('contact-address').value,
-    socialLinks: {
-      instagram: document.getElementById('contact-instagram').value,
-      facebook: document.getElementById('contact-facebook').value,
-      googleReviews: document.getElementById('contact-google').value
-    }
-  };
-  
-  if (window.saveLiveTriangleData) {
-    const saveResult = await window.saveLiveTriangleData(liveData);
-    if (saveResult && saveResult.success) {
-      showToast("Vadapalani HQ Contact Info saved! Live site updated.", "success");
-    } else {
-      showToast(`Save Error: ${saveResult?.error || 'Failed to persist contact info'}`, "error");
-    }
-  }
-});
 
 // GLOBAL ACTIONS
 window.deletePropertyItem = async function(id) {
