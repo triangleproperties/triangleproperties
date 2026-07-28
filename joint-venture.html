@@ -113,7 +113,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label for="jv-phone" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Mobile Number *</label>
-            <input type="tel" id="jv-phone" name="phone" required placeholder="Phone Number"
+            <input type="tel" id="jv-phone" name="phone" required pattern="[6-9][0-9]{9}" title="Please enter a valid 10-digit Indian mobile number (e.g. 9840123456)" placeholder="10-Digit Mobile Number"
               class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
           </div>
           <div>

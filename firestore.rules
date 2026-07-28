@@ -3,7 +3,7 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // 1. Inquiries Collection (CRM Leads)
+    // 1. Inquiries Collection (CRM Leads & Contact Form)
     // - Public website clients can submit (create) inquiries/forms
     // - Only Firebase Authenticated Admins can view (read), update status, or delete leads
     match /inquiries/{inquiryId} {
@@ -31,19 +31,31 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
-    // 5. Testimonials / Reviews Collection
+    // 5. Services Collection
+    match /services/{serviceId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 6. Testimonials / Reviews Collection
     match /testimonials/{reviewId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // 6. Company Settings Collection
+    // 7. Settings Collection (company, construction, about, jointVenture)
     match /settings/{settingId} {
       allow read: if true;
       allow write: if request.auth != null;
     }
 
-    // 7. Default Fallback: Lock down all other document paths
+    // 8. Backward Compatibility App Data
+    match /app_data/{docId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 9. Default Fallback: Lock down all other document paths
     match /{document=**} {
       allow read, write: if false;
     }

@@ -602,12 +602,19 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
 
     const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
     liveData.properties = state.properties;
-    if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+    
+    if (window.saveLiveTriangleData) {
+      const saveResult = await window.saveLiveTriangleData(liveData);
+      if (saveResult && saveResult.success) {
+        showToast("Property saved successfully! Live site updated.", "success");
+      } else {
+        showToast(`Save Error: ${saveResult?.error || 'Failed to persist property'}`, "error");
+      }
+    }
 
     renderProperties();
     renderStats();
     document.getElementById('property-modal')?.classList.add('hidden');
-    showToast("Property saved successfully! Live site updated.", "success");
   } catch (err) {
     showToast(`Save error: ${err.message}`, "error");
   }
@@ -631,18 +638,25 @@ document.getElementById('category-form')?.addEventListener('submit', async (e) =
 
     const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
     liveData.categories = state.categories;
-    if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+    
+    if (window.saveLiveTriangleData) {
+      const saveResult = await window.saveLiveTriangleData(liveData);
+      if (saveResult && saveResult.success) {
+        showToast("Category saved! Live site updated.", "success");
+      } else {
+        showToast(`Save Error: ${saveResult?.error || 'Failed to persist category'}`, "error");
+      }
+    }
 
     renderCategories();
     renderStats();
     document.getElementById('category-modal')?.classList.add('hidden');
-    showToast("Category saved! Live site updated.", "success");
   } catch (err) {
     showToast(`Save error: ${err.message}`, "error");
   }
 });
 
-document.getElementById('gallery-form')?.addEventListener('submit', (e) => {
+document.getElementById('gallery-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const docId = document.getElementById('gal-doc-id')?.value;
   const photoData = {
@@ -666,14 +680,21 @@ document.getElementById('gallery-form')?.addEventListener('submit', (e) => {
 
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.gallery = state.gallery;
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+  
+  if (window.saveLiveTriangleData) {
+    const saveResult = await window.saveLiveTriangleData(liveData);
+    if (saveResult && saveResult.success) {
+      showToast("Gallery photo saved! Live site updated.", "success");
+    } else {
+      showToast(`Save Error: ${saveResult?.error || 'Failed to persist photo'}`, "error");
+    }
+  }
 
   renderGallery();
   document.getElementById('gallery-modal')?.classList.add('hidden');
-  showToast("Gallery photo saved! Live site updated.", "success");
 });
 
-document.getElementById('service-form')?.addEventListener('submit', (e) => {
+document.getElementById('service-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const docId = document.getElementById('serv-doc-id')?.value;
   const customIcon = document.getElementById('serv-icon-custom')?.value?.trim();
@@ -701,14 +722,21 @@ document.getElementById('service-form')?.addEventListener('submit', (e) => {
 
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.services = state.services;
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
+  
+  if (window.saveLiveTriangleData) {
+    const saveResult = await window.saveLiveTriangleData(liveData);
+    if (saveResult && saveResult.success) {
+      showToast("Service saved successfully! Live site updated.", "success");
+    } else {
+      showToast(`Save Error: ${saveResult?.error || 'Failed to persist service'}`, "error");
+    }
+  }
 
   renderServices();
   document.getElementById('service-modal')?.classList.add('hidden');
-  showToast("Service saved successfully! Live site updated.", "success");
 });
 
-document.getElementById('construction-settings-form')?.addEventListener('submit', (e) => {
+document.getElementById('construction-settings-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.construction = {
@@ -717,11 +745,18 @@ document.getElementById('construction-settings-form')?.addEventListener('submit'
     luxuryRate: document.getElementById('const-luxury-rate').value,
     note: document.getElementById('const-note').value
   };
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
-  showToast("Construction Settings saved! Live site updated.", "success");
+  
+  if (window.saveLiveTriangleData) {
+    const saveResult = await window.saveLiveTriangleData(liveData);
+    if (saveResult && saveResult.success) {
+      showToast("Construction Settings saved! Live site updated.", "success");
+    } else {
+      showToast(`Save Error: ${saveResult?.error || 'Failed to persist settings'}`, "error");
+    }
+  }
 });
 
-document.getElementById('jv-settings-form')?.addEventListener('submit', (e) => {
+document.getElementById('jv-settings-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.jointVenture = {
@@ -729,11 +764,18 @@ document.getElementById('jv-settings-form')?.addEventListener('submit', (e) => {
     minLand: document.getElementById('jv-min-land').value,
     benefits: document.getElementById('jv-benefits').value
   };
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
-  showToast("Joint Venture Commercial Terms saved! Live site updated.", "success");
+  
+  if (window.saveLiveTriangleData) {
+    const saveResult = await window.saveLiveTriangleData(liveData);
+    if (saveResult && saveResult.success) {
+      showToast("Joint Venture Commercial Terms saved! Live site updated.", "success");
+    } else {
+      showToast(`Save Error: ${saveResult?.error || 'Failed to persist JV terms'}`, "error");
+    }
+  }
 });
 
-document.getElementById('about-settings-form')?.addEventListener('submit', (e) => {
+document.getElementById('about-settings-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.about = {
@@ -742,11 +784,18 @@ document.getElementById('about-settings-form')?.addEventListener('submit', (e) =
     families: document.getElementById('about-families').value,
     vision: document.getElementById('about-vision').value
   };
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
-  showToast("About Us Details saved! Live site updated.", "success");
+  
+  if (window.saveLiveTriangleData) {
+    const saveResult = await window.saveLiveTriangleData(liveData);
+    if (saveResult && saveResult.success) {
+      showToast("About Us Details saved! Live site updated.", "success");
+    } else {
+      showToast(`Save Error: ${saveResult?.error || 'Failed to persist details'}`, "error");
+    }
+  }
 });
 
-document.getElementById('contact-settings-form')?.addEventListener('submit', (e) => {
+document.getElementById('contact-settings-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
   liveData.company = {
@@ -761,8 +810,15 @@ document.getElementById('contact-settings-form')?.addEventListener('submit', (e)
       googleReviews: document.getElementById('contact-google').value
     }
   };
-  if (window.saveLiveTriangleData) window.saveLiveTriangleData(liveData);
-  showToast("Vadapalani HQ Contact Info saved! Live site updated.", "success");
+  
+  if (window.saveLiveTriangleData) {
+    const saveResult = await window.saveLiveTriangleData(liveData);
+    if (saveResult && saveResult.success) {
+      showToast("Vadapalani HQ Contact Info saved! Live site updated.", "success");
+    } else {
+      showToast(`Save Error: ${saveResult?.error || 'Failed to persist contact info'}`, "error");
+    }
+  }
 });
 
 // GLOBAL ACTIONS

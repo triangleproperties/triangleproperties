@@ -349,34 +349,80 @@ function loadLiveTriangleData() {
   }
 }
 
-function saveLiveTriangleData(newData) {
+async function saveLiveTriangleData(newData) {
+  let localSaved = false;
+  let firestoreSaved = false;
+  let errorMsg = null;
+
+  const existing = loadLiveTriangleData();
+  const merged = {
+    ...existing,
+    ...newData,
+    company: { ...existing.company, ...(newData.company || {}) },
+    properties: newData.properties || existing.properties,
+    categories: newData.categories || existing.categories,
+    gallery: newData.gallery || existing.gallery,
+    services: newData.services || existing.services,
+    testimonials: newData.testimonials || existing.testimonials,
+    construction: newData.construction || existing.construction,
+    about: newData.about || existing.about,
+    jointVenture: newData.jointVenture || existing.jointVenture
+  };
+
+  // 1. Write to LocalStorage (Offline Cache)
   try {
-    const existing = loadLiveTriangleData();
-    const merged = {
-      ...existing,
-      ...newData,
-      company: { ...existing.company, ...(newData.company || {}) },
-      properties: newData.properties || existing.properties,
-      categories: newData.categories || existing.categories,
-      gallery: newData.gallery || existing.gallery,
-      services: newData.services || existing.services,
-      testimonials: newData.testimonials || existing.testimonials
-    };
     localStorage.setItem('triangle_custom_data', JSON.stringify(merged));
     window.TRIANGLE_DATA = merged;
-    
-    // Broadcast live event for active tabs
-    window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: merged }));
-    
-    // Cloud Firestore Sync (Multi-Device & Multi-Browser Sync)
-    if (window.db && window.firestoreSetDoc && window.firestoreDoc) {
-      const docRef = window.firestoreDoc(window.db, 'app_data', 'triangle_custom_data');
-      window.firestoreSetDoc(docRef, merged, { merge: true })
-        .then(() => console.log("🔥 Cloud Firestore multi-device sync complete!"))
-        .catch(err => console.warn("Firestore cloud sync notice:", err));
-    }
+    localSaved = true;
   } catch (e) {
-    console.error("Error saving dynamic custom data:", e);
+    console.error("LocalStorage quota/private browsing write error:", e);
+    errorMsg = e.message || "Browser storage write restricted";
+  }
+
+  // Broadcast live event for active tabs
+  window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: merged }));
+
+  // 2. Write to Cloud Firestore Primary Storage
+  if (window.db && window.firestoreSetDoc && window.firestoreDoc) {
+    try {
+      const legacyDocRef = window.firestoreDoc(window.db, 'app_data', 'triangle_custom_data');
+      await window.firestoreSetDoc(legacyDocRef, merged, { merge: true });
+
+      // Save to Decoupled Settings Documents
+      if (newData.company) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'company'), newData.company, { merge: true });
+      }
+      if (newData.construction) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'construction'), newData.construction, { merge: true });
+      }
+      if (newData.about) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'about'), newData.about, { merge: true });
+      }
+      if (newData.jointVenture) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'jointVenture'), newData.jointVenture, { merge: true });
+      }
+      if (newData.testimonials) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'testimonials'), { items: newData.testimonials }, { merge: true });
+      }
+      if (newData.stats) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'stats'), { items: newData.stats }, { merge: true });
+      }
+      if (newData.processSteps) {
+        await window.firestoreSetDoc(window.firestoreDoc(window.db, 'settings', 'processSteps'), { items: newData.processSteps }, { merge: true });
+      }
+
+      firestoreSaved = true;
+      console.log("🔥 Cloud Firestore multi-collection save confirmed!");
+    } catch (err) {
+      console.error("Firestore cloud save error:", err);
+      errorMsg = err.message || "Cloud Firestore save permission denied";
+    }
+  }
+
+  if (firestoreSaved || localSaved) {
+    return { success: true, source: firestoreSaved ? 'firestore' : 'local' };
+  } else {
+    return { success: false, error: errorMsg || "Failed to persist data in storage or cloud" };
   }
 }
 
@@ -389,7 +435,11 @@ function initFirestoreLiveSync() {
         if (snapshot.exists()) {
           const cloudData = snapshot.data();
           console.log("🔥 Received real-time Cloud Firestore update from Admin!");
-          localStorage.setItem('triangle_custom_data', JSON.stringify(cloudData));
+          try {
+            localStorage.setItem('triangle_custom_data', JSON.stringify(cloudData));
+          } catch (e) {
+            console.warn("LocalStorage caching notice:", e);
+          }
           window.TRIANGLE_DATA = loadLiveTriangleData();
           window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: window.TRIANGLE_DATA }));
         }
