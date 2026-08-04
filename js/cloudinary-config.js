@@ -1,4 +1,4 @@
-// Triangle Properties Pvt. Ltd. - Cloudinary Production Media & CDN Integration
+// Triangle Properties - Cloudinary Production Media & CDN Integration
 
 const CLOUDINARY_CONFIG = {
   cloudName: "triangle-properties",
@@ -34,7 +34,7 @@ function getCloudinaryUrl(publicIdOrUrl, options = {}) {
 /**
  * Open Cloudinary Upload Widget for Admin Panel image uploads
  */
-function openCloudinaryWidget(callback) {
+function openCloudinaryWidget(callback, customOptions = {}) {
   if (typeof window.cloudinary === 'undefined') {
     alert("Cloudinary SDK loading... Please verify your internet connection.");
     return;
@@ -45,7 +45,7 @@ function openCloudinaryWidget(callback) {
       cloudName: CLOUDINARY_CONFIG.cloudName,
       uploadPreset: CLOUDINARY_CONFIG.uploadPreset,
       sources: ['local', 'url', 'camera'],
-      multiple: false,
+      multiple: customOptions.multiple || false,
       folder: CLOUDINARY_CONFIG.defaultFolder,
       clientAllowedFormats: ['png', 'jpg', 'jpeg', 'webp'],
       maxFileSize: 10485760, // 10MB
@@ -86,3 +86,4 @@ if (typeof window !== 'undefined') {
   window.getCloudinaryUrl = getCloudinaryUrl;
   window.openCloudinaryWidget = openCloudinaryWidget;
 }
+

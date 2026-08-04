@@ -1,4 +1,4 @@
-# Triangle Properties Pvt. Ltd. - Search Engine Robots Configuration
+# Triangle Properties - Search Engine Robots Configuration
 User-agent: *
 Allow: /
 
