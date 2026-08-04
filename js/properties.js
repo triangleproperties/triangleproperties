@@ -1,4 +1,4 @@
-// Triangle Properties Pvt. Ltd. - Property Search, Filter, & Detail Modal Handler (Luxury UI Pass)
+// Triangle Properties - Property Search, Filter, & Detail Modal Handler (Luxury UI Pass)
 
 document.addEventListener('DOMContentLoaded', () => {
   initPropertyGrid();

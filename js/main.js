@@ -265,7 +265,7 @@ function initFloatingButtons() {
     </a>
 
     <!-- WhatsApp Button -->
-    <a href="https://wa.me/${whatsappNum}?text=${encodeURIComponent('Hello Triangle Properties Pvt. Ltd.! I am interested in exploring property options in Chennai.')}" 
+    <a href="https://wa.me/${whatsappNum}?text=${encodeURIComponent('Hello Triangle Properties! I am interested in exploring property options in Chennai.')}" 
        target="_blank" 
        rel="noopener noreferrer"
        title="Chat on WhatsApp"
