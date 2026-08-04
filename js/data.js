@@ -226,7 +226,7 @@ const BASE_TRIANGLE_DATA = {
       role: "Verified Google Reviewer (3 Reviews)",
       rating: 5,
       time: "2 months ago",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+      avatar: "",
       content: "Excellent service from start to finish. The team was professional, transparent, and very supportive throughout the entire process. They helped us find the perfect property with clear guidance and quick responses."
     },
     {
@@ -235,7 +235,7 @@ const BASE_TRIANGLE_DATA = {
       role: "Google Reviewer (8 Reviews • 3 Photos)",
       rating: 5,
       time: "2 months ago",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+      avatar: "",
       content: "Perfect location! Perfect choice! Perfect partner! Perfect price! Triangle Properties service is professional, organized, and customer-friendly."
     },
     {
@@ -244,7 +244,7 @@ const BASE_TRIANGLE_DATA = {
       role: "Google Reviewer (4 Reviews)",
       rating: 5,
       time: "2 months ago",
-      avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&q=80",
+      avatar: "",
       content: "Very happy with our land purchase experience. The team was very trustworthy and guided clearly according to our budget. Every step was transparent, and felt money was completely safe."
     },
     {
@@ -253,7 +253,7 @@ const BASE_TRIANGLE_DATA = {
       role: "Google Reviewer (2 Reviews)",
       rating: 5,
       time: "2 months ago",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80",
+      avatar: "",
       content: "It was easy to contact these people, and their rates are very competitive. I am planning to purchase one of these properties soon."
     },
     {
@@ -262,7 +262,7 @@ const BASE_TRIANGLE_DATA = {
       role: "Google Reviewer (5 Reviews • 3 Photos)",
       rating: 5,
       time: "2 months ago",
-      avatar: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=200&q=80",
+      avatar: "",
       content: "Kutumbakam project land I am also purchasing. Good place, customer support is very friendly."
     }
   ],

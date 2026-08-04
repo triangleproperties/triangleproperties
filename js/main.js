@@ -447,6 +447,34 @@ function initTestimonialsSlider() {
       .replace(/'/g, '&#039;');
   }
 
+  function renderClientAvatarHTML(t) {
+    const name = t.name || 'Client';
+    const avatarUrl = t.avatar || '';
+    
+    if (avatarUrl && !avatarUrl.includes('images.unsplash.com')) {
+      return `<img src="${escapeHtml(avatarUrl)}" alt="${escapeHtml(name)}" class="w-10 h-10 rounded-full object-cover border border-amber-500/30 flex-shrink-0">`;
+    }
+    
+    const initial = escapeHtml(name.charAt(0).toUpperCase() || 'C');
+    const colorClasses = [
+      'bg-blue-600 text-white',
+      'bg-emerald-600 text-white',
+      'bg-rose-600 text-white',
+      'bg-amber-600 text-white',
+      'bg-purple-600 text-white',
+      'bg-teal-600 text-white'
+    ];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    const colorClass = colorClasses[Math.abs(hash) % colorClasses.length];
+
+    return `
+      <div class="w-10 h-10 rounded-full ${colorClass} font-bold font-button flex items-center justify-center text-sm shadow-md border border-amber-500/20 flex-shrink-0">
+        ${initial}
+      </div>
+    `;
+  }
+
   function renderSlide() {
     const visibleCount = window.innerWidth >= 1024 ? 3 : (window.innerWidth >= 768 ? 2 : 1);
     const sliced = [];
@@ -466,7 +494,7 @@ function initTestimonialsSlider() {
           </p>
         </div>
         <div class="flex items-center gap-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <img src="${escapeHtml(t.avatar || 'assets/logo.png')}" alt="${escapeHtml(t.name)}" class="w-10 h-10 rounded-full object-cover border border-amber-500/30">
+          ${renderClientAvatarHTML(t)}
           <div>
             <h3 class="font-display text-base font-bold text-slate-900 dark:text-white">${escapeHtml(t.name)}</h3>
             <p class="font-button text-[10px] uppercase text-slate-500">${escapeHtml(t.role)} • ${escapeHtml(t.time || 'Verified')}</p>
