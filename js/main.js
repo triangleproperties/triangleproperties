@@ -142,7 +142,29 @@ function initHeroCarousel() {
   const prevBtn = document.getElementById('hero-prev-btn');
   const nextBtn = document.getElementById('hero-next-btn');
 
+  const heroBadge = document.getElementById('hero-slide-badge');
+  const heroHeading = document.getElementById('hero-slide-heading');
+  const heroText = document.getElementById('hero-slide-text');
+
   if (slides.length === 0) return;
+
+  const slideData = [
+    {
+      badge: "Chennai's Most Affordable Luxury Developer",
+      heading: "Architecting Trust. <br/><span class=\"gold-gradient-text italic font-serif\">Creating Value.</span>",
+      text: "Triangle Properties Pvt. Ltd. delivers uncompromised architectural refinement and 100% legal title transparency across Vadapalani, ECR, and prime Chennai locations."
+    },
+    {
+      badge: "100% Legal Clear CMDA & DTCP Approved Plots",
+      heading: "Secure Prime Land. <br/><span class=\"gold-gradient-text italic font-serif\">Easy Monthly EMI.</span>",
+      text: "Explore verified residential plots, gated villa sites, and commercial land in Vadapalani & Chennai with immediate registration and 80% bank loan approval."
+    },
+    {
+      badge: "Turnkey Architectural Civil Construction",
+      heading: "Your Dream Villa. <br/><span class=\"gold-gradient-text italic font-serif\">Engineered to Perfection.</span>",
+      text: "From architectural sanction drawings to RCC structural execution, premium interior fitting, and key handover with transparent per-sq.ft pricing."
+    }
+  ];
 
   let currentSlide = 0;
   let carouselTimer = null;
@@ -167,6 +189,10 @@ function initHeroCarousel() {
         ind.classList.add('w-2.5', 'bg-slate-600');
       }
     });
+
+    if (heroBadge && slideData[index]) heroBadge.innerHTML = slideData[index].badge;
+    if (heroHeading && slideData[index]) heroHeading.innerHTML = slideData[index].heading;
+    if (heroText && slideData[index]) heroText.innerHTML = slideData[index].text;
 
     currentSlide = index;
   }

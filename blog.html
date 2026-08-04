@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <script>
+    (function() {
+      var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    })();
+  </script>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog & Real Estate Insights | Triangle Properties</title>
+  <meta name="description" content="Expert insights on Chennai real estate, CMDA & DTCP layout legal checklists, market appreciation trends, and turnkey house construction advice."/>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            surface: "var(--color-surface)",
+            "on-surface": "var(--color-on-surface)",
+            "on-surface-variant": "var(--color-on-surface-variant)",
+            primary: "var(--color-primary)",
+            secondary: "var(--color-secondary)"
+          },
+          fontFamily: {
+            display: ["'Cormorant Garamond'", "serif"],
+            body: ["Inter", "sans-serif"],
+            button: ["Poppins", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Poppins:wght@500;600;700&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0&display=swap" rel="stylesheet"/>
+
+  <link rel="stylesheet" href="css/variables.css"/>
+  <link rel="stylesheet" href="css/styles.css"/>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary/30 min-h-screen flex flex-col overflow-x-hidden">
+
+  <!-- DYNAMIC NAVBAR CONTAINER (Loaded from components/navbar.html) -->
+  <div id="navbar-container"></div>
+  <script src="js/navbar-loader.js"></script>
+
+  <!-- BANNER -->
+  <section class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Knowledge & Market Guidance</span>
+    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Blog & Real Estate Insights</h1>
+    <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
+      Stay informed with legal checklists, land investment analysis, and turnkey civil construction guides tailored for Chennai property buyers.
+    </p>
+  </section>
+
+  <!-- SEARCH & CATEGORY FILTER TOOLBAR -->
+  <section class="py-6 px-4 md:px-16 max-w-[1440px] mx-auto">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 font-button text-xs uppercase tracking-widest">
+      <div id="blog-category-filters" class="flex flex-wrap gap-2 justify-center sm:justify-start">
+        <button class="blog-filter-btn px-4 py-2 rounded-full bg-amber-500 text-slate-950 font-bold shadow-md" data-filter="ALL">All Articles</button>
+        <button class="blog-filter-btn px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Legal & Clear Title">Legal & Clear Title</button>
+        <button class="blog-filter-btn px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Market Insights">Market Insights</button>
+        <button class="blog-filter-btn px-4 py-2 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 hover:border-amber-500" data-filter="Construction Guides">Construction Guides</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG ARTICLE GRID -->
+  <main class="py-8 sm:py-12 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow">
+    <div id="blog-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Rendered dynamically -->
+    </div>
+  </main>
+
+  <div id="footer-container"></div>
+  <div id="floating-contact-container"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/component-loader.js"></script>
+  <script src="js/firebase-config.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      renderBlogGrid('ALL');
+      initBlogFilters();
+    });
+
+    function renderBlogGrid(filterCategory) {
+      const grid = document.getElementById('blog-grid');
+      if (!grid) return;
+
+      const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : window.TRIANGLE_DATA;
+      const blogs = liveData?.blogs || [];
+      const filtered = filterCategory === 'ALL' ? blogs : blogs.filter(b => b.category === filterCategory);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full text-center py-16 px-4 glass-card rounded-3xl">
+            <h3 class="text-xl font-bold font-heading mb-2">No Articles Found</h3>
+            <p class="text-xs text-slate-500">Try selecting a different category filter.</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <article class="glass-card rounded-3xl overflow-hidden group flex flex-col h-full border border-slate-200 dark:border-slate-800 hover:-translate-y-1 transition-all duration-300 shadow-md">
+          <div class="aspect-[16/10] overflow-hidden relative bg-slate-900">
+            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" loading="lazy">
+            <div class="absolute top-4 left-4 bg-slate-950/80 backdrop-blur-md text-amber-400 font-button text-[10px] uppercase px-3 py-1 rounded-full border border-amber-500/30">
+              ${item.category}
+            </div>
+          </div>
+          <div class="p-6 flex flex-col flex-grow">
+            <div class="flex items-center gap-3 text-[11px] text-slate-500 dark:text-slate-400 mb-3 font-button">
+              <span>${item.date}</span>
+              <span>•</span>
+              <span>${item.readTime}</span>
+            </div>
+            <h2 class="font-display text-xl font-bold text-slate-900 dark:text-white group-hover:text-amber-500 transition-colors mb-3 leading-snug">
+              <a href="blog-detail.html?id=${item.id}">${item.title}</a>
+            </h2>
+            <p class="font-body text-slate-600 dark:text-slate-300 text-xs line-clamp-3 mb-6 leading-relaxed flex-grow">
+              ${item.excerpt}
+            </p>
+            <div class="pt-4 border-t border-slate-200 dark:border-slate-800 mt-auto flex items-center justify-between">
+              <span class="text-[11px] text-slate-400 font-button">${item.author}</span>
+              <a href="blog-detail.html?id=${item.id}" class="text-xs font-bold font-button uppercase text-amber-500 hover:underline flex items-center gap-1">
+                Read Article <span class="material-symbols-outlined text-sm">arrow_forward</span>
+              </a>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function initBlogFilters() {
+      const buttons = document.querySelectorAll('.blog-filter-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => {
+            b.classList.remove('bg-amber-500', 'text-slate-950', 'font-bold');
+            b.classList.add('bg-slate-100', 'dark:bg-slate-900', 'border', 'border-slate-300', 'dark:border-slate-800');
+          });
+          btn.classList.add('bg-amber-500', 'text-slate-950', 'font-bold');
+          renderBlogGrid(btn.getAttribute('data-filter'));
+        });
+      });
+    }
+  </script>
+</body>
+</html>

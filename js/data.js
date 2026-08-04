@@ -324,7 +324,68 @@ const BASE_TRIANGLE_DATA = {
     sharingRatio: "50:50 / 60:40 Area Sharing",
     minLand: "2 Grounds (4,800 Sq.Ft) & Above",
     benefits: "Zero Landowner Capital Investment, 100% Legal Sanction Approval by Developer, Transparent Built-up Area Sharing, Bank Guarantee & Sub-Registrar Agreement Assurance."
-  }
+  },
+
+  blogs: [
+    {
+      id: "blog-1",
+      title: "Comprehensive Guide to Buying CMDA & DTCP Approved Plots in Chennai (2026 Legal Checklist)",
+      category: "Legal & Clear Title",
+      author: "Triangle Editorial Team",
+      date: "August 2026",
+      readTime: "5 min read",
+      image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80",
+      excerpt: "Essential legal verification steps every homebuyer must follow before investing in residential plot layouts in Vadapalani, Tambaram, and ECR corridors.",
+      content: `
+        <p class="mb-4">Investing in land in Chennai is one of the safest financial decisions when backed by thorough legal verification. However, navigating approvals between CMDA (Chennai Metropolitan Development Authority) and DTCP (Directorate of Town and Country Planning) can often feel daunting for first-time buyers.</p>
+        
+        <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white mt-6 mb-3">1. Verifying Layout Sanction Numbers</h3>
+        <p class="mb-4">Always demand the official Planning Permit (P.P.) number and layout approval letter from the developer. CMDA jurisdiction covers Chennai city limits and expanding suburbs within 1,189 sq.km, while DTCP governs non-metropolitan districts across Tamil Nadu.</p>
+
+        <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white mt-6 mb-3">2. Parent Document Verification (30-Year Traceability)</h3>
+        <p class="mb-4">Ensure your legal advocate inspects title deeds spanning at least 30 to 40 uninterrupted years. Verify Patta/Chitta ownership, Encumbrance Certificate (EC) for zero active mortgages, and clearance of Nil encumbrances.</p>
+
+        <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white mt-6 mb-3">3. Road Gifting & OSR Compliance</h3>
+        <p class="mb-4">A legally compliant layout must have layout inner roads gifted to local panchayats or municipalities via registered Gift Deeds. Triangle Properties guarantees 100% legal title clearance and transparent documentation for all plots.</p>
+      `
+    },
+    {
+      id: "blog-2",
+      title: "Top Emerging Property Hotspots in Vadapalani & West Chennai for High Capital Growth",
+      category: "Market Insights",
+      author: "Land Advisory Bureau",
+      date: "July 2026",
+      readTime: "4 min read",
+      image: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1200&q=80",
+      excerpt: "Discover why Vadapalani and adjoining West Chennai corridors are experiencing rapid real estate appreciation due to Metro expansion and civic infrastructure upgrades.",
+      content: `
+        <p class="mb-4">West Chennai, anchored by Vadapalani and Poonamallee, has emerged as the premier real estate growth vector for residential plot investments. Connectivity upgrades via Metro Rail Corridor 4 have slashed commute times to central business hubs.</p>
+        
+        <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white mt-6 mb-3">Why Vadapalani Central Remains Gold</h3>
+        <p class="mb-4">With proximity to Forum Vijaya Mall, major multi-specialty hospitals, and central bus terminals, land in Vadapalani enjoys continuous demand, high rental yields, and robust re-sale liquidity.</p>
+      `
+    },
+    {
+      id: "blog-3",
+      title: "Turnkey House Construction vs Independent Contracting: Cost, Quality & Timeline Analysis",
+      category: "Construction Guides",
+      author: "Civil Engineering Department",
+      date: "July 2026",
+      readTime: "6 min read",
+      image: "https://images.unsplash.com/photo-1541888946425-d0fbb186a5b7?auto=format&fit=crop&w=1200&q=80",
+      excerpt: "Compare structural material standards, per square foot pricing models, and contract assurances when planning your dream villa build in Chennai.",
+      content: `
+        <p class="mb-4">Building your home requires balancing material quality, structural stability, and budget discipline. Turnkey civil execution by experienced residential developers eliminates cost overruns and material substitution risks.</p>
+        
+        <h3 class="text-xl font-bold font-display text-slate-900 dark:text-white mt-6 mb-3">Key Benefits of Turnkey Execution</h3>
+        <ul class="list-disc pl-6 space-y-2 mb-4">
+          <li>Single-point accountability for architectural design, soil testing, and construction.</li>
+          <li>Fixed per-sq.ft rates with transparent specification schedules (Fe550 steel, UltraTech cement).</li>
+          <li>Strict timeline guarantees backed by structural warranty certification.</li>
+        </ul>
+      `
+    }
+  ]
 };
 
 // Retrieve live merged data (Baseline + Dynamic Admin Overrides)
@@ -345,6 +406,7 @@ function loadLiveTriangleData() {
       services: (custom.services && Array.isArray(custom.services) && custom.services.length > 0) ? custom.services : BASE_TRIANGLE_DATA.services,
       testimonials: (custom.testimonials && Array.isArray(custom.testimonials) && custom.testimonials.length > 0) ? custom.testimonials : BASE_TRIANGLE_DATA.testimonials,
       gallery: (custom.gallery && Array.isArray(custom.gallery) && custom.gallery.length > 0) ? custom.gallery : BASE_TRIANGLE_DATA.gallery,
+      blogs: (custom.blogs && Array.isArray(custom.blogs) && custom.blogs.length > 0) ? custom.blogs : BASE_TRIANGLE_DATA.blogs,
       construction: custom.construction || BASE_TRIANGLE_DATA.construction,
       about: custom.about || BASE_TRIANGLE_DATA.about,
       jointVenture: custom.jointVenture || BASE_TRIANGLE_DATA.jointVenture
@@ -368,6 +430,7 @@ async function saveLiveTriangleData(newData) {
     properties: newData.properties || existing.properties,
     categories: newData.categories || existing.categories,
     gallery: newData.gallery || existing.gallery,
+    blogs: newData.blogs || existing.blogs,
     services: newData.services || existing.services,
     testimonials: newData.testimonials || existing.testimonials,
     construction: newData.construction || existing.construction,

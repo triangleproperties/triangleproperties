@@ -1,71 +1,75 @@
-<!-- HEADER NAVBAR COMPONENT -->
-<header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800">
-  <div class="max-w-[1440px] mx-auto px-4 md:px-16 py-4 flex items-center justify-between">
-    <a href="index.html" class="flex items-center gap-3 group focus:outline-none" title="Triangle Properties Home">
-      <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="55"
-        class="h-9 sm:h-11 w-auto object-contain transition-transform group-hover:scale-105">
+<!-- HEADER NAVBAR COMPONENT (DAC Developers Style Top-Centered Logo Layout) -->
+<header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
+  <!-- Top Tier: Logo & Quick Actions -->
+  <div class="max-w-[1440px] mx-auto px-4 md:px-16 py-3 flex items-center justify-between border-b border-slate-200/50 dark:border-slate-800/50">
+    <!-- Left Spacer for symmetry on desktop -->
+    <div class="hidden lg:flex items-center gap-4 text-xs font-button text-slate-500 dark:text-slate-400">
+      <span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm text-amber-500">location_on</span> Vadapalani, Chennai</span>
+    </div>
+
+    <!-- Center Logo -->
+    <a href="index.html" class="flex items-center justify-center group focus:outline-none py-1 mx-auto lg:mx-0" title="Triangle Properties Home">
+      <img src="assets/logo.png" alt="Triangle Properties Logo" width="220" height="65"
+        class="h-11 sm:h-14 md:h-16 w-auto object-contain transition-transform group-hover:scale-105">
     </a>
 
-    <nav class="hidden lg:flex items-center gap-7">
-      <a href="index.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Home</a>
-      <a href="properties.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Projects</a>
-      <a href="construction.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Construction</a>
-      <a href="joint-venture.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Joint
-        Venture</a>
-      <a href="gallery.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Gallery</a>
-      <a href="about.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">About</a>
-      <a href="services.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Services</a>
-      <a href="contact.html"
-        class="nav-link font-button text-xs tracking-widest uppercase text-slate-700 dark:text-slate-200 hover:text-amber-500 transition-colors">Contact</a>
-    </nav>
-
+    <!-- Right Quick Actions -->
     <div class="flex items-center gap-2 sm:gap-3">
-      <a href="tel:8838957874" aria-label="Direct Call"
-        class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500"><span
+      <a href="tel:8838957874" aria-label="Direct Call" title="Call Us"
+        class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500 transition-colors"><span
           class="material-symbols-outlined text-lg sm:text-xl">call</span></a>
-      <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"
-        class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500"><span
+      <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="Chat on WhatsApp"
+        class="p-2 sm:p-2.5 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500 transition-colors"><span
           class="material-symbols-outlined text-lg sm:text-xl">chat</span></a>
       <button type="button" aria-label="Toggle light and dark theme" title="Toggle Light/Dark Theme"
         class="theme-toggle-btn p-2 sm:p-2.5 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-amber-400 hover:scale-105 transition-all focus:outline-none border border-amber-500/20">
-        <!-- Sun Icon (Visible in Dark Mode -> click to switch to Light Mode) -->
+        <!-- Sun Icon (Visible in Dark Mode -> click for Light) -->
         <svg class="icon-sun w-4 h-4 sm:w-5 sm:h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
         </svg>
-        <!-- Moon Icon (Visible in Light Mode -> click to switch to Dark Mode) -->
+        <!-- Moon Icon (Visible in Light Mode -> click for Dark) -->
         <svg class="icon-moon w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
       </button>
-      <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest">Book Site
-        Visit</a>
-      <button id="mobile-menu-btn" type="button"
+      <a href="contact.html" class="hidden sm:inline-flex btn-primary text-xs uppercase tracking-widest px-4 py-2 rounded-xl">Book Site Visit</a>
+      <button id="mobile-menu-btn" type="button" aria-label="Toggle Navigation Menu"
         class="lg:hidden p-2 sm:p-2.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span
           class="material-symbols-outlined text-lg sm:text-xl">menu</span></button>
     </div>
   </div>
 
-  <!-- Mobile Drawer -->
+  <!-- Bottom Tier: Desktop Clean Navigation Bar (No Dropdowns) -->
+  <div class="hidden lg:block max-w-[1440px] mx-auto px-4 md:px-16 py-2.5">
+    <nav class="flex items-center justify-center gap-8 font-button text-xs uppercase tracking-widest">
+      <a href="index.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">Home</a>
+      <a href="about.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">About</a>
+      <a href="properties.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">Projects</a>
+      <a href="services.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">Services</a>
+      <a href="gallery.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">Gallery</a>
+      <a href="blog.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">Blog</a>
+      <a href="contact.html"
+        class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-1 border-b-2 border-transparent hover:border-amber-500">Contact</a>
+    </nav>
+  </div>
+
+  <!-- Mobile Drawer Menu -->
   <div id="mobile-menu"
-    class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-6 space-y-3 font-button text-xs uppercase tracking-widest">
-    <a href="index.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Home</a>
-    <a href="properties.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Projects</a>
-    <a href="construction.html"
-      class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Construction</a>
-    <a href="joint-venture.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Joint
-      Venture</a>
-    <a href="gallery.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Gallery</a>
-    <a href="about.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">About</a>
-    <a href="services.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Services</a>
-    <a href="contact.html" class="block py-2 text-slate-700 dark:text-slate-200 hover:text-amber-500">Contact</a>
+    class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-5 space-y-2 font-button text-xs uppercase tracking-widest">
+    <a href="index.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Home</a>
+    <a href="about.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">About</a>
+    <a href="properties.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Projects</a>
+    <a href="services.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Services</a>
+    <a href="gallery.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Gallery</a>
+    <a href="blog.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Blog</a>
+    <a href="contact.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Contact</a>
   </div>
 </header>
