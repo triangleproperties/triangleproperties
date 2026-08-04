@@ -4,17 +4,17 @@
   <script>
     (function() {
       var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
+      if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
     })();
   </script>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Collections & Portfolio | Triangle Properties</title>
-  <meta name="description" content="Browse CMDA & DTCP approved luxury apartments, villas, plots, and commercial spaces for sale and rent in Chennai."/>
+  <title>Projects & Layout Listings | Triangle Properties</title>
+  <meta name="description" content="Browse completed and startup CMDA & DTCP approved projects, luxury plots, and commercial developments in Vadapalani & Chennai."/>
   
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -54,10 +54,10 @@
 
   <!-- BANNER -->
   <section id="collections" class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
-    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">100% Legal Clear Layouts</span>
-    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">CMDA & DTCP Approved Plot Layouts</h1>
+    <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">100% Legal Clear Developments</span>
+    <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">Projects & Layout Listings</h1>
     <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-xl mx-auto">
-      Verified residential plots, gated villa sites, commercial land, and farm lands in Vadapalani & Chennai with easy monthly EMI options.
+      Explore completed projects and startup developments, CMDA & DTCP approved plot layouts, and commercial land across Vadapalani & Chennai.
     </p>
   </section>
 
@@ -72,7 +72,7 @@
 
       <div>
         <select id="filter-type" class="w-full px-3 py-2.5 sm:py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs sm:text-sm font-button uppercase">
-          <option value="ALL">All Plot Categories</option>
+          <option value="ALL">All Categories</option>
           <option value="CMDA Approved Plot">CMDA Approved Plots</option>
           <option value="DTCP Approved Plot">DTCP Approved Plots</option>
           <option value="Gated Villa Plot">Gated Villa Plots</option>
@@ -83,8 +83,10 @@
 
       <div>
         <select id="filter-status" class="w-full px-3 py-2.5 sm:py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-xs sm:text-sm font-button uppercase">
-          <option value="ALL">All Layout Types</option>
-          <option value="For Sale">For Sale (Immediate Registration)</option>
+          <option value="ALL">All Project Statuses</option>
+          <option value="Completed Projects">Completed Projects</option>
+          <option value="Startup Projects">Startup Projects</option>
+          <option value="For Sale">For Sale</option>
         </select>
       </div>
 

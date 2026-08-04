@@ -63,7 +63,7 @@ function initScrollToTopButton() {
  * 2. Dark / Light Theme Toggle System
  * ------------------------------------------------------------- */
 function initThemeToggle() {
-  const savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme') || 'dark';
+  const savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme') || 'light';
   if (typeof window.applyTriangleTheme === 'function') {
     window.applyTriangleTheme(savedTheme);
   }

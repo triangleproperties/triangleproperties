@@ -2,7 +2,7 @@
 
 // Global Unified Theme State Functions
 function getSavedTheme() {
-  return localStorage.getItem('triangle_theme') || localStorage.getItem('theme') || 'dark';
+  return localStorage.getItem('triangle_theme') || localStorage.getItem('theme') || 'light';
 }
 
 function applyTriangleTheme(theme) {

@@ -5,10 +5,10 @@
   <script>
     (function() {
       var savedTheme = localStorage.getItem('triangle_theme') || localStorage.getItem('theme');
-      if (savedTheme === 'light') {
-        document.documentElement.classList.remove('dark');
-      } else {
+      if (savedTheme === 'dark') {
         document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
       }
     })();
   </script>
@@ -224,16 +224,16 @@
       </div>
     </section>
 
-    <!-- PORTFOLIO GRID -->
+    <!-- PROJECTS GRID -->
     <section id="collections" class="py-24 px-4 md:px-16 max-w-[1440px] mx-auto">
       <div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
         <div>
           <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">100% Legal Clear Layouts</span>
-          <h2 class="font-display text-3xl sm:text-5xl font-light">Approved Plot Portfolio & EMI Options</h2>
+          <h2 class="font-display text-3xl sm:text-5xl font-light">Featured Projects & EMI Layouts</h2>
         </div>
         <a href="properties.html"
           class="mt-4 md:mt-0 font-button text-xs text-amber-500 uppercase tracking-widest hover:underline flex items-center gap-2 font-bold">
-          <span>View Full Portfolio</span>
+          <span>View All Projects</span>
           <span class="material-symbols-outlined text-sm">arrow_forward</span>
         </a>
       </div>

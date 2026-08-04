@@ -1,6 +1,6 @@
 <!-- FOOTER COMPONENT -->
 <footer class="bg-slate-100 dark:bg-slate-950 text-slate-600 dark:text-slate-400 font-body text-xs border-t border-slate-200 dark:border-slate-900 pt-16 pb-8 px-4 md:px-16">
-  <div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+  <div class="max-w-[1440px] mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
     <!-- Col 1: Brand & Tagline -->
     <div>
       <a href="index.html" class="inline-block mb-4">
@@ -10,13 +10,13 @@
         Triangle Properties Pvt. Ltd. — Chennai's most trusted & affordable luxury residential developer & civil construction partner in Vadapalani.
       </p>
       <div class="flex items-center gap-3">
-        <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-slate-950 transition-all border border-slate-300 dark:border-slate-800">
+        <a href="https://www.instagram.com/trianglepropertiespvt/" target="_blank" rel="noopener" aria-label="Instagram" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-slate-950 transition-all border border-slate-300 dark:border-slate-800">
           <span class="material-symbols-outlined text-sm">photo_camera</span>
         </a>
-        <a href="https://www.facebook.com/Triangleproperties/" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-slate-950 transition-all border border-slate-300 dark:border-slate-800">
+        <a href="https://www.facebook.com/Triangleproperties/" target="_blank" rel="noopener" aria-label="Facebook" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-amber-500 hover:bg-amber-500 hover:text-slate-950 transition-all border border-slate-300 dark:border-slate-800">
           <span class="material-symbols-outlined text-sm">thumb_up</span>
         </a>
-        <a href="https://wa.me/918838957874" target="_blank" rel="noopener" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-emerald-500 hover:bg-emerald-500 hover:text-slate-950 transition-all border border-slate-300 dark:border-slate-800">
+        <a href="https://wa.me/918838957874" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-900 flex items-center justify-center text-emerald-500 hover:bg-emerald-500 hover:text-slate-950 transition-all border border-slate-300 dark:border-slate-800">
           <span class="material-symbols-outlined text-sm">chat</span>
         </a>
       </div>
@@ -25,37 +25,32 @@
     <!-- Col 2: Quick Links -->
     <div>
       <h4 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Quick Links</h4>
-      <ul class="space-y-2">
-        <li><a href="index.html" class="hover:text-amber-500 transition-colors">Home Page</a></li>
-        <li><a href="properties.html" class="hover:text-amber-500 transition-colors">Portfolio & Listings</a></li>
-        <li><a href="construction.html" class="hover:text-amber-500 transition-colors">Construction Packages</a></li>
-        <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Joint Venture Terms</a></li>
-        <li><a href="gallery.html" class="hover:text-amber-500 transition-colors">Architectural Gallery</a></li>
-      </ul>
+      <div class="grid grid-cols-2 gap-2">
+        <ul class="space-y-2">
+          <li><a href="index.html" class="hover:text-amber-500 transition-colors">Home</a></li>
+          <li><a href="properties.html" class="hover:text-amber-500 transition-colors">Projects</a></li>
+          <li><a href="construction.html" class="hover:text-amber-500 transition-colors">Construction</a></li>
+          <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Joint Venture</a></li>
+        </ul>
+        <ul class="space-y-2">
+          <li><a href="gallery.html" class="hover:text-amber-500 transition-colors">Gallery</a></li>
+          <li><a href="about.html" class="hover:text-amber-500 transition-colors">About Us</a></li>
+          <li><a href="services.html" class="hover:text-amber-500 transition-colors">Services</a></li>
+          <li><a href="contact.html" class="hover:text-amber-500 transition-colors">Contact Us</a></li>
+        </ul>
+      </div>
     </div>
 
-    <!-- Col 3: Services & Company -->
-    <div>
-      <h4 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Our Services</h4>
-      <ul class="space-y-2">
-        <li><a href="services.html" class="hover:text-amber-500 transition-colors">Real Estate Sales & Advisory</a></li>
-        <li><a href="construction.html" class="hover:text-amber-500 transition-colors">Turnkey Civil Execution</a></li>
-        <li><a href="joint-venture.html" class="hover:text-amber-500 transition-colors">Land Joint Ventures</a></li>
-        <li><a href="about.html" class="hover:text-amber-500 transition-colors">About Us & Heritage</a></li>
-        <li><a href="contact.html" class="hover:text-amber-500 transition-colors">Contact HQ Vadapalani</a></li>
-      </ul>
-    </div>
-
-    <!-- Col 4: Office Address & Phone -->
+    <!-- Col 3: Office Address & Phone -->
     <div>
       <h4 class="font-button text-xs uppercase tracking-widest text-slate-900 dark:text-white mb-4">Headquarters</h4>
       <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
         No.23, Pillaiyar Kovil Street, Vadapalani, Chennai, Tamil Nadu - 600026, India.
       </p>
-      <div class="space-y-1 text-xs">
-        <p><span class="text-slate-500">Phone:</span> <a href="tel:8838957874" class="text-amber-500 font-bold hover:underline">8838957874</a> / <a href="tel:7200212759" class="text-amber-500 font-bold hover:underline">7200212759</a></p>
-        <p><span class="text-slate-500">WhatsApp:</span> <a href="https://wa.me/918838957874" target="_blank" class="text-emerald-500 font-bold hover:underline">+91 88389 57874</a></p>
-        <p><span class="text-slate-500">Email:</span> <a href="mailto:info@triangleproperties.in" class="hover:underline">info@triangleproperties.in</a></p>
+      <div class="space-y-1.5 text-xs">
+        <p><span class="text-slate-500 dark:text-slate-400">Phone:</span> <a href="tel:8838957874" class="text-amber-500 font-bold hover:underline">8838957874</a> / <a href="tel:7200212759" class="text-amber-500 font-bold hover:underline">7200212759</a></p>
+        <p><span class="text-slate-500 dark:text-slate-400">WhatsApp:</span> <a href="https://wa.me/918838957874" target="_blank" class="text-emerald-500 font-bold hover:underline">+91 88389 57874</a></p>
+        <p><span class="text-slate-500 dark:text-slate-400">Email:</span> <a href="mailto:info@triangleproperties.in" class="hover:underline">info@triangleproperties.in</a></p>
       </div>
     </div>
   </div>
