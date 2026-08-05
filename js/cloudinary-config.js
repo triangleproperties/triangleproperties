@@ -1,7 +1,7 @@
 // Triangle Properties - Cloudinary Production Media & CDN Integration
 
 const CLOUDINARY_CONFIG = {
-  cloudName: "triangle-properties",
+  cloudName: "ltriw2oi",
   uploadPreset: "ltriw2oi",
   defaultFolder: "triangle-properties/uploads"
 };
