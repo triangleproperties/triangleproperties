@@ -8,3 +8,4 @@ Disallow: /admin/
 Disallow: /js/admin.js
 
 Sitemap: https://triangleproperties.in/sitemap.xml
+Sitemap: https://www.trianglepropertiespvt.com/sitemap.xml
