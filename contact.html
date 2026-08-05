@@ -146,6 +146,95 @@
         </form>
       </div>
     </div>
+
+    <!-- JOINT VENTURE PARTNERSHIP SECTION -->
+    <div class="pt-8 border-t border-slate-200 dark:border-slate-800 space-y-16">
+      <!-- WHO CAN JOIN US SECTION -->
+      <div>
+        <div class="text-center mb-8 sm:mb-12">
+          <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Growth & Partnership</span>
+          <h2 class="font-display text-3xl sm:text-5xl font-light">Who Can Join Us?</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <div class="glass-card p-8 text-center rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg hover:-translate-y-1 transition-transform">
+            <span class="material-symbols-outlined text-5xl text-amber-500 mb-4 block">landscape</span>
+            <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2">Land Owners</h3>
+            <p class="font-body text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Monetize your property with transparent built-up area sharing and 100% developer financed approvals.
+            </p>
+          </div>
+
+          <div class="glass-card p-8 text-center rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg hover:-translate-y-1 transition-transform">
+            <span class="material-symbols-outlined text-5xl text-amber-500 mb-4 block">diversity_3</span>
+            <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2">Angel Investors</h3>
+            <p class="font-body text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Partner on high-yield plotted developments across Chennai's fastest appreciating growth corridors.
+            </p>
+          </div>
+
+          <div class="glass-card p-8 text-center rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg hover:-translate-y-1 transition-transform">
+            <span class="material-symbols-outlined text-5xl text-amber-500 mb-4 block">campaign</span>
+            <h3 class="font-display text-2xl font-bold text-slate-900 dark:text-white mb-2">Marketing Investors</h3>
+            <p class="font-body text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+              Join forces with an established brand to market and scale approved residential layout projects.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- INVESTORS EXCLUSIVE FORM -->
+      <div class="glass-card p-6 sm:p-12 border-amber-500/30 max-w-3xl mx-auto shadow-2xl">
+        <h2 class="font-display text-2xl sm:text-4xl text-center mb-2">Investors Exclusive Form</h2>
+        <p class="font-body text-xs sm:text-sm text-slate-600 dark:text-slate-300 text-center mb-8 font-semibold">
+          Connect directly with our Founder of Triangle Properties.
+        </p>
+
+        <form class="triangle-inquiry-form space-y-4" data-custom-response="Thank you, your inquiry has been logged and our founder will reach you shortly">
+          <input type="hidden" name="propertyType" value="Investors Exclusive Form">
+
+          <div>
+            <label for="inv-name" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Investor Name *</label>
+            <input type="text" id="inv-name" name="name" required placeholder="Full Name"
+              class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="inv-phone" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Mobile Number *</label>
+              <input type="tel" id="inv-phone" name="phone" required pattern="[6-9][0-9]{9}" title="Please enter a valid 10-digit Indian mobile number" placeholder="10-Digit Mobile Number"
+                class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
+            </div>
+            <div>
+              <label for="inv-email" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Mail ID *</label>
+              <input type="email" id="inv-email" name="email" required placeholder="name@example.com"
+                class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="inv-jvtype" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">JV Type *</label>
+              <select id="inv-jvtype" name="type" required
+                class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
+                <option value="Landowner JV">Landowner JV</option>
+                <option value="Angel Investor">Angel Investor</option>
+                <option value="Marketing Investor">Marketing Investor</option>
+              </select>
+            </div>
+            <div>
+              <label for="inv-budget" class="block font-button text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Investment Budget / Land Details *</label>
+              <input type="text" id="inv-budget" name="budget" required placeholder="Budget amount or land location & area"
+                class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-slate-900 dark:text-white text-sm focus:outline-none focus:border-amber-500">
+            </div>
+          </div>
+
+          <button type="submit" class="w-full btn-primary text-xs uppercase tracking-widest font-bold py-3.5 mt-2">
+            Connect With Our Founder
+          </button>
+        </form>
+      </div>
+    </div>
   </main>
 
   <div id="footer-container"></div>

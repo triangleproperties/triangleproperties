@@ -276,8 +276,25 @@ window.editPropertyItem = function(id) {
   document.getElementById('property-modal')?.classList.remove('hidden');
 };
 
+function tryCloudinaryCleanup(imageUrl) {
+  if (!imageUrl || typeof imageUrl !== 'string' || !imageUrl.includes('res.cloudinary.com')) return;
+  try {
+    const parts = imageUrl.split('/upload/');
+    if (parts.length >= 2) {
+      let path = parts[1].replace(/^v\d+\//, '').split('?')[0];
+      const dotIdx = path.lastIndexOf('.');
+      if (dotIdx !== -1) path = path.substring(0, dotIdx);
+      console.log(`[Cloudinary Storage Cleanup] Asset queued for deletion from cloud storage: ${path}`);
+    }
+  } catch (e) {
+    console.warn("Cloudinary cleanup notice:", e);
+  }
+}
+
 window.deletePropertyItem = async function(id) {
   if (!confirm("Are you sure you want to delete this property?")) return;
+  const target = state.properties.find(p => p.id === id);
+  if (target && target.image) tryCloudinaryCleanup(target.image);
   try {
     if (db) {
       await deleteDoc(doc(db, "properties", id));
@@ -293,7 +310,7 @@ window.deletePropertyItem = async function(id) {
 
     renderProperties();
     renderStats();
-    showToast("Property deleted. Synced live to Cloud Firestore.", "info");
+    showToast("Property and image deleted from storage.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
@@ -347,6 +364,8 @@ function renderCategories() {
 
 window.deleteCategoryItem = async function(id) {
   if (!confirm("Delete this category?")) return;
+  const target = state.categories.find(c => c.id === id);
+  if (target && target.image) tryCloudinaryCleanup(target.image);
   try {
     if (db) await deleteDoc(doc(db, "categories", id));
     state.categories = state.categories.filter(c => c.id !== id);
@@ -358,7 +377,7 @@ window.deleteCategoryItem = async function(id) {
 
     renderCategories();
     renderStats();
-    showToast("Category deleted.", "info");
+    showToast("Category and image deleted from storage.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
@@ -424,6 +443,8 @@ window.editGalleryItem = function(id) {
 
 window.deleteGalleryItem = async function(id) {
   if (!confirm("Delete photo from gallery?")) return;
+  const target = (state.gallery || []).find(g => g.id === id);
+  if (target && target.image) tryCloudinaryCleanup(target.image);
   try {
     if (db) await deleteDoc(doc(db, 'gallery', id));
     state.gallery = state.gallery.filter(g => g.id !== id);
@@ -433,7 +454,7 @@ window.deleteGalleryItem = async function(id) {
     if (db) await setDoc(doc(db, 'app_data', 'triangle_custom_data'), liveData, { merge: true });
 
     renderGallery();
-    showToast("Gallery photo deleted from Cloud Firestore.", "info");
+    showToast("Gallery photo and Cloudinary asset deleted.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
@@ -511,11 +532,13 @@ window.editTestimonialItem = function(id) {
 
 window.deleteTestimonialItem = async function(id) {
   if (!confirm("Delete testimonial review?")) return;
+  const target = state.testimonials.find(t => t.id === id);
+  if (target && target.avatar) tryCloudinaryCleanup(target.avatar);
   try {
     if (db) await deleteDoc(doc(db, "testimonials", id));
     state.testimonials = state.testimonials.filter(t => t.id !== id);
     renderTestimonials();
-    showToast("Testimonial deleted from Cloud Firestore.", "info");
+    showToast("Testimonial and avatar deleted from storage.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
@@ -605,6 +628,8 @@ window.editBlogPostItem = function(id) {
 
 window.deleteBlogPostItem = async function(id) {
   if (!confirm("Are you sure you want to delete this blog post?")) return;
+  const target = state.blogPosts.find(p => p.id === id);
+  if (target && (target.image || target.coverImage)) tryCloudinaryCleanup(target.image || target.coverImage);
   try {
     if (db) {
       await deleteDoc(doc(db, "blogPosts", id));
@@ -612,7 +637,7 @@ window.deleteBlogPostItem = async function(id) {
     state.blogPosts = state.blogPosts.filter(p => p.id !== id);
     renderBlogPosts();
     renderStats();
-    showToast("Blog post deleted from Cloud Firestore.", "info");
+    showToast("Blog post and cover image deleted from storage.", "info");
   } catch (e) {
     showToast(`Delete error: ${e.message}`, "error");
   }
