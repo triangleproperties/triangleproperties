@@ -1,7 +1,7 @@
-<!-- HEADER NAVBAR COMPONENT (DAC Developers Style Center Inline Logo Layout) -->
+<!-- HEADER NAVBAR COMPONENT (Center Logo Layout on Desktop & Mobile) -->
 <header id="navbar" class="sticky top-0 w-full z-50 glass-nav border-b border-slate-200 dark:border-slate-800 transition-all duration-300">
   
-  <!-- DESKTOP DAC DEVELOPERS STYLE CENTERED LOGO NAVBAR -->
+  <!-- DESKTOP CENTERED LOGO NAVBAR (lg:block) -->
   <div class="hidden lg:block max-w-[1440px] mx-auto px-6 py-2.5">
     <div class="flex items-center justify-between font-button text-xs uppercase tracking-widest">
       
@@ -13,8 +13,8 @@
       </nav>
 
       <!-- CENTER LOGO -->
-      <a href="index.html" class="flex-shrink-0 flex items-center justify-center px-4 group focus:outline-none" title="Triangle Properties Home">
-        <img src="assets/logo.png" alt="Triangle Properties Logo" width="220" height="70" class="h-14 sm:h-16 md:h-18 w-auto object-contain transition-transform group-hover:scale-105">
+      <a href="index.html" class="flex-shrink-0 flex items-center justify-center px-6 group focus:outline-none" title="Triangle Properties Home">
+        <img src="assets/logo.png" alt="Triangle Properties Logo" width="220" height="70" class="h-14 sm:h-16 w-auto object-contain transition-transform group-hover:scale-105">
       </a>
 
       <!-- RIGHT NAV LINKS -->
@@ -25,7 +25,7 @@
         <a href="contact.html" class="nav-link text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold transition-colors py-2 border-b-2 border-transparent hover:border-amber-500">Contact</a>
       </nav>
 
-      <!-- DESKTOP QUICK ACTIONS (FAR RIGHT) -->
+      <!-- DESKTOP QUICK ACTIONS -->
       <div class="flex items-center gap-2 pl-4">
         <button type="button" aria-label="Toggle light and dark theme" title="Toggle Light/Dark Theme"
           class="theme-toggle-btn p-2 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-amber-400 hover:scale-105 transition-all focus:outline-none border border-amber-500/20">
@@ -36,41 +36,49 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
           </svg>
         </button>
-        <a href="tel:8838957874" aria-label="Direct Call" title="Call Us"
-          class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-amber-500 transition-colors"><span class="material-symbols-outlined text-lg">call</span></a>
-        <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="Chat on WhatsApp"
-          class="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 text-emerald-500 transition-colors"><span class="material-symbols-outlined text-lg">chat</span></a>
       </div>
 
     </div>
   </div>
 
-  <!-- MOBILE HEADER (lg:hidden) -->
-  <div class="lg:hidden px-4 py-3 flex items-center justify-between">
-    <a href="index.html" class="flex items-center group focus:outline-none" title="Triangle Properties Home">
-      <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="50" class="h-10 sm:h-12 w-auto object-contain">
-    </a>
-
-    <div class="flex items-center gap-2">
-      <a href="tel:8838957874" aria-label="Direct Call" class="p-2 rounded-full text-amber-500"><span class="material-symbols-outlined text-lg">call</span></a>
-      <a href="https://wa.me/918838957874" target="_blank" rel="noopener" aria-label="WhatsApp" class="p-2 rounded-full text-emerald-500"><span class="material-symbols-outlined text-lg">chat</span></a>
-      <button type="button" aria-label="Toggle theme" class="theme-toggle-btn p-2 rounded-full bg-slate-200/80 dark:bg-slate-800 text-slate-800 dark:text-amber-400">
+  <!-- MOBILE CENTERED LOGO HEADER (lg:hidden) -->
+  <div class="lg:hidden px-4 py-2.5 grid grid-cols-3 items-center w-full">
+    <!-- LEFT: MENU DRAWER BUTTON & THEME TOGGLE -->
+    <div class="flex items-center gap-1.5 justify-start">
+      <button id="mobile-menu-btn" type="button" aria-label="Toggle Navigation Menu" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+        <span class="material-symbols-outlined text-xl block">menu</span>
+      </button>
+      <button type="button" aria-label="Toggle theme" class="theme-toggle-btn p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-amber-400 border border-slate-200 dark:border-slate-700">
         <svg class="icon-sun w-4 h-4 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
         <svg class="icon-moon w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" /></svg>
       </button>
-      <button id="mobile-menu-btn" type="button" aria-label="Toggle Navigation Menu" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"><span class="material-symbols-outlined text-lg">menu</span></button>
+    </div>
+
+    <!-- CENTER: LOGO -->
+    <a href="index.html" class="flex items-center justify-center mx-auto group focus:outline-none" title="Triangle Properties Home">
+      <img src="assets/logo.png" alt="Triangle Properties Logo" width="180" height="50" class="h-9 sm:h-11 w-auto object-contain">
+    </a>
+
+    <!-- RIGHT: QUICK CONTACT ICONS -->
+    <div class="flex items-center gap-1.5 justify-end">
+      <a href="tel:8838957874" aria-label="Direct Call" title="Call Us" class="p-2 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/30 flex items-center justify-center">
+        <span class="material-symbols-outlined text-lg block">call</span>
+      </a>
+      <a href="https://wa.me/918838957874" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" title="WhatsApp Us" class="p-2 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/30 flex items-center justify-center">
+        <span class="material-symbols-outlined text-lg block">chat</span>
+      </a>
     </div>
   </div>
 
   <!-- Mobile Drawer Menu -->
   <div id="mobile-menu"
-    class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-5 space-y-2 font-button text-xs uppercase tracking-widest">
-    <a href="index.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Home</a>
-    <a href="about.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">About</a>
-    <a href="properties.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Projects</a>
-    <a href="services.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Services</a>
-    <a href="gallery.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Gallery</a>
-    <a href="blog.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Blog</a>
-    <a href="contact.html" class="block py-2 text-slate-800 dark:text-slate-200 hover:text-amber-500 font-semibold">Contact</a>
+    class="hidden lg:hidden border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 backdrop-blur-lg px-6 py-5 space-y-3 font-button text-xs uppercase tracking-widest shadow-2xl">
+    <a href="index.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">Home</a>
+    <a href="about.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">About</a>
+    <a href="properties.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">Projects</a>
+    <a href="services.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">Services</a>
+    <a href="gallery.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">Gallery</a>
+    <a href="blog.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">Blog</a>
+    <a href="contact.html" class="block py-2.5 px-3 rounded-xl text-slate-800 dark:text-slate-200 hover:text-amber-500 hover:bg-amber-500/10 font-semibold transition-all">Contact</a>
   </div>
 </header>

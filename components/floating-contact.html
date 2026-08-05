@@ -1,10 +1,12 @@
-<!-- FLOATING CALL & WHATSAPP BAR COMPONENT -->
-<div id="floating-contact-bar" class="fixed bottom-6 right-6 z-40 flex flex-col gap-3">
+<!-- FLOATING CALL & WHATSAPP BAR COMPONENT (MOBILE & DESKTOP ENHANCED) -->
+
+<!-- DESKTOP / TABLET FLOATING CIRCULAR BUTTONS (sm:flex) -->
+<div id="floating-contact-bar-desktop" class="hidden sm:flex fixed bottom-6 right-6 z-40 flex-col gap-3">
   <!-- WhatsApp Floating Button -->
   <a href="https://wa.me/918838957874?text=Hi%20Triangle%20Properties%2C%20I%20am%20interested%20in%20buying%2Fconstructing%20a%20property%20in%20Chennai." 
      target="_blank" rel="noopener noreferrer" 
      title="Chat on WhatsApp" 
-     class="w-13 h-13 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-2xl flex items-center justify-center transition-all hover:scale-110 group relative border-2 border-white/20">
+     class="w-13 h-13 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white shadow-xl shadow-emerald-500/30 flex items-center justify-center transition-all hover:scale-110 group relative border-2 border-white/20">
     <span class="material-symbols-outlined text-2xl">chat</span>
     <span class="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-button px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg pointer-events-none border border-slate-800">
       WhatsApp Us (8838957874)
@@ -14,10 +16,25 @@
   <!-- Phone Call Floating Button -->
   <a href="tel:8838957874" 
      title="Call Direct" 
-     class="w-13 h-13 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-2xl flex items-center justify-center transition-all hover:scale-110 group relative border-2 border-white/20">
+     class="w-13 h-13 rounded-full bg-amber-500 hover:bg-amber-600 text-slate-950 shadow-xl shadow-amber-500/30 flex items-center justify-center transition-all hover:scale-110 group relative border-2 border-white/20">
     <span class="material-symbols-outlined text-2xl">call</span>
     <span class="absolute right-16 top-1/2 -translate-y-1/2 bg-slate-900 text-white text-[11px] font-button px-3 py-1.5 rounded-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity shadow-lg pointer-events-none border border-slate-800">
       Call Now (8838957874)
     </span>
+  </a>
+</div>
+
+<!-- MOBILE BOTTOM DUAL ACTION FLOATING BAR (sm:hidden) -->
+<div id="floating-contact-bar-mobile" class="sm:hidden fixed bottom-4 left-3 right-3 z-40 flex items-center gap-2 p-1.5 rounded-2xl bg-slate-950/90 backdrop-blur-xl border border-slate-800 shadow-2xl">
+  <!-- Call Button -->
+  <a href="tel:8838957874" class="flex-1 py-2.5 px-3 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-button text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all">
+    <span class="material-symbols-outlined text-base">call</span>
+    <span>Call Now</span>
+  </a>
+
+  <!-- WhatsApp Button -->
+  <a href="https://wa.me/918838957874?text=Hi%20Triangle%20Properties%2C%20I%20am%20interested%20in%20buying%2Fconstructing%20a%20property%20in%20Chennai." target="_blank" rel="noopener noreferrer" class="flex-1 py-2.5 px-3 rounded-xl bg-emerald-500 hover:bg-emerald-600 text-white font-button text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md active:scale-95 transition-all">
+    <span class="material-symbols-outlined text-base">chat</span>
+    <span>WhatsApp</span>
   </a>
 </div>
