@@ -23,6 +23,7 @@ let state = {
   enquiries: [],
   gallery: [],
   testimonials: [],
+  blogPosts: [],
   settings: {},
   activeLeadFilter: 'all',
   user: null
@@ -47,6 +48,15 @@ function showToast(message, type = 'info') {
 function escapeHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+// Helper: Auto-generate URL Slug
+function slugify(text) {
+  return text ? text.toString().toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w\-]+/g, '')
+    .replace(/\-\-+/g, '-') : '';
 }
 
 // 3. DIAGNOSTIC CHECK
@@ -171,6 +181,7 @@ tabBtns.forEach(btn => {
                               tab === 'categories' ? 'Real Estate Categories' :
                               tab === 'gallery' ? 'Architectural Photo Gallery' :
                               tab === 'testimonials' ? 'Customer Testimonials & Reviews' :
+                              tab === 'blog' ? 'Blog & Articles CMS' :
                               tab === 'settings' ? 'Site Settings & Configuration' : 'Customer Enquiries & Leads';
     }
   });
@@ -178,7 +189,7 @@ tabBtns.forEach(btn => {
 
 // 7. DATA LOAD & FIRESTORE REALTIME SNAPSHOT SUBSCRIPTIONS
 async function loadDashboardData() {
-  await Promise.all([fetchProperties(), fetchCategories(), fetchGallery(), fetchTestimonials(), fetchEnquiries()]);
+  await Promise.all([fetchProperties(), fetchCategories(), fetchGallery(), fetchTestimonials(), fetchBlogPosts(), fetchEnquiries()]);
   renderStats();
 }
 
@@ -514,7 +525,117 @@ window.deleteTestimonialItem = async function(id) {
   }
 };
 
-// E. ENQUIRIES & LEADS CRUD (CRITICAL XSS PROTECTION ENFORCED)
+// E. BLOG POSTS CRUD
+async function fetchBlogPosts() {
+  try {
+    if (db) {
+      const q = query(collection(db, "blogPosts"), orderBy("createdAt", "desc"));
+      onSnapshot(q, (snap) => {
+        if (snap.docs.length > 0) {
+          state.blogPosts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          renderBlogPosts();
+          renderStats();
+        }
+      });
+    }
+  } catch (e) {
+    console.warn("Firestore blogPosts snapshot notice:", e);
+  }
+
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  if (!state.blogPosts || state.blogPosts.length === 0) {
+    state.blogPosts = (liveData.blogs && liveData.blogs.length > 0) ? liveData.blogs : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.blogs || [] : []);
+  }
+  renderBlogPosts();
+}
+
+function renderBlogPosts() {
+  const container = document.getElementById('blog-list');
+  if (!container) return;
+
+  container.innerHTML = state.blogPosts.map(post => {
+    const postDate = post.createdAt?.toDate ? post.createdAt.toDate().toLocaleDateString() : (post.date || new Date().toLocaleDateString());
+    const isPublished = (post.status || 'Published') === 'Published';
+    
+    return `
+      <tr class="border-b border-slate-800 hover:bg-surface-container-high/50 transition-colors">
+        <td class="py-3 px-4">
+          <img src="${escapeHtml(post.image || post.coverImage)}" class="w-14 h-10 object-cover rounded-lg border border-slate-700">
+        </td>
+        <td class="py-3 px-4">
+          <span class="font-display font-bold text-white text-base block">${escapeHtml(post.title)}</span>
+          <span class="font-body text-[11px] text-amber-400/80 block">/blog-detail.html?id=${escapeHtml(post.id)}</span>
+        </td>
+        <td class="py-3 px-4 font-button text-xs text-on-surface-variant">${escapeHtml(post.category)}</td>
+        <td class="py-3 px-4">
+          <span class="font-button text-[10px] uppercase px-2.5 py-1 rounded-full ${isPublished ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/30' : 'bg-slate-700/50 text-slate-400 border border-slate-600'}">
+            ${escapeHtml(post.status || 'Published')}
+          </span>
+        </td>
+        <td class="py-3 px-4 font-body text-xs text-on-surface-variant">${escapeHtml(postDate)}</td>
+        <td class="py-3 px-4">
+          <div class="flex items-center gap-2">
+            <button onclick="window.editBlogPostItem('${post.id}')" title="Edit Post" class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 transition-all">
+              <span class="material-symbols-outlined text-base">edit</span>
+            </button>
+            <button onclick="window.deleteBlogPostItem('${post.id}')" title="Delete Post" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all">
+              <span class="material-symbols-outlined text-base">delete</span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+window.editBlogPostItem = function(id) {
+  const post = state.blogPosts.find(p => p.id === id);
+  if (!post) return;
+
+  document.getElementById('blog-doc-id').value = post.id;
+  document.getElementById('blog-title').value = post.title || '';
+  document.getElementById('blog-slug').value = post.slug || slugify(post.title || '');
+  document.getElementById('blog-category').value = post.category || 'Legal & Clear Title';
+  document.getElementById('blog-status').value = post.status || 'Published';
+  document.getElementById('blog-author').value = post.author || 'Triangle Properties Team';
+  document.getElementById('blog-image-url').value = post.image || post.coverImage || '';
+  document.getElementById('blog-excerpt').value = post.excerpt || post.summary || '';
+  document.getElementById('blog-content').value = post.content || post.body || '';
+
+  const modalTitle = document.getElementById('blog-modal-title');
+  if (modalTitle) modalTitle.textContent = "Edit Blog Post";
+  document.getElementById('blog-post-modal')?.classList.remove('hidden');
+};
+
+window.deleteBlogPostItem = async function(id) {
+  if (!confirm("Are you sure you want to delete this blog post?")) return;
+  try {
+    if (db) {
+      await deleteDoc(doc(db, "blogPosts", id));
+    }
+    state.blogPosts = state.blogPosts.filter(p => p.id !== id);
+    renderBlogPosts();
+    renderStats();
+    showToast("Blog post deleted from Cloud Firestore.", "info");
+  } catch (e) {
+    showToast(`Delete error: ${e.message}`, "error");
+  }
+};
+
+// Auto-generate slug on Title typing
+document.getElementById('blog-title')?.addEventListener('input', (e) => {
+  const slugInput = document.getElementById('blog-slug');
+  if (slugInput && !slugInput.dataset.userEdited) {
+    slugInput.value = slugify(e.target.value);
+  }
+});
+
+document.getElementById('blog-slug')?.addEventListener('input', () => {
+  const slugInput = document.getElementById('blog-slug');
+  if (slugInput) slugInput.dataset.userEdited = "true";
+});
+
+// F. ENQUIRIES & LEADS CRUD (CRITICAL XSS PROTECTION ENFORCED)
 async function fetchEnquiries() {
   try {
     if (db) {
@@ -627,11 +748,13 @@ window.deleteEnquiryItem = async function(id) {
 function renderStats() {
   const kProp = document.getElementById('kpi-properties');
   const kCat = document.getElementById('kpi-categories');
+  const kBlog = document.getElementById('kpi-blog-posts');
   const kEnq = document.getElementById('kpi-enquiries');
   const kPen = document.getElementById('kpi-pending');
 
   if (kProp) kProp.textContent = state.properties.length;
   if (kCat) kCat.textContent = state.categories.length;
+  if (kBlog) kBlog.textContent = state.blogPosts.filter(b => (b.status || 'Published') === 'Published').length;
   if (kEnq) kEnq.textContent = state.enquiries.length;
   if (kPen) kPen.textContent = state.enquiries.filter(e => (e.status || 'Pending') === 'Pending').length;
 }
@@ -662,6 +785,15 @@ document.getElementById('add-testimonial-btn')?.addEventListener('click', () => 
   document.getElementById('testimonial-form')?.reset();
   document.getElementById('testi-doc-id').value = '';
   document.getElementById('testimonial-modal')?.classList.remove('hidden');
+});
+
+document.getElementById('add-blog-btn')?.addEventListener('click', () => {
+  document.getElementById('blog-form')?.reset();
+  document.getElementById('blog-doc-id').value = '';
+  delete document.getElementById('blog-slug').dataset.userEdited;
+  const modalTitle = document.getElementById('blog-modal-title');
+  if (modalTitle) modalTitle.textContent = "Add Blog Post";
+  document.getElementById('blog-post-modal')?.classList.remove('hidden');
 });
 
 // Cloudinary Upload Buttons
@@ -712,6 +844,17 @@ document.getElementById('testi-cloudinary-btn')?.addEventListener('click', () =>
   }
 });
 
+document.getElementById('blog-cloudinary-btn')?.addEventListener('click', () => {
+  if (typeof window.openCloudinaryWidget === 'function') {
+    window.openCloudinaryWidget((url) => {
+      document.getElementById('blog-image-url').value = url;
+    });
+  } else {
+    const url = prompt("Enter Image URL:");
+    if (url) document.getElementById('blog-image-url').value = url;
+  }
+});
+
 // 9. SUBMIT HANDLERS (SAVE TO CLOUD FIRESTORE)
 document.getElementById('property-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
@@ -734,10 +877,8 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
     if (db) {
       if (docId) {
         await updateDoc(doc(db, "properties", docId), propData);
-        propData.id = docId;
       } else {
-        const ref = await addDoc(collection(db, "properties"), { ...propData, createdAt: serverTimestamp() });
-        propData.id = ref.id;
+        await addDoc(collection(db, "properties"), { ...propData, createdAt: serverTimestamp() });
       }
     }
     showToast("Property saved & synced live to Cloud Firestore!", "success");
@@ -810,6 +951,40 @@ document.getElementById('testimonial-form')?.addEventListener('submit', async (e
     }
     showToast("Testimonial saved to Cloud Firestore!", "success");
     document.getElementById('testimonial-modal')?.classList.add('hidden');
+  } catch (err) {
+    showToast(`Save error: ${err.message}`, "error");
+  }
+});
+
+document.getElementById('blog-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const docId = document.getElementById('blog-doc-id').value;
+  const title = document.getElementById('blog-title').value;
+  const blogData = {
+    title: title,
+    slug: document.getElementById('blog-slug').value || slugify(title),
+    category: document.getElementById('blog-category').value,
+    status: document.getElementById('blog-status').value,
+    author: document.getElementById('blog-author').value || "Triangle Properties Team",
+    image: document.getElementById('blog-image-url').value,
+    coverImage: document.getElementById('blog-image-url').value,
+    excerpt: document.getElementById('blog-excerpt').value,
+    summary: document.getElementById('blog-excerpt').value,
+    content: document.getElementById('blog-content').value,
+    body: document.getElementById('blog-content').value,
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    if (db) {
+      if (docId) {
+        await updateDoc(doc(db, "blogPosts", docId), blogData);
+      } else {
+        await addDoc(collection(db, "blogPosts"), { ...blogData, createdAt: serverTimestamp() });
+      }
+    }
+    showToast("Blog post saved & published to Cloud Firestore!", "success");
+    document.getElementById('blog-post-modal')?.classList.add('hidden');
   } catch (err) {
     showToast(`Save error: ${err.message}`, "error");
   }

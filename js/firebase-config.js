@@ -1,4 +1,4 @@
-// Triangle Properties Pvt. Ltd. - Firebase Production Auth, Firestore & Cloud Storage Integration
+// Triangle Properties - Firebase Production Auth, Firestore & Cloud Storage Integration
 
 const firebaseConfig = {
   apiKey: "AIzaSyAKVhfxCv8mVmjDnzA2Cu-SeskSIM1mpC8",
@@ -68,6 +68,9 @@ const LocalInquiryStore = {
     if (typeof window.initFirestoreLiveSync === 'function') {
       window.initFirestoreLiveSync();
     }
+
+    // Broadcast firebase-ready event for public page data loaders
+    window.dispatchEvent(new Event('firebase-ready'));
 
     // Global Firebase Cloud Storage File Upload Helper
     window.uploadFileToFirebaseStorage = function(file, folderName = 'uploads', onProgress, onSuccess, onError) {

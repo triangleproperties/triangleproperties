@@ -69,30 +69,60 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       renderBlogDetail();
+      window.addEventListener('firebase-ready', () => renderBlogDetail());
     });
 
-    function renderBlogDetail() {
+    async function renderBlogDetail() {
       const container = document.getElementById('blog-detail-container');
       if (!container) return;
 
       const urlParams = new URLSearchParams(window.location.search);
       const blogId = urlParams.get('id') || 'blog-1';
 
-      const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : window.TRIANGLE_DATA;
-      const blogs = liveData?.blogs || [];
-      const article = blogs.find(b => b.id === blogId) || blogs[0];
+      let article = null;
+
+      if (window.db) {
+        try {
+          const { doc, getDoc } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+          const snap = await getDoc(doc(window.db, "blogPosts", blogId));
+          if (snap.exists()) {
+            const data = snap.data();
+            // Draft protection: Draft posts must not render publicly
+            if ((data.status || 'Published') === 'Published') {
+              article = { id: snap.id, ...data };
+            }
+          }
+        } catch (err) {
+          console.warn("Firestore public blog detail read notice (falling back):", err);
+        }
+      }
+
+      if (!article) {
+        const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : window.TRIANGLE_DATA;
+        const blogs = (liveData?.blogs || []).filter(b => (b.status || 'Published') === 'Published');
+        article = blogs.find(b => b.id === blogId) || (blogs[0] && (blogs[0].id === blogId ? blogs[0] : null));
+      }
 
       if (!article) {
         container.innerHTML = `
-          <div class="text-center py-20">
-            <h2 class="text-2xl font-bold font-display mb-4">Article Not Found</h2>
+          <div class="text-center py-20 glass-card rounded-3xl p-8 border border-slate-800">
+            <h2 class="text-2xl font-bold font-display mb-4 text-white">Article Not Found</h2>
+            <p class="text-xs text-slate-400 mb-6">This article may be unpublished or does not exist.</p>
             <a href="blog.html" class="btn-primary text-xs uppercase tracking-widest px-6 py-3 inline-block">Back to All Articles</a>
           </div>
         `;
         return;
       }
 
-      document.title = `${article.title} | Triangle Properties Blog`;
+      const title = article.title || '';
+      const category = article.category || 'Real Estate';
+      const image = article.image || article.coverImage || 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80';
+      const date = article.date || (article.createdAt?.toDate ? article.createdAt.toDate().toLocaleDateString() : 'Recent');
+      const readTime = article.readTime || '3 min read';
+      const author = article.author || 'Triangle Properties Team';
+      const contentText = article.content || article.body || article.excerpt || '';
+
+      document.title = `${title} | Triangle Properties Blog`;
 
       container.innerHTML = `
         <div class="mb-6">
@@ -100,27 +130,25 @@
             <span class="material-symbols-outlined text-sm">arrow_back</span> Back to Blog
           </a>
           <span class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/10 text-amber-500 border border-amber-500/30 inline-block mb-4">
-            ${article.category}
+            ${category}
           </span>
           <h1 class="font-display text-3xl sm:text-5xl font-bold leading-tight mb-4 text-slate-900 dark:text-white">
-            ${article.title}
+            ${title}
           </h1>
           <div class="flex items-center gap-4 text-xs text-slate-500 dark:text-slate-400 font-button pb-6 border-b border-slate-200 dark:border-slate-800">
-            <span>By ${article.author}</span>
+            <span>By ${author}</span>
             <span>•</span>
-            <span>${article.date}</span>
+            <span>${date}</span>
             <span>•</span>
-            <span>${article.readTime}</span>
+            <span>${readTime}</span>
           </div>
         </div>
 
         <div class="aspect-[16/9] rounded-3xl overflow-hidden mb-8 shadow-xl border border-slate-200 dark:border-slate-800 bg-slate-900">
-          <img src="${article.image}" alt="${article.title}" class="w-full h-full object-cover">
+          <img src="${image}" alt="${title}" class="w-full h-full object-cover">
         </div>
 
-        <div class="prose dark:prose-invert max-w-none font-body text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-12">
-          ${article.content}
-        </div>
+        <div id="blog-body-text" class="prose dark:prose-invert max-w-none font-body text-slate-700 dark:text-slate-300 text-sm leading-relaxed mb-12 whitespace-pre-wrap"></div>
 
         <div class="p-8 glass-card rounded-3xl border border-amber-500/30 bg-amber-500/5 text-center my-12">
           <h3 class="font-display text-2xl font-bold mb-2">Looking for Verified Properties in Chennai?</h3>
@@ -132,6 +160,10 @@
           </a>
         </div>
       `;
+
+      // Safe body rendering: set plain text with pre-wrap to avoid HTML injection
+      const bodyEl = document.getElementById('blog-body-text');
+      if (bodyEl) bodyEl.textContent = contentText;
     }
   </script>
 </body>

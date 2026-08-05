@@ -49,6 +49,12 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
+    // 8. Blog Posts Collection
+    match /blogPosts/{postId} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
     // 8. Backward Compatibility App Data
     match /app_data/{docId} {
       allow read: if true;
