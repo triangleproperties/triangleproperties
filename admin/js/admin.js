@@ -803,51 +803,86 @@ document.getElementById('prop-cloudinary-btn')?.addEventListener('click', () => 
     }, { multiple: true });
   } else {
     const url = prompt("Enter Image URL:");
-    if (url) document.getElementById('prop-image-url').value = url;
+    if (url) {
+      document.getElementById('prop-image-url').value = url;
+      const prev = document.getElementById('prop-img-preview');
+      if (prev) prev.src = url;
+      document.getElementById('prop-img-preview-box')?.classList.remove('hidden');
+    }
   }
 });
 
+function updatePreviewHelper(inputId, previewImgId, previewBoxId) {
+  const url = document.getElementById(inputId)?.value;
+  const prevImg = document.getElementById(previewImgId);
+  const prevBox = document.getElementById(previewBoxId);
+  if (url && url.trim() !== '') {
+    if (prevImg) prevImg.src = url;
+    prevBox?.classList.remove('hidden');
+  } else {
+    prevBox?.classList.add('hidden');
+  }
+}
+
+['prop-image-url', 'cat-image-url', 'gal-image-url', 'testi-avatar', 'blog-image-url'].forEach(id => {
+  document.getElementById(id)?.addEventListener('input', () => {
+    if (id === 'prop-image-url') updatePreviewHelper('prop-image-url', 'prop-img-preview', 'prop-img-preview-box');
+    if (id === 'cat-image-url') updatePreviewHelper('cat-image-url', 'cat-img-preview', 'cat-img-preview-box');
+    if (id === 'gal-image-url') updatePreviewHelper('gal-image-url', 'gal-img-preview', 'gal-img-preview-box');
+    if (id === 'testi-avatar') updatePreviewHelper('testi-avatar', 'testi-img-preview', 'testi-img-preview-box');
+    if (id === 'blog-image-url') updatePreviewHelper('blog-image-url', 'blog-img-preview', 'blog-img-preview-box');
+  });
+});
+
 document.getElementById('cat-cloudinary-btn')?.addEventListener('click', () => {
+  const handleUrl = (url) => {
+    document.getElementById('cat-image-url').value = url;
+    updatePreviewHelper('cat-image-url', 'cat-img-preview', 'cat-img-preview-box');
+  };
   if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget((url) => {
-      document.getElementById('cat-image-url').value = url;
-    });
+    window.openCloudinaryWidget(handleUrl);
   } else {
     const url = prompt("Enter Image URL:");
-    if (url) document.getElementById('cat-image-url').value = url;
+    if (url) handleUrl(url);
   }
 });
 
 document.getElementById('gal-cloudinary-btn')?.addEventListener('click', () => {
+  const handleUrl = (url) => {
+    document.getElementById('gal-image-url').value = url;
+    updatePreviewHelper('gal-image-url', 'gal-img-preview', 'gal-img-preview-box');
+  };
   if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget((url) => {
-      document.getElementById('gal-image-url').value = url;
-    });
+    window.openCloudinaryWidget(handleUrl);
   } else {
     const url = prompt("Enter Image URL:");
-    if (url) document.getElementById('gal-image-url').value = url;
+    if (url) handleUrl(url);
   }
 });
 
 document.getElementById('testi-cloudinary-btn')?.addEventListener('click', () => {
+  const handleUrl = (url) => {
+    document.getElementById('testi-avatar').value = url;
+    updatePreviewHelper('testi-avatar', 'testi-img-preview', 'testi-img-preview-box');
+  };
   if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget((url) => {
-      document.getElementById('testi-avatar').value = url;
-    });
+    window.openCloudinaryWidget(handleUrl);
   } else {
     const url = prompt("Enter Image URL:");
-    if (url) document.getElementById('testi-avatar').value = url;
+    if (url) handleUrl(url);
   }
 });
 
 document.getElementById('blog-cloudinary-btn')?.addEventListener('click', () => {
+  const handleUrl = (url) => {
+    document.getElementById('blog-image-url').value = url;
+    updatePreviewHelper('blog-image-url', 'blog-img-preview', 'blog-img-preview-box');
+  };
   if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget((url) => {
-      document.getElementById('blog-image-url').value = url;
-    });
+    window.openCloudinaryWidget(handleUrl);
   } else {
     const url = prompt("Enter Image URL:");
-    if (url) document.getElementById('blog-image-url').value = url;
+    if (url) handleUrl(url);
   }
 });
 

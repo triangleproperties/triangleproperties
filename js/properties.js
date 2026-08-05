@@ -15,19 +15,40 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
-function getLiveProperties() {
+let cachedPropertiesList = [];
+
+async function fetchLiveProperties() {
+  if (window.db) {
+    try {
+      const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const snap = await getDocs(collection(window.db, "properties"));
+      if (snap.docs.length > 0) {
+        cachedPropertiesList = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        return cachedPropertiesList;
+      }
+    } catch (e) {
+      console.warn("Firestore public properties read notice:", e);
+    }
+  }
+
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : window.TRIANGLE_DATA;
-  return liveData?.properties || [];
+  cachedPropertiesList = liveData?.properties || [];
+  return cachedPropertiesList;
+}
+
+function getLiveProperties() {
+  return cachedPropertiesList.length > 0 ? cachedPropertiesList : ((window.loadLiveTriangleData ? window.loadLiveTriangleData() : window.TRIANGLE_DATA)?.properties || []);
 }
 
 /* -------------------------------------------------------------
  * 1. Render Property Grid Cards
  * ------------------------------------------------------------- */
-function initPropertyGrid() {
+async function initPropertyGrid() {
   const gridContainer = document.getElementById('properties-grid');
   if (!gridContainer) return;
 
-  renderProperties(getLiveProperties(), gridContainer);
+  const props = await fetchLiveProperties();
+  renderProperties(props, gridContainer);
 }
 
 function renderProperties(propertiesList, container) {
