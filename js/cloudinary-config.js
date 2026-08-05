@@ -2,7 +2,7 @@
 
 const CLOUDINARY_CONFIG = {
   cloudName: "ltriw2oi",
-  uploadPreset: localStorage.getItem('cloudinary_preset') || "ml_default",
+  uploadPreset: localStorage.getItem('cloudinary_preset') || "Triangle Properties",
   defaultFolder: "triangle-properties/uploads"
 };
 
