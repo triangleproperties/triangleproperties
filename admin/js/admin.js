@@ -123,7 +123,7 @@ if (auth) {
 // Login Form Submit
 document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const email = document.getElementById('login-email').value;
+  const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-password').value;
   const submitBtn = document.getElementById('login-submit-btn');
 
@@ -131,8 +131,31 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
 
   try {
     if (auth) {
-      await signInWithEmailAndPassword(auth, email, pass);
-      showToast("Welcome back Admin!", "success");
+      try {
+        await signInWithEmailAndPassword(auth, email, pass);
+        showToast("Welcome back Admin!", "success");
+      } catch (authErr) {
+        console.warn("Sign-in attempt failed, checking auto-registration:", authErr.code, authErr.message);
+
+        // Auto-register initial admin account if user does not exist yet in Firebase Auth
+        if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/user-not-found') {
+          try {
+            const { createUserWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+            await createUserWithEmailAndPassword(auth, email, pass);
+            showToast("Admin account registered & authenticated with Firebase!", "success");
+            return;
+          } catch (createErr) {
+            if (createErr.code === 'auth/email-already-in-use') {
+              showToast("Sign in error: Incorrect password for registered admin account.", "error");
+            } else {
+              showToast(`Sign in error: ${createErr.message}`, "error");
+            }
+            return;
+          }
+        } else {
+          showToast(`Sign in error: ${authErr.message}`, "error");
+        }
+      }
     } else {
       document.getElementById('auth-screen')?.classList.add('hidden');
       document.getElementById('dashboard-screen')?.classList.remove('hidden');
@@ -141,7 +164,7 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   } catch (err) {
     showToast(`Sign in error: ${err.message}`, "error");
   } finally {
-    if (submitBtn) submitBtn.textContent = "Sign In";
+    if (submitBtn) submitBtn.textContent = "Sign In to Dashboard";
   }
 });
 
