@@ -2,7 +2,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   initScrollProgressBar();
-  initScrollToTopButton();
   initThemeToggle();
   initNavigation();
   initHeroCarousel();
@@ -14,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* -------------------------------------------------------------
- * 1. Scroll Progress Bar & Scroll To Top
+ * 1. Scroll Progress Bar
  * ------------------------------------------------------------- */
 function initScrollProgressBar() {
   if (document.getElementById('scroll-progress-bar')) return;
@@ -29,34 +28,6 @@ function initScrollProgressBar() {
     const scrolled = height > 0 ? (winScroll / height) * 100 : 0;
     bar.style.width = scrolled + '%';
   });
-}
-
-function initScrollToTopButton() {
-  if (document.getElementById('scroll-to-top')) return;
-
-  const btn = document.createElement('button');
-  btn.id = 'scroll-to-top';
-  btn.ariaLabel = 'Scroll to top';
-  btn.className = 'fixed bottom-24 right-4 sm:right-6 z-40 p-3 rounded-full bg-slate-900 dark:bg-slate-800 text-amber-400 border border-amber-500/30 shadow-xl hover:scale-110 focus:outline-none transition-all';
-  btn.innerHTML = `
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"/>
-    </svg>
-  `;
-
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 400) {
-      btn.classList.add('visible');
-    } else {
-      btn.classList.remove('visible');
-    }
-  });
-
-  document.body.appendChild(btn);
 }
 
 /* -------------------------------------------------------------

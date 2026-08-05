@@ -92,7 +92,7 @@
       }
     }
   </script>
-
+  <link rel="preload" as="image" href="assets/hero-slider-1.jpg" fetchpriority="high" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preload" as="style"
@@ -103,26 +103,6 @@
 
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/styles.css" />
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "RealEstateAgent",
-    "name": "Triangle Properties",
-    "image": "assets/logo.png",
-    "telephone": "+91 88389 57874",
-    "email": "info@triangleproperties.in",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "No.23, Pillaiyar Kovil Street, Vadapalani",
-      "addressLocality": "Chennai",
-      "addressRegion": "Tamil Nadu",
-      "postalCode": "600026",
-      "addressCountry": "IN"
-    },
-    "priceRange": "₹36 Lakhs - ₹3.4 Cr"
-  }
-  </script>
 </head>
 
 <body
@@ -135,22 +115,19 @@
     <!-- EXECUTIVE HERO SLIDER (CLEAN BANNER DISPLAY) -->
     <section class="relative w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 bg-slate-950">
       
-      <!-- HERO CAROUSEL SLIDES (100% CLEAN IMAGE QUALITY, NO OVERLAYS OR BLUR) -->
+      <!-- HERO CAROUSEL SLIDES (100% CLEAN IMAGE QUALITY WITH LCP HIGH PRIORITY PRELOAD) -->
       <div id="hero-carousel" class="relative w-full aspect-[16/9] sm:aspect-[2.2/1] min-h-[220px] sm:min-h-[480px]">
         <!-- Slide 1: Susee Alight Kuthambakkam -->
-        <div
-          class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 bg-contain sm:bg-cover bg-center bg-no-repeat"
-          style="background-image: url('assets/hero-slider-1.jpg');">
+        <div class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100">
+          <img src="assets/hero-slider-1.jpg" alt="Susee Alight Kuthambakkam - Triangle Properties Gated Community Plots" class="w-full h-full object-contain sm:object-cover object-center" fetchpriority="high" width="1600" height="900" />
         </div>
         <!-- Slide 2: ECR Resort Plots -->
-        <div
-          class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 bg-contain sm:bg-cover bg-center bg-no-repeat"
-          style="background-image: url('assets/hero-slider-2.jpg');">
+        <div class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0">
+          <img src="assets/hero-slider-2.jpg" alt="Ishwarya Nagar ECR - Triangle Properties Resort Layout" class="w-full h-full object-contain sm:object-cover object-center" loading="lazy" width="1600" height="900" />
         </div>
         <!-- Slide 3: M.A. Nagar Tiruvallur -->
-        <div
-          class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 bg-contain sm:bg-cover bg-center bg-no-repeat"
-          style="background-image: url('assets/hero-slider-3.jpg');">
+        <div class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0">
+          <img src="assets/hero-slider-3.jpg" alt="M.A. Nagar Tiruvallur - Triangle Properties Approved Plots" class="w-full h-full object-contain sm:object-cover object-center" loading="lazy" width="1600" height="900" />
         </div>
 
         <!-- FLOATING CAROUSEL CONTROLS & INDICATORS -->
@@ -160,9 +137,9 @@
             <span class="material-symbols-outlined text-sm">arrow_back</span>
           </button>
           <div id="hero-indicators" class="flex items-center gap-2">
-            <button class="w-6 h-1.5 rounded-full bg-amber-500 transition-all hero-indicator" data-slide="0"></button>
-            <button class="w-2 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="1"></button>
-            <button class="w-2 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="2"></button>
+            <button class="w-6 h-1.5 rounded-full bg-amber-500 transition-all hero-indicator" data-slide="0" aria-label="Slide 1"></button>
+            <button class="w-2 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="1" aria-label="Slide 2"></button>
+            <button class="w-2 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="2" aria-label="Slide 3"></button>
           </div>
           <button id="hero-next-btn" aria-label="Next Slide"
             class="p-1 rounded-full text-slate-300 hover:text-amber-400 transition-all">
@@ -254,11 +231,11 @@
   <div id="footer-container"></div>
   <div id="floating-contact-container"></div>
 
-  <script src="js/data.js"></script>
-  <script src="js/component-loader.js"></script>
-  <script src="js/firebase-config.js"></script>
-  <script src="js/main.js"></script>
-  <script src="js/properties.js"></script>
+  <script src="js/data.js" defer></script>
+  <script src="js/component-loader.js" defer></script>
+  <script src="js/firebase-config.js" defer></script>
+  <script src="js/main.js" defer></script>
+  <script src="js/properties.js" defer></script>
 </body>
 
 </html>
