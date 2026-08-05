@@ -876,7 +876,7 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
   try {
     if (db) {
       if (docId) {
-        await updateDoc(doc(db, "properties", docId), propData);
+        await setDoc(doc(db, "properties", docId), propData, { merge: true });
       } else {
         await addDoc(collection(db, "properties"), { ...propData, createdAt: serverTimestamp() });
       }
@@ -918,7 +918,7 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
   try {
     if (db) {
       if (docId) {
-        await updateDoc(doc(db, "gallery", docId), galData);
+        await setDoc(doc(db, "gallery", docId), galData, { merge: true });
       } else {
         await addDoc(collection(db, "gallery"), { ...galData, createdAt: serverTimestamp() });
       }
@@ -944,7 +944,7 @@ document.getElementById('testimonial-form')?.addEventListener('submit', async (e
   try {
     if (db) {
       if (docId) {
-        await updateDoc(doc(db, "testimonials", docId), testiData);
+        await setDoc(doc(db, "testimonials", docId), testiData, { merge: true });
       } else {
         await addDoc(collection(db, "testimonials"), { ...testiData, createdAt: serverTimestamp() });
       }
@@ -978,7 +978,7 @@ document.getElementById('blog-form')?.addEventListener('submit', async (e) => {
   try {
     if (db) {
       if (docId) {
-        await updateDoc(doc(db, "blogPosts", docId), blogData);
+        await setDoc(doc(db, "blogPosts", docId), { ...blogData, createdAt: serverTimestamp() }, { merge: true });
       } else {
         await addDoc(collection(db, "blogPosts"), { ...blogData, createdAt: serverTimestamp() });
       }
