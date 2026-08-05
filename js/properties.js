@@ -467,28 +467,183 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
   const email = document.getElementById('brochure-email')?.value || '';
   const title = decodeURIComponent(encodedTitle);
 
-  // Save inquiry lead
-  if (window.db && window.collection && window.addDoc) {
-    try {
-      window.addDoc(window.collection(window.db, "inquiries"), {
-        name, phone, email, project: title, propertyId, type: "Brochure Download", timestamp: new Date().toISOString()
-      });
-    } catch (err) { console.log(err); }
+  // Save inquiry lead for Admin Control Panel CRM
+  const leadData = {
+    name: name,
+    phone: phone,
+    email: email,
+    project: title,
+    propertyId: propertyId,
+    type: "Brochure Download",
+    source: "Brochure Lightbox",
+    createdAt: new Date().toISOString()
+  };
+
+  if (typeof window.submitInquiry === 'function') {
+    window.submitInquiry(leadData);
+  } else if (window.LocalInquiryStore && typeof window.LocalInquiryStore.saveInquiry === 'function') {
+    window.LocalInquiryStore.saveInquiry(leadData);
+  } else {
+    const existing = JSON.parse(localStorage.getItem('triangle_inquiries') || '[]');
+    existing.unshift({ id: 'inq_' + Date.now(), ...leadData });
+    localStorage.setItem('triangle_inquiries', JSON.stringify(existing));
   }
 
   const successMsg = document.getElementById('brochure-success-msg');
   if (successMsg) successMsg.classList.remove('hidden');
 
-  // Trigger PDF brochure download
+  // Fetch live property details for the PDF
+  const liveProps = typeof getLiveProperties === 'function' ? getLiveProperties() : [];
+  const property = liveProps.find(p => p.id === propertyId) || {};
+  const price = property.price || "Contact for Price";
+  const emi = property.emiOption || "EMI Available";
+  const location = property.location || "Chennai Growth Corridor";
+  const category = property.category || "Approved Plot Layout";
+  const areaSqft = property.areaSqft || 722;
+  const roadWidth = property.roadWidth || "30ft Wide Roads";
+
+  // Trigger PDF brochure generation & download
   setTimeout(() => {
-    const brochureContent = `TRIANGLE PROPERTIES - PROJECT BROCHURE\n=========================================\nProject: ${title}\nProject Code: ${propertyId}\nLocation: Chennai / Vadapalani\nApprovals: CMDA & DTCP Approved\n\nHotline: +91 88389 57874 / +91 72002 12759\nWhatsApp: +91 88389 57874\nEmail: info@triangleproperties.in\nWebsite: https://triangleproperties.in\n=========================================\nCustomer: ${name}\nContact: ${phone} (${email})\nGenerated Date: ${new Date().toLocaleDateString()}`;
-    const blob = new Blob([brochureContent], { type: 'application/pdf' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `${propertyId}-Brochure-TriangleProperties.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    try {
+      const { jsPDF } = window.jspdf || {};
+      if (jsPDF) {
+        const doc = new jsPDF({ unit: 'pt', format: 'a4' });
+
+        // Brand Header (Dark & Gold Accent)
+        doc.setFillColor(30, 41, 59); // Slate 800
+        doc.rect(0, 0, 595, 110, 'F');
+
+        doc.setFillColor(217, 119, 6); // Amber 600 line
+        doc.rect(0, 106, 595, 4, 'F');
+
+        doc.setTextColor(245, 158, 11); // Gold Title
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(22);
+        doc.text("TRIANGLE PROPERTIES", 40, 45);
+
+        doc.setTextColor(226, 232, 240); // Light Slate
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(10);
+        doc.text("TAP into Smart Investments | DTCP & RERA Approved Layouts", 40, 65);
+        doc.text("Corporate Office: Vadapalani, Chennai | Helpline: +91 88389 57874", 40, 82);
+
+        // Document Title Banner
+        doc.setFillColor(248, 250, 252);
+        doc.rect(40, 130, 515, 40, 'F');
+        doc.setDrawColor(226, 232, 240);
+        doc.rect(40, 130, 515, 40, 'S');
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text(`OFFICIAL PROJECT BROCHURE: ${title.toUpperCase()}`, 55, 155);
+
+        // Customer Details Box
+        doc.setFillColor(254, 243, 199); // Amber 100
+        doc.rect(40, 185, 515, 45, 'F');
+        doc.setDrawColor(245, 158, 11);
+        doc.rect(40, 185, 515, 45, 'S');
+
+        doc.setTextColor(180, 83, 9);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(10);
+        doc.text("PREPARED EXCLUSIVELY FOR:", 55, 203);
+
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "normal");
+        doc.text(`${name}   |   Mobile: ${phone}   |   Email: ${email || 'N/A'}`, 55, 219);
+
+        // Property Specifications Table
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text("Project Specifications & Details", 40, 260);
+
+        doc.setLineWidth(1);
+        doc.setDrawColor(217, 119, 6);
+        doc.line(40, 266, 555, 266);
+
+        const specs = [
+          ["Project Title", title],
+          ["Project Code", propertyId.toUpperCase()],
+          ["Approval Status", "CMDA & DTCP Approved Layout"],
+          ["Category", category],
+          ["Location Corridor", location],
+          ["Plot Area", `${areaSqft} sq.ft onwards`],
+          ["Road Infrastructure", roadWidth],
+          ["Launch Price", price],
+          ["EMI Options", emi]
+        ];
+
+        let startY = 280;
+        specs.forEach(([label, value], idx) => {
+          doc.setFillColor(idx % 2 === 0 ? 248 : 255, idx % 2 === 0 ? 250 : 255, idx % 2 === 0 ? 252 : 255);
+          doc.rect(40, startY, 515, 22, 'F');
+
+          doc.setTextColor(71, 85, 105);
+          doc.setFont("helvetica", "bold");
+          doc.setFontSize(9.5);
+          doc.text(label, 50, startY + 15);
+
+          doc.setTextColor(15, 23, 42);
+          doc.setFont("helvetica", "normal");
+          doc.text(String(value), 200, startY + 15);
+
+          startY += 22;
+        });
+
+        // Highlights & Amenities
+        startY += 20;
+        doc.setTextColor(15, 23, 42);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(13);
+        doc.text("Key Infrastructure & Highlights", 40, startY);
+
+        const highlights = [
+          "✓ Blacktop roads with streetlights and avenue trees",
+          "✓ 100% Clear Title layouts verified by legal experts",
+          "✓ Ready for immediate villa construction & fast registration",
+          "✓ Bank loan approval assistance with flexible EMI terms",
+          "✓ 24/7 Gated Security with compound wall & entry arch"
+        ];
+
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9.5);
+        doc.setTextColor(51, 65, 85);
+        highlights.forEach((h, i) => {
+          doc.text(h, 45, startY + 18 + (i * 17));
+        });
+
+        // Corporate Footer Banner
+        doc.setFillColor(30, 41, 59);
+        doc.rect(40, 750, 515, 50, 'F');
+
+        doc.setTextColor(245, 158, 11);
+        doc.setFont("helvetica", "bold");
+        doc.setFontSize(11);
+        doc.text("Triangle Properties Pvt Ltd — Direct Sales Desk", 55, 768);
+
+        doc.setTextColor(255, 255, 255);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        doc.text("Phone: +91 88389 57874 / +91 72002 12759 | Website: https://triangleproperties.in", 55, 785);
+
+        // Download PDF
+        doc.save(`${propertyId}-Brochure-TriangleProperties.pdf`);
+      } else {
+        throw new Error("jsPDF library not available");
+      }
+    } catch (err) {
+      console.warn("jsPDF fallback:", err);
+      const fallbackText = `TRIANGLE PROPERTIES - PROJECT BROCHURE\n=========================================\nProject: ${title}\nLocation: ${location}\nPrice: ${price}\nEMI: ${emi}\n=========================================\nContact: +91 88389 57874\nWebsite: https://triangleproperties.in`;
+      const blob = new Blob([fallbackText], { type: 'text/plain;charset=utf-8' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = `${propertyId}-Brochure-TriangleProperties.txt`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
     setTimeout(closeBrochureModal, 2000);
   }, 400);
