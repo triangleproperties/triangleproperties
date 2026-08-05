@@ -154,20 +154,27 @@ function createPropertyCardHTML(prop) {
         </p>
 
         <!-- Actions -->
-        <div class="flex items-center gap-3 pt-4 border-t border-slate-200 dark:border-slate-800 mt-auto">
-          <button onclick="openPropertyModal('${prop.id}')" 
-                  class="flex-1 py-3 px-4 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md">
-            View Details
+        <div class="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-800 mt-auto">
+          <button onclick="openBrochureModal('${prop.id}')" 
+                  class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 border border-amber-500/30 font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md flex items-center justify-center gap-2">
+            <span class="material-symbols-outlined text-base">picture_as_pdf</span>
+            <span>Download Brochure</span>
           </button>
-          <a href="https://wa.me/918838957874?text=${encodeURIComponent('Hello Triangle Properties, I want details regarding: ' + prop.title + ' (' + prop.id + ')')}" 
-             target="_blank"
-             rel="noopener noreferrer"
-             title="Inquire on WhatsApp"
-             class="py-3 px-3.5 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-xl text-xs font-semibold transition-all border border-emerald-500/30 flex items-center justify-center">
-            <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
-            </svg>
-          </a>
+          <div class="flex items-center gap-2">
+            <button onclick="openPropertyModal('${prop.id}')" 
+                    class="flex-1 py-2.5 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md">
+              View Details
+            </button>
+            <a href="https://wa.me/918838957874?text=${encodeURIComponent('Hello Triangle Properties, I want details regarding: ' + prop.title + ' (' + prop.id + ')')}" 
+               target="_blank"
+               rel="noopener noreferrer"
+               title="Inquire on WhatsApp"
+               class="py-2.5 px-3 bg-emerald-500/10 hover:bg-emerald-500 text-emerald-600 hover:text-white rounded-xl text-xs font-semibold transition-all border border-emerald-500/30 flex items-center justify-center">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-1.157 4.228 4.201-1.101z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -212,6 +219,18 @@ function initPropertySearch() {
   typeFilter?.addEventListener('change', applyFilters);
   statusFilter?.addEventListener('change', applyFilters);
   maxPriceFilter?.addEventListener('change', applyFilters);
+
+  // Check URL query parameters for pre-selected status (e.g. ?status=ONGOING)
+  const urlParams = new URLSearchParams(window.location.search);
+  const statusParam = urlParams.get('status');
+  if (statusParam && statusFilter) {
+    const uppercaseStatus = statusParam.toUpperCase();
+    const hasOption = Array.from(statusFilter.options).some(opt => opt.value === uppercaseStatus);
+    if (hasOption) {
+      statusFilter.value = uppercaseStatus;
+    }
+    applyFilters();
+  }
 }
 
 function resetPropertyFilters() {
@@ -373,3 +392,108 @@ function closePropertyModal() {
 window.openPropertyModal = openPropertyModal;
 window.closePropertyModal = closePropertyModal;
 window.resetPropertyFilters = resetPropertyFilters;
+
+/* -------------------------------------------------------------
+ * 4. Download Brochure Lightbox Modal
+ * ------------------------------------------------------------- */
+function openBrochureModal(propertyId) {
+  const allProps = window.getLiveProperties ? window.getLiveProperties() : (allProperties || []);
+  const prop = allProps.find(p => p.id === propertyId);
+  const title = prop ? prop.title : 'Project Brochure';
+
+  let modal = document.getElementById('brochure-modal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'brochure-modal';
+    document.body.appendChild(modal);
+  }
+
+  modal.className = 'fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md overflow-y-auto';
+  modal.innerHTML = `
+    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative">
+      <button onclick="closeBrochureModal()" 
+              class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-700 dark:text-slate-200 flex items-center justify-center transition-all">
+        <span class="material-symbols-outlined text-lg">close</span>
+      </button>
+
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-3 border border-amber-500/30">
+          <span class="material-symbols-outlined text-2xl">picture_as_pdf</span>
+        </div>
+        <span class="font-button text-[11px] uppercase tracking-widest text-amber-500 font-bold block mb-1">Project Brochure</span>
+        <h3 class="font-display text-xl sm:text-2xl font-bold text-slate-900 dark:text-white mb-2">${title}</h3>
+        <p class="font-body text-xs text-slate-600 dark:text-slate-400">Enter your details below to instantly download the PDF brochure.</p>
+      </div>
+
+      <form onsubmit="handleBrochureSubmit(event, '${propertyId}', '${encodeURIComponent(title)}')" class="space-y-4">
+        <div>
+          <label class="block text-xs font-button uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Full Name *</label>
+          <input type="text" id="brochure-name" required placeholder="Enter your full name" 
+                 class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500 text-slate-900 dark:text-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-button uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Phone / Mobile Number *</label>
+          <input type="tel" id="brochure-phone" required placeholder="Enter 10-digit mobile number" 
+                 class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500 text-slate-900 dark:text-white" />
+        </div>
+        <div>
+          <label class="block text-xs font-button uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-1">Email Address *</label>
+          <input type="email" id="brochure-email" required placeholder="name@example.com" 
+                 class="w-full px-4 py-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-300 dark:border-slate-800 text-sm focus:outline-none focus:border-amber-500 text-slate-900 dark:text-white" />
+        </div>
+
+        <button type="submit" id="brochure-submit-btn"
+                class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-button text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-all mt-2">
+          <span class="material-symbols-outlined text-lg">download</span>
+          <span>Submit & Download Brochure PDF</span>
+        </button>
+      </form>
+      <div id="brochure-success-msg" class="hidden mt-4 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 text-xs font-semibold text-center">
+        ✓ Thank you! Your brochure download has started.
+      </div>
+    </div>
+  `;
+}
+
+function closeBrochureModal() {
+  const modal = document.getElementById('brochure-modal');
+  if (modal) modal.remove();
+}
+
+function handleBrochureSubmit(e, propertyId, encodedTitle) {
+  e.preventDefault();
+  const name = document.getElementById('brochure-name')?.value || 'Valued Customer';
+  const phone = document.getElementById('brochure-phone')?.value || '';
+  const email = document.getElementById('brochure-email')?.value || '';
+  const title = decodeURIComponent(encodedTitle);
+
+  // Save inquiry lead
+  if (window.db && window.collection && window.addDoc) {
+    try {
+      window.addDoc(window.collection(window.db, "inquiries"), {
+        name, phone, email, project: title, propertyId, type: "Brochure Download", timestamp: new Date().toISOString()
+      });
+    } catch (err) { console.log(err); }
+  }
+
+  const successMsg = document.getElementById('brochure-success-msg');
+  if (successMsg) successMsg.classList.remove('hidden');
+
+  // Trigger PDF brochure download
+  setTimeout(() => {
+    const brochureContent = `TRIANGLE PROPERTIES - PROJECT BROCHURE\n=========================================\nProject: ${title}\nProject Code: ${propertyId}\nLocation: Chennai / Vadapalani\nApprovals: CMDA & DTCP Approved\n\nHotline: +91 88389 57874 / +91 72002 12759\nWhatsApp: +91 88389 57874\nEmail: info@triangleproperties.in\nWebsite: https://triangleproperties.in\n=========================================\nCustomer: ${name}\nContact: ${phone} (${email})\nGenerated Date: ${new Date().toLocaleDateString()}`;
+    const blob = new Blob([brochureContent], { type: 'application/pdf' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${propertyId}-Brochure-TriangleProperties.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    setTimeout(closeBrochureModal, 2000);
+  }, 400);
+}
+
+window.openBrochureModal = openBrochureModal;
+window.closeBrochureModal = closeBrochureModal;
+window.handleBrochureSubmit = handleBrochureSubmit;

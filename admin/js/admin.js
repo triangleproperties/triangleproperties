@@ -257,6 +257,9 @@ window.editPropertyItem = function(id) {
   document.getElementById('prop-doc-id').value = prop.id;
   document.getElementById('prop-title').value = prop.title || '';
   document.getElementById('prop-category').value = prop.category || 'DTCP Approved Plot';
+  if (document.getElementById('prop-project-status')) {
+    document.getElementById('prop-project-status').value = prop.projectCategory || prop.status || 'ONGOING';
+  }
   document.getElementById('prop-price').value = prop.price || '';
   document.getElementById('prop-emi').value = prop.emiOption || '';
   document.getElementById('prop-location').value = prop.location || '';
@@ -915,12 +918,14 @@ document.getElementById('blog-cloudinary-btn')?.addEventListener('click', () => 
 document.getElementById('property-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const docId = document.getElementById('prop-doc-id').value;
+  const projectStage = document.getElementById('prop-project-status')?.value || "ONGOING";
   const propData = {
     title: document.getElementById('prop-title').value,
     category: document.getElementById('prop-category').value,
+    status: projectStage,
+    projectCategory: projectStage,
     price: document.getElementById('prop-price').value,
     emiOption: document.getElementById('prop-emi')?.value || "EMI Options Available",
-    status: "For Sale",
     location: document.getElementById('prop-location').value,
     areaSqft: parseInt(document.getElementById('prop-sqft')?.value || 722),
     roadWidth: document.getElementById('prop-road')?.value || "30ft Road",
