@@ -2,7 +2,7 @@
 
 const CLOUDINARY_CONFIG = {
   cloudName: "ltriw2oi",
-  uploadPreset: "ltriw2oi",
+  uploadPreset: localStorage.getItem('cloudinary_preset') || "ml_default",
   defaultFolder: "triangle-properties/uploads"
 };
 
@@ -40,10 +40,12 @@ function openCloudinaryWidget(callback, customOptions = {}) {
     return;
   }
 
+  const currentPreset = localStorage.getItem('cloudinary_preset') || CLOUDINARY_CONFIG.uploadPreset;
+
   const widget = window.cloudinary.createUploadWidget(
     {
       cloudName: CLOUDINARY_CONFIG.cloudName,
-      uploadPreset: CLOUDINARY_CONFIG.uploadPreset,
+      uploadPreset: currentPreset,
       sources: ['local', 'url', 'camera'],
       multiple: customOptions.multiple || false,
       folder: CLOUDINARY_CONFIG.defaultFolder,
@@ -68,7 +70,18 @@ function openCloudinaryWidget(callback, customOptions = {}) {
       }
     },
     (error, result) => {
-      if (!error && result && result.event === "success") {
+      if (error) {
+        console.error("Cloudinary widget error:", error);
+        const newPreset = prompt(
+          `Cloudinary Upload Error: "${error.message || 'Unknown API key'}"\n\nPlease enter your exact Unsigned Upload Preset name from Cloudinary Dashboard (e.g. ml_default or triangle_properties):`,
+          currentPreset
+        );
+        if (newPreset && newPreset.trim() !== '') {
+          localStorage.setItem('cloudinary_preset', newPreset.trim());
+          CLOUDINARY_CONFIG.uploadPreset = newPreset.trim();
+          alert("Upload preset updated to '" + newPreset.trim() + "'. Please click Upload again!");
+        }
+      } else if (result && result.event === "success") {
         console.log("Image uploaded to Cloudinary successfully:", result.info.secure_url);
         if (typeof callback === 'function') {
           callback(result.info.secure_url, result.info);
