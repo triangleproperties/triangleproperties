@@ -80,72 +80,42 @@
   <div id="navbar-container"></div>
 
   <main class="flex-grow">
-    <!-- EXECUTIVE HERO WITH BACKGROUND CAROUSEL -->
-    <section
-      class="relative min-h-[85vh] flex items-center justify-center overflow-hidden border-b border-slate-200 dark:border-slate-800">
-
-      <!-- HERO BACKGROUND CAROUSEL SLIDES -->
-      <div id="hero-carousel" class="absolute inset-0 z-0">
-        <!-- Slide 1 -->
+    <!-- EXECUTIVE HERO SLIDER (CLEAN BANNER DISPLAY) -->
+    <section class="relative w-full overflow-hidden border-b border-slate-200 dark:border-slate-800 bg-slate-950">
+      
+      <!-- HERO CAROUSEL SLIDES (100% CLEAN IMAGE QUALITY, NO OVERLAYS OR BLUR) -->
+      <div id="hero-carousel" class="relative w-full aspect-[16/9] sm:aspect-[2.2/1] min-h-[220px] sm:min-h-[480px]">
+        <!-- Slide 1: Susee Alight Kuthambakkam -->
         <div
-          class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-100 bg-cover bg-center scale-105 transition-transform duration-10000"
-          style="background-image: url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=2000&q=85');">
+          class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-100 bg-contain sm:bg-cover bg-center bg-no-repeat"
+          style="background-image: url('assets/hero-slider-1.jpg');">
         </div>
-        <!-- Slide 2 -->
+        <!-- Slide 2: ECR Resort Plots -->
         <div
-          class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
-          style="background-image: url('https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=2000&q=85');">
+          class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 bg-contain sm:bg-cover bg-center bg-no-repeat"
+          style="background-image: url('assets/hero-slider-2.jpg');">
         </div>
-        <!-- Slide 3 -->
+        <!-- Slide 3: M.A. Nagar Tiruvallur -->
         <div
-          class="hero-slide absolute inset-0 transition-opacity duration-1000 ease-in-out opacity-0 bg-cover bg-center scale-105 transition-transform duration-10000"
-          style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=85');">
+          class="hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out opacity-0 bg-contain sm:bg-cover bg-center bg-no-repeat"
+          style="background-image: url('assets/hero-slider-3.jpg');">
         </div>
-      </div>
 
-      <!-- LEGIBILITY GRADIENT OVERLAY -->
-      <div
-        class="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/50 backdrop-blur-[2px]">
-      </div>
-
-      <!-- HERO CONTENT CONTAINER -->
-      <div class="relative z-20 max-w-[1440px] mx-auto px-4 md:px-16 py-20 md:py-28 w-full text-white">
-        <div class="max-w-4xl">
-          <div
-            class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-button uppercase tracking-widest mb-6">
-            <span id="hero-slide-badge">Chennai's Most Affordable Luxury Developer</span>
+        <!-- FLOATING CAROUSEL CONTROLS & INDICATORS -->
+        <div class="absolute bottom-3 right-3 sm:bottom-6 sm:right-8 z-20 flex items-center gap-3 bg-slate-950/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-800 shadow-2xl">
+          <button id="hero-prev-btn" aria-label="Previous Slide"
+            class="p-1 rounded-full text-slate-300 hover:text-amber-400 transition-all">
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+          </button>
+          <div id="hero-indicators" class="flex items-center gap-2">
+            <button class="w-6 h-1.5 rounded-full bg-amber-500 transition-all hero-indicator" data-slide="0"></button>
+            <button class="w-2 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="1"></button>
+            <button class="w-2 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator" data-slide="2"></button>
           </div>
-
-          <h1 id="hero-slide-heading"
-            class="font-display text-4xl sm:text-6xl lg:text-7xl font-light leading-tight mb-6 text-white drop-shadow-lg">
-            Architecting Trust. <br />
-            <span class="gold-gradient-text italic font-serif">Creating Value.</span>
-          </h1>
-
-          <p id="hero-slide-text"
-            class="font-body text-base md:text-lg text-slate-200 max-w-2xl leading-relaxed mb-10 drop-shadow-md">
-            Triangle Properties delivers uncompromised architectural refinement and legal title transparency
-            across Vadapalani, ECR, Poonamallee, and prime Chennai locations.
-          </p>
-          <!-- CAROUSEL CONTROLS & INDICATORS -->
-          <div class="flex items-center gap-4 mt-8">
-            <button id="hero-prev-btn" aria-label="Previous Slide"
-              class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
-              <span class="material-symbols-outlined text-sm">arrow_back</span>
-            </button>
-            <div id="hero-indicators" class="flex items-center gap-2">
-              <button class="w-8 h-1.5 rounded-full bg-amber-500 transition-all hero-indicator" data-slide="0"></button>
-              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator"
-                data-slide="1"></button>
-              <button class="w-2.5 h-1.5 rounded-full bg-slate-600 transition-all hero-indicator"
-                data-slide="2"></button>
-            </div>
-            <button id="hero-next-btn" aria-label="Next Slide"
-              class="p-2.5 rounded-full bg-slate-900/60 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 transition-all">
-              <span class="material-symbols-outlined text-sm">arrow_forward</span>
-            </button>
-          </div>
-
+          <button id="hero-next-btn" aria-label="Next Slide"
+            class="p-1 rounded-full text-slate-300 hover:text-amber-400 transition-all">
+            <span class="material-symbols-outlined text-sm">arrow_forward</span>
+          </button>
         </div>
       </div>
     </section>

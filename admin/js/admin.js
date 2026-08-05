@@ -396,11 +396,8 @@ function renderGallery() {
         <img src="${escapeHtml(g.image)}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
       </div>
       <div class="p-4 flex items-center justify-between">
-        <div>
-          <h3 class="font-display font-bold text-white text-sm line-clamp-1">${escapeHtml(g.title)}</h3>
-          <span class="font-button text-[10px] text-amber-400 uppercase">${escapeHtml(g.category || 'Site Photos')}</span>
-        </div>
-        <div class="flex items-center gap-1.5">
+        <h3 class="font-display font-bold text-white text-sm line-clamp-1">${escapeHtml(g.title)}</h3>
+        <div class="flex items-center gap-1.5 shrink-0">
           <button onclick="window.editGalleryItem('${g.id}')" title="Edit Photo" class="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 hover:bg-amber-500 hover:text-slate-950 transition-all">
             <span class="material-symbols-outlined text-base">edit</span>
           </button>
@@ -418,7 +415,6 @@ window.editGalleryItem = function(id) {
   if (!item) return;
   document.getElementById('gal-doc-id').value = item.id;
   document.getElementById('gal-title').value = item.title || '';
-  document.getElementById('gal-category').value = item.category || 'Site Photos';
   document.getElementById('gal-image-url').value = item.image || '';
 
   const titleEl = document.getElementById('gal-modal-title');
@@ -911,7 +907,6 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
   const docId = document.getElementById('gal-doc-id').value;
   const galData = {
     title: document.getElementById('gal-title').value,
-    category: document.getElementById('gal-category').value,
     image: document.getElementById('gal-image-url').value
   };
 

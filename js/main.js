@@ -150,19 +150,19 @@ function initHeroCarousel() {
 
   const slideData = [
     {
-      badge: "Chennai's Most Affordable Luxury Developer",
-      heading: "Architecting Trust. <br/><span class=\"gold-gradient-text italic font-serif\">Creating Value.</span>",
-      text: "Triangle Properties Pvt. Ltd. delivers uncompromised architectural refinement and 100% legal title transparency across Vadapalani, ECR, and prime Chennai locations."
+      badge: "TAP into Smart Investments",
+      heading: "Premium Plots in Kuthambakkam <br/><span class=\"gold-gradient-text italic font-serif\">Susee Alight – ₹1,899/sq.ft</span>",
+      text: "Triangle Properties delivers DTCP & RERA approved gated community plots in Kuthambakkam, Poonamallee with 33ft blacktop roads and 100% legal title clearance."
     },
     {
-      badge: "100% Legal Clear CMDA & DTCP Approved Plots",
-      heading: "Secure Prime Land. <br/><span class=\"gold-gradient-text italic font-serif\">Easy Monthly EMI.</span>",
-      text: "Explore verified residential plots, gated villa sites, and commercial land in Vadapalani & Chennai with immediate registration and 80% bank loan approval."
+      badge: "On-Road Resort Plots on ECR",
+      heading: "Ishwarya Nagar – ECR <br/><span class=\"gold-gradient-text italic font-serif\">Affordable Luxury at ₹777/sq.ft</span>",
+      text: "DTCP approved prime resort plots in Koovathur, ECR with avenue trees, entrance arch, street lights, and high appreciation potential."
     },
     {
-      badge: "Turnkey Architectural Civil Construction",
-      heading: "Your Dream Villa. <br/><span class=\"gold-gradient-text italic font-serif\">Engineered to Perfection.</span>",
-      text: "From architectural sanction drawings to RCC structural execution, premium interior fitting, and key handover with transparent per-sq.ft pricing."
+      badge: "Kadambathur, Tiruvallur",
+      heading: "M.A. Nagar Tiruvallur <br/><span class=\"gold-gradient-text italic font-serif\">Exclusive Price ₹899/sq.ft</span>",
+      text: "DTCP approved 4.7-acre gated layout with 30ft roads, 24x7 security, EB facility, and ready for immediate registration."
     }
   ];
 
