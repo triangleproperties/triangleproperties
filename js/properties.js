@@ -221,108 +221,94 @@ function createPropertyCardHTML(prop) {
 /* -------------------------------------------------------------
  * 2. Search & Filter Logic
  * ------------------------------------------------------------- */
+let currentActiveProjectCategory = 'ONGOING';
+
 function updateBannerHeading(statusValue) {
   const headingEl = document.getElementById('project-banner-heading');
   const subHeadingEl = document.getElementById('project-banner-subheading');
-  const normalized = (statusValue || 'ALL').toUpperCase();
+  const normalized = (statusValue || 'ONGOING').toUpperCase();
 
   if (normalized === 'COMPLETED') {
     if (headingEl) headingEl.textContent = "COMPLETED PROJECTS";
     if (subHeadingEl) subHeadingEl.textContent = "Explore our successfully delivered and handed-over DTCP & RERA approved completed projects.";
     document.title = "Completed Projects & Handed Over Layouts | Triangle Properties";
-  } else if (normalized === 'ONGOING') {
+  } else {
     if (headingEl) headingEl.textContent = "ONGOING PROJECTS";
     if (subHeadingEl) subHeadingEl.textContent = "From affordable residential plots to premium gated communities, our ongoing projects are designed to deliver exceptional value and long-term appreciation.";
     document.title = "Ongoing Projects & Plot Layout Listings | Triangle Properties";
-  } else {
-    if (headingEl) headingEl.textContent = "ALL PROJECTS & PLOT LAYOUTS";
-    if (subHeadingEl) subHeadingEl.textContent = "Explore our full portfolio of ongoing and completed plotted developments across Chennai, Poonamallee, Tiruvallur, and ECR.";
-    document.title = "All Projects & Plot Layouts | Triangle Properties";
   }
+}
+
+function updateTabButtonsUI(activeCategory) {
+  const ongoingBtn = document.getElementById('tab-btn-ongoing');
+  const completedBtn = document.getElementById('tab-btn-completed');
+
+  if (activeCategory === 'COMPLETED') {
+    if (completedBtn) {
+      completedBtn.className = 'px-6 py-3 rounded-2xl font-button text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border shadow-lg bg-emerald-600 text-white border-emerald-600 scale-105';
+    }
+    if (ongoingBtn) {
+      ongoingBtn.className = 'px-6 py-3 rounded-2xl font-button text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border border-slate-300 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:text-amber-500 hover:border-amber-500/50 hover:scale-105';
+    }
+  } else {
+    if (ongoingBtn) {
+      ongoingBtn.className = 'px-6 py-3 rounded-2xl font-button text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border shadow-lg bg-amber-500 text-slate-950 border-amber-500 scale-105';
+    }
+    if (completedBtn) {
+      completedBtn.className = 'px-6 py-3 rounded-2xl font-button text-xs font-bold uppercase tracking-wider transition-all duration-300 flex items-center gap-2 border border-slate-300 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-700 dark:text-slate-300 hover:text-amber-500 hover:border-amber-500/50 hover:scale-105';
+    }
+  }
+}
+
+function switchProjectCategory(targetCategory) {
+  currentActiveProjectCategory = (targetCategory || 'ONGOING').toUpperCase();
+
+  try {
+    const newUrl = window.location.pathname + '?status=' + currentActiveProjectCategory;
+    window.history.replaceState(null, '', newUrl);
+  } catch (e) {}
+
+  updateBannerHeading(currentActiveProjectCategory);
+  updateTabButtonsUI(currentActiveProjectCategory);
+
+  const gridContainer = document.getElementById('properties-grid');
+  if (!gridContainer) return;
+
+  const allProps = getLiveProperties();
+
+  // STRICT ZERO-MIXING FILTERING
+  const filteredProps = allProps.filter(prop => {
+    const pStatus = (prop.status || '').toUpperCase();
+    const pCategory = (prop.projectCategory || '').toUpperCase();
+
+    if (currentActiveProjectCategory === 'COMPLETED') {
+      return pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory === 'COMPLETED';
+    } else {
+      // ONGOING view: strictly match ongoing/for sale and EXCLUDE completed
+      const isCompleted = pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory === 'COMPLETED';
+      return !isCompleted;
+    }
+  });
+
+  renderProperties(filteredProps, gridContainer);
 }
 
 function initPropertySearch() {
-  const searchInput = document.getElementById('search-keyword');
-  const typeFilter = document.getElementById('filter-type');
-  const statusFilter = document.getElementById('filter-status');
-  const maxPriceFilter = document.getElementById('filter-price');
   const gridContainer = document.getElementById('properties-grid');
-
   if (!gridContainer) return;
 
-  function applyFilters() {
-    const keyword = searchInput?.value.toLowerCase().trim() || '';
-    const selectedType = typeFilter?.value || 'ALL';
-    const selectedStatus = statusFilter?.value || 'ALL';
-    const maxPrice = parseFloat(maxPriceFilter?.value || '9999999999');
-
-    updateBannerHeading(selectedStatus);
-
-    const filtered = getLiveProperties().filter(prop => {
-      const matchKeyword = !keyword || 
-        prop.title.toLowerCase().includes(keyword) || 
-        prop.location.toLowerCase().includes(keyword) ||
-        prop.description.toLowerCase().includes(keyword);
-      
-      const matchType = selectedType === 'ALL' || prop.category === selectedType;
-      
-      const pStatus = (prop.status || '').toUpperCase();
-      const pCategory = (prop.projectCategory || '').toUpperCase();
-      
-      let matchStatus = selectedStatus === 'ALL';
-      if (!matchStatus) {
-        if (selectedStatus === 'ONGOING') {
-          matchStatus = pStatus === 'FOR SALE' || pStatus === 'ONGOING' || pCategory.includes('ONGOING');
-        } else if (selectedStatus === 'COMPLETED') {
-          matchStatus = pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory.includes('COMPLETED');
-        } else {
-          matchStatus = pStatus === selectedStatus || pCategory.includes(selectedStatus);
-        }
-      }
-
-      const matchPrice = (prop.priceRaw || 0) <= maxPrice;
-
-      return matchKeyword && matchType && matchStatus && matchPrice;
-    });
-
-    renderProperties(filtered, gridContainer);
-  }
-
-  searchInput?.addEventListener('input', applyFilters);
-  typeFilter?.addEventListener('change', applyFilters);
-  statusFilter?.addEventListener('change', applyFilters);
-  maxPriceFilter?.addEventListener('change', applyFilters);
-
-  // Check URL query parameters for pre-selected status (e.g. ?status=COMPLETED)
   const urlParams = new URLSearchParams(window.location.search);
-  const statusParam = urlParams.get('status');
-  if (statusParam) {
-    const uppercaseStatus = statusParam.toUpperCase();
-    if (statusFilter) {
-      const hasOption = Array.from(statusFilter.options).some(opt => opt.value === uppercaseStatus);
-      if (hasOption) {
-        statusFilter.value = uppercaseStatus;
-      }
-    }
-    updateBannerHeading(uppercaseStatus);
+  const statusParam = (urlParams.get('status') || '').toUpperCase();
+
+  if (statusParam === 'COMPLETED') {
+    switchProjectCategory('COMPLETED');
+  } else {
+    switchProjectCategory('ONGOING');
   }
-  
-  applyFilters();
 }
 
 function resetPropertyFilters() {
-  const searchInput = document.getElementById('search-keyword');
-  const typeFilter = document.getElementById('filter-type');
-  const statusFilter = document.getElementById('filter-status');
-  const maxPriceFilter = document.getElementById('filter-price');
-  const gridContainer = document.getElementById('properties-grid');
-
-  if (searchInput) searchInput.value = '';
-  if (typeFilter) typeFilter.value = 'ALL';
-  if (statusFilter) statusFilter.value = 'ALL';
-  if (maxPriceFilter) maxPriceFilter.value = '9999999999';
-
-  renderProperties(getLiveProperties(), gridContainer);
+  switchProjectCategory('ONGOING');
 }
 
 /* -------------------------------------------------------------
@@ -634,3 +620,4 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
 window.openBrochureModal = openBrochureModal;
 window.closeBrochureModal = closeBrochureModal;
 window.handleBrochureSubmit = handleBrochureSubmit;
+window.switchProjectCategory = switchProjectCategory;
