@@ -9,6 +9,8 @@ const BASE_TRIANGLE_DATA = {
     logoPath: "assets/logo.png",
     phone1: "8838957874",
     phone2: "7200212759",
+    phone1Display: "+91 88389 57874",
+    phone2Display: "+91 72002 12759",
     phoneDisplay: "+91 88389 57874 / +91 72002 12759",
     phoneRaw: "+918838957874",
     whatsapp: "918838957874",

@@ -134,7 +134,7 @@ function createPropertyCardHTML(prop) {
           <span class="px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${badgeClass} shadow-lg backdrop-blur-md">
             ${prop.status}
           </span>
-          ${prop.projectCategory ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-950/80 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow-md">${prop.projectCategory}</span>` : ''}
+          ${(prop.projectCategory && prop.projectCategory.toUpperCase() !== (prop.status || '').toUpperCase()) ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-slate-950/80 text-amber-300 border border-amber-500/30 backdrop-blur-md shadow-md">${prop.projectCategory}</span>` : ''}
         </div>
 
         <div class="absolute top-4 right-4 z-10">

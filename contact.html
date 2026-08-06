@@ -286,8 +286,10 @@
       }
 
       if (whatsappEl && companyData.whatsapp) {
-        whatsappEl.textContent = companyData.whatsapp;
-        whatsappEl.href = `https://wa.me/91${companyData.whatsapp.replace(/\D/g, '')}`;
+        whatsappEl.textContent = companyData.phone1Display || `+91 ${companyData.phone1.slice(0,5)} ${companyData.phone1.slice(5)}`;
+        let cleanWa = companyData.whatsapp.replace(/\D/g, '');
+        if (!cleanWa.startsWith('91') || cleanWa.length < 12) cleanWa = '91' + cleanWa;
+        whatsappEl.href = `https://wa.me/${cleanWa}`;
       }
     }
   </script>

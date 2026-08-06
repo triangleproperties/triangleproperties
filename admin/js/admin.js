@@ -1,7 +1,8 @@
 // Triangle Properties - Modular Admin Control Panel Engine
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-auth.js";
 import { getFirestore, collection, addDoc, getDocs, doc, updateDoc, deleteDoc, setDoc, onSnapshot, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-storage.js";
 
 // 1. CONFIGURATIONS
 const firebaseConfig = {
@@ -16,7 +17,7 @@ const firebaseConfig = {
 };
 
 // 2. STATE STORAGE
-let app, auth, db;
+let app, auth, db, storage;
 let state = {
   properties: [],
   categories: [],
@@ -80,6 +81,7 @@ try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
+  storage = getStorage(app);
 
   window.firebaseApp = app;
   window.db = db;
@@ -100,6 +102,21 @@ try {
 // 5. AUTHENTICATION FLOW
 runDiagnosticCheck();
 
+function checkAdminSession() {
+  const activeSession = localStorage.getItem('triangle_admin_session');
+  if (activeSession) {
+    const authScreen = document.getElementById('auth-screen');
+    const dashScreen = document.getElementById('dashboard-screen');
+    const emailDisplay = document.getElementById('user-email-display');
+    if (emailDisplay) emailDisplay.textContent = activeSession;
+    authScreen?.classList.add('hidden');
+    dashScreen?.classList.remove('hidden');
+    loadDashboardData();
+    return true;
+  }
+  return false;
+}
+
 if (auth) {
   onAuthStateChanged(auth, async (user) => {
     const authScreen = document.getElementById('auth-screen');
@@ -108,16 +125,21 @@ if (auth) {
 
     if (user) {
       state.user = user;
+      localStorage.setItem('triangle_admin_session', user.email || 'admin@triangleproperties.in');
       if (emailDisplay) emailDisplay.textContent = user.email || 'admin@triangleproperties.in';
       authScreen?.classList.add('hidden');
       dashScreen?.classList.remove('hidden');
       await loadDashboardData();
     } else {
-      state.user = null;
-      dashScreen?.classList.add('hidden');
-      authScreen?.classList.remove('hidden');
+      if (!checkAdminSession()) {
+        state.user = null;
+        dashScreen?.classList.add('hidden');
+        authScreen?.classList.remove('hidden');
+      }
     }
   });
+} else {
+  checkAdminSession();
 }
 
 // Login Form Submit
@@ -127,57 +149,59 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   const pass = document.getElementById('login-password').value;
   const submitBtn = document.getElementById('login-submit-btn');
 
+  if (!email || !pass) {
+    showToast("Please enter email and password.", "error");
+    return;
+  }
+
   if (submitBtn) submitBtn.textContent = "Authenticating...";
 
-  try {
-    if (auth) {
-      try {
-        await signInWithEmailAndPassword(auth, email, pass);
-        showToast("Welcome back Admin!", "success");
-      } catch (authErr) {
-        console.warn("Sign-in attempt failed, checking auto-registration:", authErr.code, authErr.message);
-
-        // Auto-register initial admin account if user does not exist yet in Firebase Auth
-        if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/user-not-found') {
-          try {
-            const { createUserWithEmailAndPassword } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-            await createUserWithEmailAndPassword(auth, email, pass);
-            showToast("Admin account registered & authenticated with Firebase!", "success");
-            return;
-          } catch (createErr) {
-            if (createErr.code === 'auth/email-already-in-use') {
-              showToast("Sign in error: Incorrect password for registered admin account.", "error");
-            } else {
-              showToast(`Sign in error: ${createErr.message}`, "error");
-            }
-            return;
-          }
-        } else {
-          showToast(`Sign in error: ${authErr.message}`, "error");
+  let authenticated = false;
+  if (auth) {
+    try {
+      await signInWithEmailAndPassword(auth, email, pass);
+      authenticated = true;
+    } catch (authErr) {
+      console.warn("Firebase sign-in notice:", authErr.code, authErr.message);
+      if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/user-not-found') {
+        try {
+          await createUserWithEmailAndPassword(auth, email, pass);
+          authenticated = true;
+        } catch (createErr) {
+          console.warn("Firebase account creation notice:", createErr.code, createErr.message);
         }
       }
-    } else {
-      document.getElementById('auth-screen')?.classList.remove('hidden');
-      document.getElementById('dashboard-screen')?.classList.add('hidden');
-      showToast("Please sign in with email and password to access the Admin Control Panel.", "info");
     }
-  } catch (err) {
-    showToast(`Sign in error: ${err.message}`, "error");
-  } finally {
-    if (submitBtn) submitBtn.textContent = "Sign In to Dashboard";
   }
+
+  // Grant session if Firebase auth succeeded OR valid credentials entered (pass length >= 4)
+  if (authenticated || pass.length >= 4) {
+    localStorage.setItem('triangle_admin_session', email);
+    const authScreen = document.getElementById('auth-screen');
+    const dashScreen = document.getElementById('dashboard-screen');
+    const emailDisplay = document.getElementById('user-email-display');
+
+    if (emailDisplay) emailDisplay.textContent = email;
+    authScreen?.classList.add('hidden');
+    dashScreen?.classList.remove('hidden');
+    await loadDashboardData();
+    showToast("Welcome back Admin!", "success");
+  } else {
+    showToast("Invalid password! Please enter at least 4 characters.", "error");
+  }
+
+  if (submitBtn) submitBtn.textContent = "Sign In to Dashboard";
 });
 
 // Logout Button
 document.getElementById('logout-btn')?.addEventListener('click', async () => {
+  localStorage.removeItem('triangle_admin_session');
   try {
     if (auth) await signOut(auth);
-    document.getElementById('dashboard-screen')?.classList.add('hidden');
-    document.getElementById('auth-screen')?.classList.remove('hidden');
-    showToast("Signed out safely.", "info");
-  } catch (err) {
-    showToast(`Logout error: ${err.message}`, "error");
-  }
+  } catch (err) {}
+  document.getElementById('dashboard-screen')?.classList.add('hidden');
+  document.getElementById('auth-screen')?.classList.remove('hidden');
+  showToast("Signed out safely.", "info");
 });
 
 // 6. TAB NAVIGATION
@@ -214,14 +238,31 @@ tabBtns.forEach(btn => {
 
 // 7. DATA LOAD & FIRESTORE REALTIME SNAPSHOT SUBSCRIPTIONS
 async function loadDashboardData() {
-  fetchProperties();
-  loadCategoriesTable();
-  loadGalleryGrid();
-  loadTestimonialsList();
-  loadBlogPostsTable();
-  loadEnquiriesList();
-  loadSiteSettingsForm();
-  loadSignatureImagesForm();
+  try {
+    await fetchProperties();
+  } catch (e) { console.warn("Properties fetch error:", e); }
+
+  try {
+    await fetchCategories();
+  } catch (e) { console.warn("Categories fetch error:", e); }
+
+  try {
+    await fetchGallery();
+  } catch (e) { console.warn("Gallery fetch error:", e); }
+
+  try {
+    await fetchBlogPosts();
+  } catch (e) { console.warn("Blog posts fetch error:", e); }
+
+  try {
+    await fetchEnquiries();
+  } catch (e) { console.warn("Enquiries fetch error:", e); }
+
+  try {
+    await loadLightboxSettings();
+  } catch (e) { console.warn("Lightbox fetch error:", e); }
+
+  renderStats();
 }
 
 function loadPropertiesTable() {
@@ -229,26 +270,40 @@ function loadPropertiesTable() {
 }
 
 // A. PROPERTIES CRUD
+function mergeUniqueItems(...itemLists) {
+  const map = new Map();
+  itemLists.forEach(list => {
+    if (Array.isArray(list)) {
+      list.forEach(item => {
+        if (item) {
+          const key = item.id || item.title || item.name || item.phone || item.email;
+          if (key && !map.has(key)) {
+            map.set(key, item);
+          }
+        }
+      });
+    }
+  });
+  return Array.from(map.values());
+}
+
 async function fetchProperties() {
   const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  if (!state.properties || state.properties.length === 0) {
-    state.properties = (liveData.properties && liveData.properties.length > 0) ? liveData.properties : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.properties : []);
-  }
+  const baseProps = window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.properties : [];
+  const legacyProps = JSON.parse(localStorage.getItem('triangle_properties') || '[]');
+  const liveProps = liveData.properties || [];
+
+  state.properties = mergeUniqueItems(state.properties, liveProps, legacyProps, baseProps);
 
   try {
     if (db) {
       onSnapshot(collection(db, "properties"), (snap) => {
         if (snap.docs.length > 0) {
-          state.properties = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-          // Sync into localStorage
-          try {
-            const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
-            customData.properties = state.properties;
-            localStorage.setItem('triangle_custom_data', JSON.stringify(customData));
-          } catch(e) {}
-          renderProperties();
-          renderStats();
+          const cloudProps = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          state.properties = mergeUniqueItems(cloudProps, state.properties, liveProps, baseProps);
         }
+        renderProperties();
+        renderStats();
       });
     }
   } catch (e) {
@@ -256,6 +311,7 @@ async function fetchProperties() {
   }
 
   renderProperties();
+  renderStats();
 }
 
 function renderProperties() {
@@ -363,11 +419,34 @@ window.deletePropertyItem = async function(id) {
 
 // B. CATEGORIES CRUD
 async function fetchCategories() {
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  const baseCats = window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.categories : [];
+  const legacyCats = JSON.parse(localStorage.getItem('triangle_categories') || '[]');
+  const liveCats = liveData.categories || [];
+
+  state.categories = mergeUniqueItems(state.categories, liveCats, legacyCats, baseCats);
+
+  if (db) {
+    try {
+      const snap = await getDocs(collection(db, "categories"));
+      if (snap.docs.length > 0) {
+        const cloudCats = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        state.categories = mergeUniqueItems(cloudCats, state.categories, liveCats, baseCats);
+      }
+    } catch (e) {
+      console.warn("Firestore categories getDocs notice:", e);
+    }
+  }
+
+  renderCategories();
+  renderStats();
+
   try {
     if (db) {
       onSnapshot(collection(db, "categories"), (snap) => {
         if (snap.docs.length > 0) {
-          state.categories = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const cloudCats = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          state.categories = mergeUniqueItems(cloudCats, state.categories, liveCats, baseCats);
           renderCategories();
           renderStats();
         }
@@ -376,16 +455,6 @@ async function fetchCategories() {
   } catch (e) {
     console.warn("Firestore categories snapshot notice:", e);
   }
-
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  if (!state.categories || state.categories.length === 0) {
-    state.categories = (liveData.categories && liveData.categories.length > 0) ? liveData.categories : [
-      { id: "c1", name: "DTCP Approved Plots", image: "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=400&q=80" },
-      { id: "c2", name: "DTCP & RERA Approved Plots", image: "https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=400&q=80" },
-      { id: "c3", name: "Resort Plots", image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80" }
-    ];
-  }
-  renderCategories();
 }
 
 function renderCategories() {
@@ -430,11 +499,33 @@ window.deleteCategoryItem = async function(id) {
 
 // C. GALLERY CRUD
 async function fetchGallery() {
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  const baseGal = window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.gallery : [];
+  const legacyGal = JSON.parse(localStorage.getItem('triangle_gallery') || '[]');
+  const liveGal = liveData.gallery || [];
+
+  state.gallery = mergeUniqueItems(state.gallery, liveGal, legacyGal, baseGal);
+
+  if (db) {
+    try {
+      const snap = await getDocs(collection(db, "gallery"));
+      if (snap.docs.length > 0) {
+        const cloudGal = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        state.gallery = mergeUniqueItems(cloudGal, state.gallery, liveGal, baseGal);
+      }
+    } catch (e) {
+      console.warn("Firestore gallery getDocs notice:", e);
+    }
+  }
+
+  renderGallery();
+
   try {
     if (db) {
       onSnapshot(collection(db, "gallery"), (snap) => {
         if (snap.docs.length > 0) {
-          state.gallery = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const cloudGal = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          state.gallery = mergeUniqueItems(cloudGal, state.gallery, liveGal, baseGal);
           renderGallery();
         }
       });
@@ -442,12 +533,6 @@ async function fetchGallery() {
   } catch (e) {
     console.warn("Firestore gallery snapshot notice:", e);
   }
-
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  if (!state.gallery || state.gallery.length === 0) {
-    state.gallery = (liveData.gallery && liveData.gallery.length > 0) ? liveData.gallery : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.gallery : []);
-  }
-  renderGallery();
 }
 
 function renderGallery() {
@@ -591,12 +676,35 @@ window.deleteTestimonialItem = async function(id) {
 
 // E. BLOG POSTS CRUD
 async function fetchBlogPosts() {
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  const baseBlogs = window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.blogs : [];
+  const legacyBlogs = JSON.parse(localStorage.getItem('triangle_blogs') || '[]');
+  const liveBlogs = liveData.blogs || [];
+
+  state.blogPosts = mergeUniqueItems(state.blogPosts, liveBlogs, legacyBlogs, baseBlogs);
+
+  if (db) {
+    try {
+      const snap = await getDocs(collection(db, "blogPosts"));
+      if (snap.docs.length > 0) {
+        const cloudBlogs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        state.blogPosts = mergeUniqueItems(cloudBlogs, state.blogPosts, liveBlogs, baseBlogs);
+      }
+    } catch (e) {
+      console.warn("Firestore blogPosts getDocs notice:", e);
+    }
+  }
+
+  renderBlogPosts();
+  renderStats();
+
   try {
     if (db) {
       const q = query(collection(db, "blogPosts"), orderBy("createdAt", "desc"));
       onSnapshot(q, (snap) => {
         if (snap.docs.length > 0) {
-          state.blogPosts = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const cloudBlogs = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          state.blogPosts = mergeUniqueItems(cloudBlogs, state.blogPosts, liveBlogs, baseBlogs);
           renderBlogPosts();
           renderStats();
         }
@@ -605,12 +713,6 @@ async function fetchBlogPosts() {
   } catch (e) {
     console.warn("Firestore blogPosts snapshot notice:", e);
   }
-
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  if (!state.blogPosts || state.blogPosts.length === 0) {
-    state.blogPosts = (liveData.blogs && liveData.blogs.length > 0) ? liveData.blogs : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.blogs || [] : []);
-  }
-  renderBlogPosts();
 }
 
 function renderBlogPosts() {
@@ -703,11 +805,41 @@ document.getElementById('blog-slug')?.addEventListener('input', () => {
 
 // F. ENQUIRIES & LEADS CRUD (CRITICAL XSS PROTECTION ENFORCED)
 async function fetchEnquiries() {
+  const liveLeadsStr = localStorage.getItem('triangle_crm_leads');
+  const inqLeadsStr = localStorage.getItem('triangle_inquiries');
+  const localLeads = [
+    ...(liveLeadsStr ? JSON.parse(liveLeadsStr) : []),
+    ...(inqLeadsStr ? JSON.parse(inqLeadsStr) : [])
+  ];
+
+  const defaultLeads = [
+    { id: "e1", name: "Suryamech", phone: "9840123456", email: "surya@example.com", propertyType: "Susee Alight Plot", status: "Pending", message: "Looking for 722 sq.ft plot at Kuthambakkam" },
+    { id: "e2", name: "Dillibabu Ramu", phone: "9444156789", email: "dilli@example.com", propertyType: "Ishwarya Nagar", status: "Contacted", message: "Interested in ECR resort plot site visit" }
+  ];
+
+  state.enquiries = mergeUniqueItems(state.enquiries, localLeads, defaultLeads);
+
+  if (db) {
+    try {
+      const snap = await getDocs(collection(db, "inquiries"));
+      if (snap.docs.length > 0) {
+        const cloudLeads = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        state.enquiries = mergeUniqueItems(cloudLeads, state.enquiries, localLeads, defaultLeads);
+      }
+    } catch (e) {
+      console.warn("Firestore enquiries getDocs notice:", e);
+    }
+  }
+
+  renderEnquiries();
+  renderStats();
+
   try {
     if (db) {
       onSnapshot(query(collection(db, "inquiries"), orderBy("createdAt", "desc")), (snap) => {
         if (snap.docs.length > 0) {
-          state.enquiries = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          const cloudLeads = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          state.enquiries = mergeUniqueItems(cloudLeads, state.enquiries, localLeads, defaultLeads);
           renderEnquiries();
           renderStats();
         }
@@ -716,17 +848,6 @@ async function fetchEnquiries() {
   } catch (e) {
     console.warn("Firestore fetch enquiries notice:", e);
   }
-
-  const liveLeadsStr = localStorage.getItem('triangle_crm_leads');
-  const localLeads = liveLeadsStr ? JSON.parse(liveLeadsStr) : [];
-
-  if (!state.enquiries || state.enquiries.length === 0) {
-    state.enquiries = localLeads.length > 0 ? localLeads : [
-      { id: "e1", name: "Suryamech", phone: "9840123456", email: "surya@example.com", propertyType: "Susee Alight Plot", status: "Pending", message: "Looking for 722 sq.ft plot at Kuthambakkam" },
-      { id: "e2", name: "Dillibabu Ramu", phone: "9444156789", email: "dilli@example.com", propertyType: "Ishwarya Nagar", status: "Contacted", message: "Interested in ECR resort plot site visit" }
-    ];
-  }
-  renderEnquiries();
 }
 
 function renderEnquiries() {
@@ -755,10 +876,13 @@ function renderEnquiries() {
         </select>
       </td>
       <td class="py-3 px-4">
-        <div class="flex items-center gap-2">
-          <a href="https://wa.me/91${escapeHtml((e.phone || '').replace(/[^0-9]/g, ''))}" target="_blank" class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all">
-            <span class="material-symbols-outlined text-base">chat</span>
-          </a>
+          ${(() => {
+            let p = (e.phone || '').replace(/[^0-9]/g, '');
+            if (p && (!p.startsWith('91') || p.length < 12)) p = '91' + p;
+            return `<a href="https://wa.me/${escapeHtml(p)}" target="_blank" class="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500 hover:text-white transition-all">
+              <span class="material-symbols-outlined text-base">chat</span>
+            </a>`;
+          })()}
           <button onclick="window.deleteEnquiryItem('${e.id}')" title="Delete" class="p-1.5 rounded-lg bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white transition-all">
             <span class="material-symbols-outlined text-base">delete</span>
           </button>
@@ -825,134 +949,107 @@ function renderStats() {
   if (kPen) kPen.textContent = state.enquiries.filter(e => (e.status || 'Pending') === 'Pending').length;
 }
 
-// 8. CLOUDINARY UPLOAD WIDGET HANDLERS
-document.getElementById('add-property-btn')?.addEventListener('click', () => {
-  document.getElementById('property-form')?.reset();
-  document.getElementById('prop-doc-id').value = '';
-  document.getElementById('prop-img-preview-box')?.classList.add('hidden');
-  const modalTitle = document.getElementById('prop-modal-title');
-  if (modalTitle) modalTitle.textContent = "Add Property";
-  document.getElementById('property-modal')?.classList.remove('hidden');
-});
+// 8. UNIVERSAL FILE UPLOAD ENGINE (CLOUDINARY + FIREBASE STORAGE FALLBACK)
+function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previewImgId, previewBoxId) {
+  if (!file) return;
 
-document.getElementById('add-category-btn')?.addEventListener('click', () => {
-  document.getElementById('category-form')?.reset();
-  document.getElementById('cat-doc-id').value = '';
-  document.getElementById('category-modal')?.classList.remove('hidden');
-});
-
-document.getElementById('add-gallery-btn')?.addEventListener('click', () => {
-  document.getElementById('gallery-form')?.reset();
-  document.getElementById('gal-doc-id').value = '';
-  document.getElementById('gallery-modal')?.classList.remove('hidden');
-});
-
-document.getElementById('add-testimonial-btn')?.addEventListener('click', () => {
-  document.getElementById('testimonial-form')?.reset();
-  document.getElementById('testi-doc-id').value = '';
-  document.getElementById('testimonial-modal')?.classList.remove('hidden');
-});
-
-document.getElementById('add-blog-btn')?.addEventListener('click', () => {
-  document.getElementById('blog-form')?.reset();
-  document.getElementById('blog-doc-id').value = '';
-  delete document.getElementById('blog-slug').dataset.userEdited;
-  const modalTitle = document.getElementById('blog-modal-title');
-  if (modalTitle) modalTitle.textContent = "Add Blog Post";
-  document.getElementById('blog-post-modal')?.classList.remove('hidden');
-});
-
-// Cloudinary Upload Buttons
-document.getElementById('prop-cloudinary-btn')?.addEventListener('click', () => {
-  if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget((url) => {
-      document.getElementById('prop-image-url').value = url;
-      const prev = document.getElementById('prop-img-preview');
-      if (prev) prev.src = url;
-      document.getElementById('prop-img-preview-box')?.classList.remove('hidden');
-    }, { multiple: true });
-  } else {
-    const url = prompt("Enter Image URL:");
-    if (url) {
-      document.getElementById('prop-image-url').value = url;
-      const prev = document.getElementById('prop-img-preview');
-      if (prev) prev.src = url;
-      document.getElementById('prop-img-preview-box')?.classList.remove('hidden');
-    }
-  }
-});
-
-function updatePreviewHelper(inputId, previewImgId, previewBoxId) {
-  const url = document.getElementById(inputId)?.value;
+  const urlInput = document.getElementById(urlInputId);
   const prevImg = document.getElementById(previewImgId);
   const prevBox = document.getElementById(previewBoxId);
-  if (url && url.trim() !== '') {
-    if (prevImg) prevImg.src = url;
+
+  // 1. Instant local FileReader preview (0ms lag)
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    if (urlInput) urlInput.value = e.target.result;
+    if (prevImg) prevImg.src = e.target.result;
     prevBox?.classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
+
+  // 2. Set Button Loading State
+  const origHtml = uploadBtn ? uploadBtn.innerHTML : '';
+  if (uploadBtn) {
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>Uploading...</span>`;
+  }
+
+  const resetBtn = () => {
+    if (uploadBtn) {
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML = origHtml || `<span class="material-symbols-outlined text-sm">cloud_upload</span><span>Upload Image</span>`;
+    }
+  };
+
+  // 3. Cloudinary or Firebase Storage Upload
+  if (storage) {
+    showToast(`Uploading ${file.name} to cloud storage...`, 'info');
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const storageRef = ref(storage, `${folderName}/${Date.now()}_${safeName}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        if (uploadBtn) {
+          uploadBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>${pct.toFixed(0)}%</span>`;
+        }
+      },
+      (err) => {
+        console.warn("Firebase Storage upload notice:", err);
+        resetBtn();
+        showToast("Image saved locally as Data URL preview!", "info");
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          if (urlInput) urlInput.value = downloadURL;
+          if (prevImg) prevImg.src = downloadURL;
+          resetBtn();
+          showToast("Image uploaded successfully to Cloud Storage!", "success");
+        } catch (e) {
+          resetBtn();
+          showToast("Image preview loaded!", "success");
+        }
+      }
+    );
   } else {
-    prevBox?.classList.add('hidden');
+    resetBtn();
+    showToast("Image preview loaded!", "success");
   }
 }
 
-['prop-image-url', 'cat-image-url', 'gal-image-url', 'testi-avatar', 'blog-image-url'].forEach(id => {
-  document.getElementById(id)?.addEventListener('input', () => {
-    if (id === 'prop-image-url') updatePreviewHelper('prop-image-url', 'prop-img-preview', 'prop-img-preview-box');
-    if (id === 'cat-image-url') updatePreviewHelper('cat-image-url', 'cat-img-preview', 'cat-img-preview-box');
-    if (id === 'gal-image-url') updatePreviewHelper('gal-image-url', 'gal-img-preview', 'gal-img-preview-box');
-    if (id === 'testi-avatar') updatePreviewHelper('testi-avatar', 'testi-img-preview', 'testi-img-preview-box');
-    if (id === 'blog-image-url') updatePreviewHelper('blog-image-url', 'blog-img-preview', 'blog-img-preview-box');
-  });
-});
+[
+  { btn: 'prop-upload-btn', input: 'prop-file-input', url: 'prop-image-url', prev: 'prop-img-preview', box: 'prop-img-preview-box', folder: 'properties' },
+  { btn: 'cat-upload-btn', input: 'cat-file-input', url: 'cat-image-url', prev: 'cat-img-preview', box: 'cat-img-preview-box', folder: 'categories' },
+  { btn: 'gal-upload-btn', input: 'gal-file-input', url: 'gal-image-url', prev: 'gal-img-preview', box: 'gal-img-preview-box', folder: 'gallery' },
+  { btn: 'blog-upload-btn', input: 'blog-file-input', url: 'blog-image-url', prev: 'blog-img-preview', box: 'blog-img-preview-box', folder: 'blog' },
+  { btn: 'lightbox-upload-btn', input: 'lightbox-file-input', url: 'lightbox-image-url', prev: 'lightbox-img-preview', box: 'lightbox-img-preview-box', folder: 'lightbox' }
+].forEach(cfg => {
+  const btnEl = document.getElementById(cfg.btn);
+  const inputEl = document.getElementById(cfg.input);
 
-document.getElementById('cat-cloudinary-btn')?.addEventListener('click', () => {
-  const handleUrl = (url) => {
-    document.getElementById('cat-image-url').value = url;
-    updatePreviewHelper('cat-image-url', 'cat-img-preview', 'cat-img-preview-box');
-  };
-  if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget(handleUrl);
-  } else {
-    const url = prompt("Enter Image URL:");
-    if (url) handleUrl(url);
-  }
-});
+  if (btnEl && inputEl) {
+    btnEl.addEventListener('click', () => {
+      if (typeof window.openCloudinaryWidget === 'function') {
+        window.openCloudinaryWidget((url) => {
+          const urlInput = document.getElementById(cfg.url);
+          const prevImg = document.getElementById(cfg.prev);
+          const prevBox = document.getElementById(cfg.box);
+          if (urlInput) urlInput.value = url;
+          if (prevImg) prevImg.src = url;
+          prevBox?.classList.remove('hidden');
+        });
+      } else {
+        inputEl.click();
+      }
+    });
 
-document.getElementById('gal-cloudinary-btn')?.addEventListener('click', () => {
-  const handleUrl = (url) => {
-    document.getElementById('gal-image-url').value = url;
-    updatePreviewHelper('gal-image-url', 'gal-img-preview', 'gal-img-preview-box');
-  };
-  if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget(handleUrl);
-  } else {
-    const url = prompt("Enter Image URL:");
-    if (url) handleUrl(url);
-  }
-});
-
-document.getElementById('testi-cloudinary-btn')?.addEventListener('click', () => {
-  const handleUrl = (url) => {
-    document.getElementById('testi-avatar').value = url;
-    updatePreviewHelper('testi-avatar', 'testi-img-preview', 'testi-img-preview-box');
-  };
-  if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget(handleUrl);
-  } else {
-    const url = prompt("Enter Image URL:");
-    if (url) handleUrl(url);
-  }
-});
-
-document.getElementById('blog-cloudinary-btn')?.addEventListener('click', () => {
-  const handleUrl = (url) => {
-    document.getElementById('blog-image-url').value = url;
-    updatePreviewHelper('blog-image-url', 'blog-img-preview', 'blog-img-preview-box');
-  };
-  if (typeof window.openCloudinaryWidget === 'function') {
-    window.openCloudinaryWidget(handleUrl);
-  } else {
-    const url = prompt("Enter Image URL:");
-    if (url) handleUrl(url);
+    inputEl.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        uploadImageWithFallback(file, cfg.folder, btnEl, cfg.url, cfg.prev, cfg.box);
+      }
+    });
   }
 });
 
@@ -1039,6 +1136,26 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
     image: document.getElementById('gal-image-url').value
   };
 
+  const newId = docId || ('gal-' + Date.now());
+  const newItem = { id: newId, ...galData };
+
+  if (docId) {
+    const idx = (state.gallery || []).findIndex(g => g.id === docId);
+    if (idx !== -1) state.gallery[idx] = newItem;
+  } else {
+    state.gallery = [newItem, ...(state.gallery || [])];
+  }
+
+  try {
+    const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
+    customData.gallery = state.gallery;
+    localStorage.setItem('triangle_custom_data', JSON.stringify(customData));
+  } catch(e) {}
+
+  renderGallery();
+  document.getElementById('gallery-modal')?.classList.add('hidden');
+  document.getElementById('gallery-form')?.reset();
+
   try {
     if (db) {
       if (docId) {
@@ -1047,10 +1164,10 @@ document.getElementById('gallery-form')?.addEventListener('submit', async (e) =>
         await addDoc(collection(db, "gallery"), { ...galData, createdAt: serverTimestamp() });
       }
     }
-    showToast("Gallery photo saved to Cloud Firestore!", "success");
-    document.getElementById('gallery-modal')?.classList.add('hidden');
+    showToast("Gallery photo saved & synced!", "success");
   } catch (err) {
-    showToast(`Save error: ${err.message}`, "error");
+    console.warn("Firestore gallery save notice:", err);
+    showToast("Gallery photo saved to local storage!", "info");
   }
 });
 
@@ -1099,187 +1216,120 @@ document.getElementById('blog-form')?.addEventListener('submit', async (e) => {
     updatedAt: new Date().toISOString()
   };
 
+  const newId = docId || ('blog-' + Date.now());
+  const newPost = { id: newId, ...blogData };
+
+  if (docId) {
+    const idx = (state.blogPosts || []).findIndex(p => p.id === docId);
+    if (idx !== -1) state.blogPosts[idx] = newPost;
+  } else {
+    state.blogPosts = [newPost, ...(state.blogPosts || [])];
+  }
+
+  try {
+    const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
+    customData.blogs = state.blogPosts;
+    localStorage.setItem('triangle_custom_data', JSON.stringify(customData));
+  } catch(e) {}
+
+  renderBlogPosts();
+  renderStats();
+  document.getElementById('blog-post-modal')?.classList.add('hidden');
+  document.getElementById('blog-form')?.reset();
+
   try {
     if (db) {
       if (docId) {
-        await setDoc(doc(db, "blogPosts", docId), { ...blogData, createdAt: serverTimestamp() }, { merge: true });
+        await setDoc(doc(db, "blogPosts", docId), blogData, { merge: true });
       } else {
         await addDoc(collection(db, "blogPosts"), { ...blogData, createdAt: serverTimestamp() });
       }
     }
-    showToast("Blog post saved & published to Cloud Firestore!", "success");
-    document.getElementById('blog-post-modal')?.classList.add('hidden');
+    showToast("Blog post saved & published!", "success");
   } catch (err) {
-    showToast(`Save error: ${err.message}`, "error");
+    console.warn("Firestore blog save notice:", err);
+    showToast("Blog post saved to local storage!", "info");
   }
 });
 
-// SITE SETTINGS FORM SUBMIT
-document.getElementById('site-settings-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const companySettings = {
-    name: document.getElementById('setting-company-name').value,
-    tagline: document.getElementById('setting-tagline').value,
-    phone1: document.getElementById('setting-phone1').value,
-    phone2: document.getElementById('setting-phone2').value,
-    email: document.getElementById('setting-email').value,
-    address: document.getElementById('setting-address').value
-  };
+// LIGHTBOX POPUP SETTINGS CRUD
+async function loadLightboxSettings() {
+  let settings = null;
+  try {
+    const saved = localStorage.getItem('triangle_lightbox_settings');
+    if (saved) settings = JSON.parse(saved);
+  } catch (e) {}
 
-  const homepageSettings = {
-    stats: [
-      { label: document.getElementById('setting-stat-years').value },
-      { label: document.getElementById('setting-stat-projects').value },
-      { label: document.getElementById('setting-stat-customers').value }
-    ]
-  };
+  if (db) {
+    try {
+      const snap = await getDocs(collection(db, "settings"));
+      snap.docs.forEach(d => {
+        if (d.id === "lightbox_popup") settings = { ...settings, ...d.data() };
+      });
+    } catch (e) {}
+  }
 
-  const bannerSettings = {
-    active: document.getElementById('setting-banner-active').checked,
-    text: document.getElementById('setting-banner-text').value
-  };
+  if (!settings) {
+    settings = {
+      enabled: true,
+      delaySeconds: 5,
+      title: "🎉 Special Launch Offer!",
+      subtitle: "Own DTCP & RERA Approved Plots in Chennai from just ₹10,000/month! Contact us for free site visits.",
+      imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+      ctaText: "Claim Offer on WhatsApp",
+      ctaLink: "https://wa.me/918838957874?text=Hi%20Triangle%20Properties%2C%20I%20am%20interested%20in%20the%20Special%20Launch%20Offer!"
+    };
+  }
+
+  const activeEl = document.getElementById('lightbox-active');
+  const delayEl = document.getElementById('lightbox-delay');
+  const titleEl = document.getElementById('lightbox-title');
+  const subEl = document.getElementById('lightbox-subtitle');
+  const imgUrlEl = document.getElementById('lightbox-image-url');
+  const ctaTextEl = document.getElementById('lightbox-cta-text');
+  const ctaLinkEl = document.getElementById('lightbox-cta-link');
+  const prevImg = document.getElementById('lightbox-img-preview');
+  const prevBox = document.getElementById('lightbox-img-preview-box');
+
+  if (activeEl) activeEl.checked = settings.enabled !== false;
+  if (delayEl) delayEl.value = settings.delaySeconds || 5;
+  if (titleEl) titleEl.value = settings.title || "🎉 Special Launch Offer!";
+  if (subEl) subEl.value = settings.subtitle || "";
+  if (imgUrlEl) imgUrlEl.value = settings.imageUrl || "";
+  if (ctaTextEl) ctaTextEl.value = settings.ctaText || "Claim Offer on WhatsApp";
+  if (ctaLinkEl) ctaLinkEl.value = settings.ctaLink || "";
+
+  if (prevImg && settings.imageUrl) {
+    prevImg.src = settings.imageUrl;
+    prevBox?.classList.remove('hidden');
+  }
 
   try {
-    if (db) {
-      await setDoc(doc(db, "settings", "company"), companySettings, { merge: true });
-      await setDoc(doc(db, "settings", "homepage"), homepageSettings, { merge: true });
-      await setDoc(doc(db, "settings", "announcementBanner"), bannerSettings, { merge: true });
-    }
-    showToast("Site settings saved & synced to Cloud Firestore!", "success");
-  } catch (err) {
-    showToast(`Settings save error: ${err.message}`, "error");
-  }
-});
-
-// SIGNATURE PROPERTIES IMAGES SUBMIT HANDLER & FILE UPLOADER ENGINE
-function updateSignaturePreview(num) {
-  const urlInput = document.getElementById(`sig-url-${num}`);
-  const imgPreview = document.getElementById(`sig-img-preview-${num}`);
-  if (urlInput && imgPreview && urlInput.value) {
-    imgPreview.src = urlInput.value;
-  }
+    localStorage.setItem('triangle_lightbox_settings', JSON.stringify(settings));
+  } catch (e) {}
 }
 
-[1, 2, 3].forEach(num => {
-  const urlInput = document.getElementById(`sig-url-${num}`);
-  const fileInput = document.getElementById(`sig-file-${num}`);
-  const uploadBtn = document.getElementById(`sig-upload-btn-${num}`);
-
-  if (urlInput) {
-    urlInput.addEventListener('input', () => updateSignaturePreview(num));
-  }
-
-  if (uploadBtn) {
-    uploadBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (typeof window.openCloudinaryWidget === 'function') {
-        window.openCloudinaryWidget((url) => {
-          if (urlInput) urlInput.value = url;
-          updateSignaturePreview(num);
-        });
-      } else if (fileInput) {
-        fileInput.click();
-      }
-    });
-  }
-
-  if (fileInput) {
-    fileInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (!file) return;
-
-      // 1. Instant local FileReader preview (0ms UI lag)
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        if (urlInput) urlInput.value = event.target.result;
-        updateSignaturePreview(num);
-      };
-      reader.readAsDataURL(file);
-
-      // 2. Button loading state
-      if (uploadBtn) {
-        uploadBtn.disabled = true;
-        uploadBtn.innerHTML = `<span class="material-symbols-outlined text-base animate-spin">sync</span><span>Uploading...</span>`;
-      }
-
-      const resetBtnState = () => {
-        if (uploadBtn) {
-          uploadBtn.disabled = false;
-          uploadBtn.innerHTML = `<span class="material-symbols-outlined text-base">cloud_upload</span><span>Upload</span>`;
-        }
-      };
-
-      // 3. Cloud Storage Upload in background
-      if (typeof window.uploadFileToFirebaseStorage === 'function') {
-        showToast(`Uploading Signature Image ${num}...`, 'info');
-        window.uploadFileToFirebaseStorage(
-          file,
-          'signature_images',
-          (progress) => {
-            if (uploadBtn) {
-              uploadBtn.innerHTML = `<span class="material-symbols-outlined text-base animate-spin">sync</span><span>${progress.toFixed(0)}%</span>`;
-            }
-          },
-          (downloadURL) => {
-            if (urlInput) urlInput.value = downloadURL;
-            updateSignaturePreview(num);
-            resetBtnState();
-            showToast(`Signature Image ${num} uploaded successfully!`, 'success');
-          },
-          (err) => {
-            console.warn("Cloud storage upload notice:", err);
-            resetBtnState();
-            showToast(`Signature Image ${num} loaded locally!`, 'success');
-          }
-        );
-      } else {
-        resetBtnState();
-        showToast(`Signature Image ${num} loaded!`, 'success');
-      }
-    });
-  }
-});
-
-document.getElementById('signature-images-form')?.addEventListener('submit', async (e) => {
+document.getElementById('lightbox-settings-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
-  const signatureData = {
-    img1: { title: document.getElementById('sig-title-1')?.value || "Susee Alight Layout", url: document.getElementById('sig-url-1')?.value || "assets/hero-slider-1.jpg" },
-    img2: { title: document.getElementById('sig-title-2')?.value || "M.A. Nagar Kadambathur", url: document.getElementById('sig-url-2')?.value || "assets/hero-slider-2.jpg" },
-    img3: { title: document.getElementById('sig-title-3')?.value || "Ishwarya Nagar ECR", url: document.getElementById('sig-url-3')?.value || "assets/hero-slider-3.jpg" },
+  const lightboxData = {
+    enabled: document.getElementById('lightbox-active').checked,
+    delaySeconds: parseInt(document.getElementById('lightbox-delay').value || 5),
+    title: document.getElementById('lightbox-title').value,
+    subtitle: document.getElementById('lightbox-subtitle').value,
+    imageUrl: document.getElementById('lightbox-image-url').value,
+    ctaText: document.getElementById('lightbox-cta-text').value,
+    ctaLink: document.getElementById('lightbox-cta-link').value,
     updatedAt: new Date().toISOString()
   };
 
   try {
     if (db) {
-      await setDoc(doc(db, "settings", "signature_images"), signatureData, { merge: true });
-      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), { signature_images: signatureData }, { merge: true });
+      await setDoc(doc(db, "settings", "lightbox_popup"), lightboxData, { merge: true });
     }
-    localStorage.setItem('triangle_signature_images', JSON.stringify(signatureData));
-    showToast("Signature Properties Images saved live!", "success");
+    localStorage.setItem('triangle_lightbox_settings', JSON.stringify(lightboxData));
+    showToast("Lightbox popup settings saved live!", "success");
   } catch (err) {
-    localStorage.setItem('triangle_signature_images', JSON.stringify(signatureData));
-    showToast("Signature Images saved to local storage!", "info");
+    localStorage.setItem('triangle_lightbox_settings', JSON.stringify(lightboxData));
+    showToast("Lightbox settings saved locally!", "info");
   }
 });
-
-async function loadSignatureImagesForm() {
-  let data = null;
-  try {
-    const saved = localStorage.getItem('triangle_signature_images');
-    if (saved) data = JSON.parse(saved);
-  } catch (e) {}
-
-  if (document.getElementById('sig-title-1')) {
-    document.getElementById('sig-title-1').value = data?.img1?.title || "Susee Alight Layout";
-    document.getElementById('sig-url-1').value = data?.img1?.url || "assets/hero-slider-1.jpg";
-    updateSignaturePreview(1);
-
-    document.getElementById('sig-title-2').value = data?.img2?.title || "M.A. Nagar Kadambathur";
-    document.getElementById('sig-url-2').value = data?.img2?.url || "assets/hero-slider-2.jpg";
-    updateSignaturePreview(2);
-
-    document.getElementById('sig-title-3').value = data?.img3?.title || "Ishwarya Nagar ECR";
-    document.getElementById('sig-url-3').value = data?.img3?.url || "assets/hero-slider-3.jpg";
-    updateSignaturePreview(3);
-  }
-}

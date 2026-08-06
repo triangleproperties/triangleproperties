@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordions();
   initInquiryForms();
   initTestimonialsSlider();
+  initAnnouncementLightbox();
 });
 
 /* -------------------------------------------------------------
@@ -521,6 +522,69 @@ function initTestimonialsSlider() {
     currentIndex = (currentIndex + 1) % items.length;
     renderSlide();
   }, 6000);
+}
+
+/* -------------------------------------------------------------
+ * 14. 5-Second Announcement Lightbox Popup Modal
+ * ------------------------------------------------------------- */
+function initAnnouncementLightbox() {
+  const lightboxModal = document.getElementById('announcement-lightbox');
+  if (!lightboxModal) return;
+
+  // Read active Lightbox settings
+  let settings = null;
+  try {
+    const saved = localStorage.getItem('triangle_lightbox_settings');
+    if (saved) settings = JSON.parse(saved);
+  } catch (e) {}
+
+  if (!settings) {
+    settings = {
+      enabled: true,
+      delaySeconds: 5,
+      title: "🎉 Special Launch Offer!",
+      subtitle: "Own DTCP & RERA Approved Villa Plots in Chennai from just ₹10,000/month! Contact us for free site visits.",
+      imageUrl: "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=80",
+      ctaText: "Claim Offer on WhatsApp",
+      ctaLink: "https://wa.me/918838957874?text=Hi%20Triangle%20Properties%2C%20I%20am%20interested%20in%20the%20Special%20Launch%20Offer!"
+    };
+  }
+
+  // If disabled by Admin, return early
+  if (settings.enabled === false) return;
+
+  // Populate Lightbox DOM elements
+  const imgEl = document.getElementById('lightbox-popup-img');
+  const titleEl = document.getElementById('lightbox-popup-title');
+  const subEl = document.getElementById('lightbox-popup-subtitle');
+  const ctaEl = document.getElementById('lightbox-popup-cta');
+  const ctaTextEl = document.getElementById('lightbox-popup-cta-text');
+
+  if (imgEl && settings.imageUrl) imgEl.src = settings.imageUrl;
+  if (titleEl && settings.title) titleEl.textContent = settings.title;
+  if (subEl && settings.subtitle) subEl.textContent = settings.subtitle;
+  if (ctaEl && settings.ctaLink) ctaEl.href = settings.ctaLink;
+  if (ctaTextEl && settings.ctaText) ctaTextEl.textContent = settings.ctaText;
+
+  // Close handlers
+  const closeBtn = document.getElementById('close-lightbox-btn');
+  const closeLightbox = () => {
+    lightboxModal.classList.add('hidden');
+    sessionStorage.setItem('triangle_lightbox_closed', 'true');
+  };
+
+  if (closeBtn) closeBtn.addEventListener('click', closeLightbox);
+  lightboxModal.addEventListener('click', (e) => {
+    if (e.target === lightboxModal) closeLightbox();
+  });
+
+  // 5-Second Timer Popup Trigger
+  const delayMs = (settings.delaySeconds || 5) * 1000;
+  setTimeout(() => {
+    if (!sessionStorage.getItem('triangle_lightbox_closed')) {
+      lightboxModal.classList.remove('hidden');
+    }
+  }, delayMs);
 }
 
 window.showToast = showToast;

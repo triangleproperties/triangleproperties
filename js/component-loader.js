@@ -77,19 +77,27 @@ function updateFooterCompanyInfo() {
 
   const phoneLinks = footerContainer.querySelectorAll('a[href^="tel:"]');
   if (phoneLinks.length > 0 && company.phone1) {
-    phoneLinks[0].textContent = company.phone1;
+    phoneLinks[0].textContent = company.phone1Display || `+91 ${company.phone1.slice(0,5)} ${company.phone1.slice(5)}`;
     phoneLinks[0].href = `tel:${company.phone1}`;
   }
   if (phoneLinks.length > 1 && company.phone2) {
-    phoneLinks[1].textContent = company.phone2;
+    phoneLinks[1].textContent = company.phone2Display || `+91 ${company.phone2.slice(0,5)} ${company.phone2.slice(5)}`;
     phoneLinks[1].href = `tel:${company.phone2}`;
   }
 
   const waLinks = document.querySelectorAll('a[href*="wa.me"]');
   if (company.whatsapp) {
-    const cleanWa = company.whatsapp.replace(/\D/g, '');
+    let cleanWa = company.whatsapp.replace(/\D/g, '');
+    if (!cleanWa.startsWith('91') || cleanWa.length < 12) {
+      cleanWa = '91' + cleanWa;
+    }
     waLinks.forEach(link => {
-      link.href = `https://wa.me/91${cleanWa}`;
+      let search = '';
+      try {
+        const u = new URL(link.href, window.location.origin);
+        search = u.search;
+      } catch (e) {}
+      link.href = `https://wa.me/${cleanWa}${search}`;
     });
   }
 }
