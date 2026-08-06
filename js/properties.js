@@ -182,18 +182,14 @@ function createPropertyCardHTML(prop) {
           </div>
         </div>
 
-        <div class="mb-4">
+        <div class="mb-4 mt-auto">
           <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/10 text-amber-500 border border-amber-500/30 block text-center">
             💳 ${prop.emiOption || 'Easy Monthly EMI Options Available'}
           </span>
         </div>
 
-        <p class="text-slate-600 dark:text-slate-400 text-xs line-clamp-2 mb-6 flex-grow leading-relaxed">
-          ${prop.description}
-        </p>
-
         <!-- Actions -->
-        <div class="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-800 mt-auto">
+        <div class="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-800">
           <button onclick="openBrochureModal('${prop.id}')" 
                   class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md flex items-center justify-center gap-2 border border-emerald-500/40">
             <span class="material-symbols-outlined text-base">picture_as_pdf</span>
@@ -201,8 +197,10 @@ function createPropertyCardHTML(prop) {
           </button>
           <div class="flex items-center gap-2">
             <button onclick="openPropertyModal('${prop.id}')" 
-                    class="flex-1 py-2.5 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md">
-              View Details
+                    class="flex-1 py-2.5 px-3 bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md flex items-center justify-center gap-1.5"
+                    title="Read More & View Complete Details">
+              <span>View Details</span>
+              <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </button>
             <a href="https://wa.me/918838957874?text=${encodeURIComponent('Hello Triangle Properties, I want details regarding: ' + prop.title + ' (' + prop.id + ')')}" 
                target="_blank"
@@ -223,6 +221,26 @@ function createPropertyCardHTML(prop) {
 /* -------------------------------------------------------------
  * 2. Search & Filter Logic
  * ------------------------------------------------------------- */
+function updateBannerHeading(statusValue) {
+  const headingEl = document.getElementById('project-banner-heading');
+  const subHeadingEl = document.getElementById('project-banner-subheading');
+  const normalized = (statusValue || 'ALL').toUpperCase();
+
+  if (normalized === 'COMPLETED') {
+    if (headingEl) headingEl.textContent = "COMPLETED PROJECTS";
+    if (subHeadingEl) subHeadingEl.textContent = "Explore our successfully delivered and handed-over DTCP & RERA approved completed projects.";
+    document.title = "Completed Projects & Handed Over Layouts | Triangle Properties";
+  } else if (normalized === 'ONGOING') {
+    if (headingEl) headingEl.textContent = "ONGOING PROJECTS";
+    if (subHeadingEl) subHeadingEl.textContent = "From affordable residential plots to premium gated communities, our ongoing projects are designed to deliver exceptional value and long-term appreciation.";
+    document.title = "Ongoing Projects & Plot Layout Listings | Triangle Properties";
+  } else {
+    if (headingEl) headingEl.textContent = "ALL PROJECTS & PLOT LAYOUTS";
+    if (subHeadingEl) subHeadingEl.textContent = "Explore our full portfolio of ongoing and completed plotted developments across Chennai, Poonamallee, Tiruvallur, and ECR.";
+    document.title = "All Projects & Plot Layouts | Triangle Properties";
+  }
+}
+
 function initPropertySearch() {
   const searchInput = document.getElementById('search-keyword');
   const typeFilter = document.getElementById('filter-type');
@@ -238,6 +256,8 @@ function initPropertySearch() {
     const selectedStatus = statusFilter?.value || 'ALL';
     const maxPrice = parseFloat(maxPriceFilter?.value || '9999999999');
 
+    updateBannerHeading(selectedStatus);
+
     const filtered = getLiveProperties().filter(prop => {
       const matchKeyword = !keyword || 
         prop.title.toLowerCase().includes(keyword) || 
@@ -245,8 +265,22 @@ function initPropertySearch() {
         prop.description.toLowerCase().includes(keyword);
       
       const matchType = selectedType === 'ALL' || prop.category === selectedType;
-      const matchStatus = selectedStatus === 'ALL' || prop.status === selectedStatus || prop.projectCategory === selectedStatus;
-      const matchPrice = prop.priceRaw <= maxPrice;
+      
+      const pStatus = (prop.status || '').toUpperCase();
+      const pCategory = (prop.projectCategory || '').toUpperCase();
+      
+      let matchStatus = selectedStatus === 'ALL';
+      if (!matchStatus) {
+        if (selectedStatus === 'ONGOING') {
+          matchStatus = pStatus === 'FOR SALE' || pStatus === 'ONGOING' || pCategory.includes('ONGOING');
+        } else if (selectedStatus === 'COMPLETED') {
+          matchStatus = pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory.includes('COMPLETED');
+        } else {
+          matchStatus = pStatus === selectedStatus || pCategory.includes(selectedStatus);
+        }
+      }
+
+      const matchPrice = (prop.priceRaw || 0) <= maxPrice;
 
       return matchKeyword && matchType && matchStatus && matchPrice;
     });
@@ -259,17 +293,21 @@ function initPropertySearch() {
   statusFilter?.addEventListener('change', applyFilters);
   maxPriceFilter?.addEventListener('change', applyFilters);
 
-  // Check URL query parameters for pre-selected status (e.g. ?status=ONGOING)
+  // Check URL query parameters for pre-selected status (e.g. ?status=COMPLETED)
   const urlParams = new URLSearchParams(window.location.search);
   const statusParam = urlParams.get('status');
-  if (statusParam && statusFilter) {
+  if (statusParam) {
     const uppercaseStatus = statusParam.toUpperCase();
-    const hasOption = Array.from(statusFilter.options).some(opt => opt.value === uppercaseStatus);
-    if (hasOption) {
-      statusFilter.value = uppercaseStatus;
+    if (statusFilter) {
+      const hasOption = Array.from(statusFilter.options).some(opt => opt.value === uppercaseStatus);
+      if (hasOption) {
+        statusFilter.value = uppercaseStatus;
+      }
     }
-    applyFilters();
+    updateBannerHeading(uppercaseStatus);
   }
+  
+  applyFilters();
 }
 
 function resetPropertyFilters() {
@@ -284,14 +322,15 @@ function resetPropertyFilters() {
   if (statusFilter) statusFilter.value = 'ALL';
   if (maxPriceFilter) maxPriceFilter.value = '9999999999';
 
-  renderProperties(allProperties, gridContainer);
+  renderProperties(getLiveProperties(), gridContainer);
 }
 
 /* -------------------------------------------------------------
  * 3. Property Detail Modal Popup
  * ------------------------------------------------------------- */
 function openPropertyModal(propertyId) {
-  const prop = allProperties.find(p => p.id === propertyId);
+  const liveProps = getLiveProperties();
+  const prop = liveProps.find(p => p.id === propertyId);
   if (!prop) return;
 
   let modal = document.getElementById('property-detail-modal');

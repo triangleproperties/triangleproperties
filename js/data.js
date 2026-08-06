@@ -113,6 +113,56 @@ const BASE_TRIANGLE_DATA = {
       description: "Welcome to Ishwarya Nagar, exclusive DTCP approved resort plots by Triangle Properties on East Coast Road (ECR). 1.7 acres with 38 exclusive plots at over 40% below market value (Launch: ₹777/sq.ft vs Market: ₹1,300/sq.ft).",
       amenities: ["DTCP Approved", "Blacktop Internal Roads", "Street Lights", "Entrance Gate", "Avenue Plantation", "Coastal Living"],
       specs: { facing: "North-East", dimensions: "1080 sq.ft onwards", emi: "Own at just ₹8L Onwards", approval: "DTCP Approved", roadWidth: "30ft Blacktop" }
+    },
+    {
+      id: "prop-sri-nagar-completed",
+      title: "Sri Nagar Gated Layout – Poonamallee",
+      category: "CMDA & RERA Approved Layout",
+      projectCategory: "Completed Projects",
+      status: "Completed",
+      price: "100% Sold Out & Handed Over",
+      priceRaw: 2200,
+      marketValue: "₹ 3,200 / sq.ft",
+      emiOption: "Handed Over & Registered",
+      location: "Poonamallee, Chennai",
+      address: "Near Poonamallee Bus Depot & Outer Ring Road Interchange, Chennai",
+      areaSqft: 1200,
+      plotDimensions: "1200 sq.ft to 2400 sq.ft (5.2 Acres)",
+      roadWidth: "40ft & 30ft Blacktop Roads",
+      totalPlots: 112,
+      image: "https://images.unsplash.com/photo-1592595896551-12b371d546d5?auto=format&fit=crop&w=1200&q=80",
+      gallery: [
+        "https://images.unsplash.com/photo-1592595896551-12b371d546d5?auto=format&fit=crop&w=1200&q=80"
+      ],
+      featured: false,
+      description: "Sri Nagar Gated Layout is a flagship completed residential township by Triangle Properties in Poonamallee. Successfully delivered ahead of schedule with 100% occupancy, complete blacktop roads, street lighting, and gated entry.",
+      amenities: ["CMDA & RERA Approved", "100% Delivered & Handed Over", "40ft Main Blacktop Road", "Children's Park", "24x7 Security Post", "Individual EB Lines"],
+      specs: { facing: "East / North", dimensions: "1200 - 2400 sq.ft", emi: "Handed Over", approval: "CMDA & RERA Approved", roadWidth: "40ft Blacktop" }
+    },
+    {
+      id: "prop-green-city-completed",
+      title: "Green City Layout – Vadapalani",
+      category: "CMDA Approved Residential Plot",
+      projectCategory: "Completed Projects",
+      status: "Completed",
+      price: "100% Sold Out & Delivered",
+      priceRaw: 3500,
+      marketValue: "₹ 5,000 / sq.ft",
+      emiOption: "Handed Over & Registered",
+      location: "Vadapalani, Chennai",
+      address: "Near Vadapalani Metro Station & Forum Vijaya Mall, Chennai",
+      areaSqft: 1500,
+      plotDimensions: "1500 sq.ft onwards (3.8 Acres)",
+      roadWidth: "33ft Internal Tar Road",
+      totalPlots: 45,
+      image: "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80",
+      gallery: [
+        "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&w=1200&q=80"
+      ],
+      featured: false,
+      description: "Green City Vadapalani is a landmark completed urban residential layout by Triangle Properties. Fully developed, registered, and handed over to happy homeowners with prime connectivity to Vadapalani Metro.",
+      amenities: ["CMDA Approved", "Fully Handed Over", "Metro Proximity", "Underground Drainage", "Avenue Trees", "Compound Wall"],
+      specs: { facing: "North", dimensions: "1500 sq.ft onwards", emi: "Handed Over", approval: "CMDA Registered", roadWidth: "33ft Tar Road" }
     }
   ],
 

@@ -68,7 +68,8 @@
     class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
     <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">About Us</span>
     <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">TAP into Smart Investment</h1>
-    <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12">
+    <p
+      class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12">
       Every great journey begins with a single step, and ours started with a simple vision—to make land ownership
       affordable, transparent, and accessible for every family.
     </p>
@@ -77,10 +78,13 @@
     <div id="about-signature-images" class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
       <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
         <div class="relative h-48 sm:h-60 overflow-hidden">
-          <img src="assets/hero-slider-1.jpg" alt="Susee Alight Layout" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <img src="assets/hero-slider-1.jpg" alt="Susee Alight Layout"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
           <div class="absolute bottom-4 left-4 right-4">
-            <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+            <span
+              class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature
+              Layout</span>
             <h3 class="font-display text-lg sm:text-xl font-bold text-white">Susee Alight Layout</h3>
           </div>
         </div>
@@ -88,10 +92,13 @@
 
       <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
         <div class="relative h-48 sm:h-60 overflow-hidden">
-          <img src="assets/hero-slider-2.jpg" alt="M.A. Nagar Kadambathur" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <img src="assets/hero-slider-2.jpg" alt="M.A. Nagar Kadambathur"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
           <div class="absolute bottom-4 left-4 right-4">
-            <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+            <span
+              class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature
+              Layout</span>
             <h3 class="font-display text-lg sm:text-xl font-bold text-white">M.A. Nagar Kadambathur</h3>
           </div>
         </div>
@@ -99,10 +106,13 @@
 
       <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
         <div class="relative h-48 sm:h-60 overflow-hidden">
-          <img src="assets/hero-slider-3.jpg" alt="Ishwarya Nagar ECR" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <img src="assets/hero-slider-3.jpg" alt="Ishwarya Nagar ECR"
+            class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
           <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
           <div class="absolute bottom-4 left-4 right-4">
-            <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+            <span
+              class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature
+              Layout</span>
             <h3 class="font-display text-lg sm:text-xl font-bold text-white">Ishwarya Nagar ECR</h3>
           </div>
         </div>
@@ -135,17 +145,17 @@
           container.innerHTML = imgs.map((item, i) => `
             <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
               <div class="relative h-48 sm:h-60 overflow-hidden">
-                <img src="${item.url || 'assets/hero-slider-' + (i + 1) + '.jpg'}" alt="${item.title || 'Signature Layout ' + (i+1)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <img src="${item.url || 'assets/hero-slider-' + (i + 1) + '.jpg'}" alt="${item.title || 'Signature Layout ' + (i + 1)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
                 <div class="absolute bottom-4 left-4 right-4">
                   <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
-                  <h3 class="font-display text-lg sm:text-xl font-bold text-white">${item.title || 'Signature Layout ' + (i+1)}</h3>
+                  <h3 class="font-display text-lg sm:text-xl font-bold text-white">${item.title || 'Signature Layout ' + (i + 1)}</h3>
                 </div>
               </div>
             </div>
           `).join('');
         }
-      } catch(e) {}
+      } catch (e) { }
     }
 
     renderSignatureImages();
@@ -202,7 +212,7 @@
     </div>
 
     <!-- MEET OUR FOUNDERS SECTION -->
-    <div class="space-y-12">
+    <div class="space-y-12"> -
       <div class="text-center max-w-3xl mx-auto">
         <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">Leadership & Vision</span>
         <h2 class="font-display text-3xl sm:text-5xl font-light mb-4">Meet Our Founders</h2>

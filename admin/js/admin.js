@@ -157,9 +157,9 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
         }
       }
     } else {
-      document.getElementById('auth-screen')?.classList.add('hidden');
-      document.getElementById('dashboard-screen')?.classList.remove('hidden');
-      await loadDashboardData();
+      document.getElementById('auth-screen')?.classList.remove('hidden');
+      document.getElementById('dashboard-screen')?.classList.add('hidden');
+      showToast("Please sign in with email and password to access the Admin Control Panel.", "info");
     }
   } catch (err) {
     showToast(`Sign in error: ${err.message}`, "error");
@@ -1188,37 +1188,53 @@ function updateSignaturePreview(num) {
       const file = e.target.files[0];
       if (!file) return;
 
+      // 1. Instant local FileReader preview (0ms UI lag)
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (urlInput) urlInput.value = event.target.result;
+        updateSignaturePreview(num);
+      };
+      reader.readAsDataURL(file);
+
+      // 2. Button loading state
+      if (uploadBtn) {
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = `<span class="material-symbols-outlined text-base animate-spin">sync</span><span>Uploading...</span>`;
+      }
+
+      const resetBtnState = () => {
+        if (uploadBtn) {
+          uploadBtn.disabled = false;
+          uploadBtn.innerHTML = `<span class="material-symbols-outlined text-base">cloud_upload</span><span>Upload</span>`;
+        }
+      };
+
+      // 3. Cloud Storage Upload in background
       if (typeof window.uploadFileToFirebaseStorage === 'function') {
         showToast(`Uploading Signature Image ${num}...`, 'info');
         window.uploadFileToFirebaseStorage(
           file,
           'signature_images',
           (progress) => {
-            console.log(`Signature image ${num} upload progress: ${progress}%`);
+            if (uploadBtn) {
+              uploadBtn.innerHTML = `<span class="material-symbols-outlined text-base animate-spin">sync</span><span>${progress.toFixed(0)}%</span>`;
+            }
           },
           (downloadURL) => {
             if (urlInput) urlInput.value = downloadURL;
             updateSignaturePreview(num);
+            resetBtnState();
             showToast(`Signature Image ${num} uploaded successfully!`, 'success');
           },
-          () => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              if (urlInput) urlInput.value = event.target.result;
-              updateSignaturePreview(num);
-              showToast(`Signature Image ${num} loaded!`, 'success');
-            };
-            reader.readAsDataURL(file);
+          (err) => {
+            console.warn("Cloud storage upload notice:", err);
+            resetBtnState();
+            showToast(`Signature Image ${num} loaded locally!`, 'success');
           }
         );
       } else {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          if (urlInput) urlInput.value = event.target.result;
-          updateSignaturePreview(num);
-          showToast(`Signature Image ${num} loaded!`, 'success');
-        };
-        reader.readAsDataURL(file);
+        resetBtnState();
+        showToast(`Signature Image ${num} loaded!`, 'success');
       }
     });
   }
