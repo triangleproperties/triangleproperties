@@ -563,16 +563,49 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
   const property = liveProps.find(p => p.id === propertyId) || {};
   const brochureUrl = property.brochurePdfUrl || '';
 
+function openOrDownloadPdf(pdfUrl, fileName = 'Brochure.pdf') {
+  if (!pdfUrl) return;
+
+  if (pdfUrl.startsWith('data:application/pdf')) {
+    try {
+      const parts = pdfUrl.split(';base64,');
+      const contentType = parts[0].split(':')[1] || 'application/pdf';
+      const raw = window.atob(parts[1]);
+      const rawLength = raw.length;
+      const uInt8Array = new Uint8Array(rawLength);
+      for (let i = 0; i < rawLength; ++i) {
+        uInt8Array[i] = raw.charCodeAt(i);
+      }
+      const blob = new Blob([uInt8Array], { type: contentType });
+      const blobUrl = URL.createObjectURL(blob);
+      const win = window.open(blobUrl, '_blank');
+      if (!win) {
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = fileName;
+        a.click();
+      }
+      return;
+    } catch (e) {
+      console.warn("PDF Blob conversion error:", e);
+    }
+  }
+
+  try {
+    window.open(pdfUrl, '_blank');
+  } catch (e) {}
+}
+
   if (brochureUrl) {
     if (successMsg) {
       successMsg.innerHTML = `
         <div class="space-y-3">
           <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Thank you, ${name}! Your PDF Brochure is ready.</p>
           <div class="flex items-center justify-center gap-3 pt-2">
-            <a href="${brochureUrl}" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5">
+            <button type="button" onclick="window.openOrDownloadPdf('${brochureUrl}', '${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5">
               <span class="material-symbols-outlined text-sm">open_in_new</span>
               <span>View PDF Online</span>
-            </a>
+            </button>
             <a href="${brochureUrl}" download="${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf" target="_blank" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5">
               <span class="material-symbols-outlined text-sm">download</span>
               <span>Download PDF</span>
@@ -584,9 +617,7 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
     }
 
     // Direct open in new tab
-    try {
-      window.open(brochureUrl, '_blank');
-    } catch (e) {}
+    openOrDownloadPdf(brochureUrl, `${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf`);
 
     setTimeout(closeBrochureModal, 5000);
 
@@ -621,3 +652,4 @@ window.openBrochureModal = openBrochureModal;
 window.closeBrochureModal = closeBrochureModal;
 window.handleBrochureSubmit = handleBrochureSubmit;
 window.switchProjectCategory = switchProjectCategory;
+window.openOrDownloadPdf = openOrDownloadPdf;
