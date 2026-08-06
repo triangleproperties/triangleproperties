@@ -982,48 +982,66 @@ function uploadPdfWithFirebase(file, uploadBtn, urlInputId, previewBoxId, previe
     }
   };
 
-  if (storage) {
-    showToast(`Uploading ${file.name} to Firebase Cloud Storage...`, 'info');
-    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const storageRef = ref(storage, `brochures/${Date.now()}_${safeName}`);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  // 1. Instant 0ms local FileReader preview (guarantees PDF is attached even before cloud upload finishes)
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    if (urlInput) urlInput.value = e.target.result;
+    if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
+    prevBox?.classList.remove('hidden');
+  };
+  reader.readAsDataURL(file);
 
-    uploadTask.on('state_changed',
-      (snapshot) => {
-        const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        if (uploadBtn) {
-          uploadBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>${pct.toFixed(0)}%</span>`;
-        }
-      },
-      (err) => {
-        console.warn("Firebase Storage PDF upload notice:", err);
-        resetBtn();
-        showToast("PDF file attached!", "info");
-      },
-      async () => {
-        try {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          if (urlInput) urlInput.value = downloadURL;
-          if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
-          prevBox?.classList.remove('hidden');
+  // Timeout guard (reset button after 8s if cloud storage is slow)
+  const timeoutId = setTimeout(() => {
+    resetBtn();
+    showToast("PDF brochure attached successfully!", "success");
+  }, 8000);
+
+  // 2. Background Cloud Storage Upload
+  if (storage) {
+    try {
+      showToast(`Uploading ${file.name} to Cloud Storage...`, 'info');
+      const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+      const storageRef = ref(storage, `brochures/${Date.now()}_${safeName}`);
+      const uploadTask = uploadBytesResumable(storageRef, file);
+
+      uploadTask.on('state_changed',
+        (snapshot) => {
+          const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (uploadBtn) {
+            uploadBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>${pct.toFixed(0)}%</span>`;
+          }
+        },
+        (err) => {
+          console.warn("Firebase Storage PDF upload notice:", err);
+          clearTimeout(timeoutId);
           resetBtn();
-          showToast("PDF brochure uploaded successfully to Firebase Storage!", "success");
-        } catch (e) {
-          resetBtn();
-          showToast("PDF URL attached!", "success");
+          showToast("PDF brochure attached!", "success");
+        },
+        async () => {
+          clearTimeout(timeoutId);
+          try {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            if (urlInput) urlInput.value = downloadURL;
+            if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
+            prevBox?.classList.remove('hidden');
+            resetBtn();
+            showToast("PDF brochure uploaded successfully to Firebase Storage!", "success");
+          } catch (e) {
+            resetBtn();
+            showToast("PDF Brochure attached!", "success");
+          }
         }
-      }
-    );
-  } else {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      if (urlInput) urlInput.value = e.target.result;
-      if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
-      prevBox?.classList.remove('hidden');
+      );
+    } catch (e) {
+      clearTimeout(timeoutId);
       resetBtn();
       showToast("PDF Brochure attached!", "success");
-    };
-    reader.readAsDataURL(file);
+    }
+  } else {
+    clearTimeout(timeoutId);
+    resetBtn();
+    showToast("PDF Brochure attached!", "success");
   }
 }
 

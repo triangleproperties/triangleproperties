@@ -581,13 +581,15 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
     if (successMsg) {
       successMsg.innerHTML = `
         <div class="space-y-3">
-          <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Thank you, ${name}! Your Brochure is ready.</p>
+          <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Thank you, ${name}! Your PDF Brochure is ready.</p>
           <div class="flex items-center justify-center gap-3 pt-2">
-            <a href="${brochureUrl}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md">
-              View Online
+            <a href="${brochureUrl}" target="_blank" rel="noopener noreferrer" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">open_in_new</span>
+              <span>View PDF Online</span>
             </a>
-            <a href="${brochureUrl}" download="${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf" target="_blank" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md">
-              Download PDF
+            <a href="${brochureUrl}" download="${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf" target="_blank" class="px-5 py-2.5 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-sm">download</span>
+              <span>Download PDF</span>
             </a>
           </div>
         </div>
@@ -595,43 +597,37 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
       successMsg.classList.remove('hidden');
     }
 
-    // Trigger direct file download
-    try {
-      const a = document.createElement('a');
-      a.href = brochureUrl;
-      a.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf`;
-      a.target = '_blank';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    } catch (e) {}
-
-    // Open PDF in a new tab for instant viewing
+    // Direct open in new tab
     try {
       window.open(brochureUrl, '_blank');
     } catch (e) {}
 
-    setTimeout(closeBrochureModal, 4000);
+    setTimeout(closeBrochureModal, 5000);
 
   } else {
-    // Fast WhatsApp Fallback (No lag / No heavy jsPDF rendering)
+    // Clear WhatsApp option when no PDF is attached by admin
+    const waText = encodeURIComponent(`Hi Triangle Properties, I submitted my details for ${title}. Please send me the official PDF brochure.`);
+    const waUrl = `https://wa.me/918838957874?text=${waText}`;
+
     if (successMsg) {
       successMsg.innerHTML = `
-        <div class="space-y-2">
-          <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Thank you, ${name}!</p>
-          <p class="text-xs text-slate-600 dark:text-slate-300">Connecting to WhatsApp to share the official PDF brochure...</p>
+        <div class="space-y-3">
+          <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Details saved successfully, ${name}!</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300">Click below to request the PDF brochure directly from our sales team on WhatsApp:</p>
+          <div class="pt-1">
+            <a href="${waUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-lg">
+              <span class="material-symbols-outlined text-sm">chat</span>
+              <span>Request Brochure on WhatsApp</span>
+            </a>
+          </div>
         </div>
       `;
       successMsg.classList.remove('hidden');
     }
 
-    const waText = encodeURIComponent(`Hi Triangle Properties, I submitted my contact details for ${title}. Please share the official PDF brochure with me.`);
-    const waUrl = `https://wa.me/918838957874?text=${waText}`;
-
     setTimeout(() => {
-      window.open(waUrl, '_blank');
-      closeBrochureModal();
-    }, 1200);
+      try { window.open(waUrl, '_blank'); } catch (e) {}
+    }, 1500);
   }
 }
 
