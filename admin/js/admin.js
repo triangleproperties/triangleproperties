@@ -1318,7 +1318,7 @@ document.getElementById('lightbox-settings-form')?.addEventListener('submit', as
     subtitle: document.getElementById('lightbox-subtitle').value,
     imageUrl: document.getElementById('lightbox-image-url').value,
     ctaText: document.getElementById('lightbox-cta-text').value,
-    ctaLink: document.getElementById('lightbox-cta-link').value,
+    ctaLink: document.getElementById('lightbox-cta-link')?.value || "https://wa.me/918838957874?text=Hi%20Triangle%20Properties%2C%20I%20am%20interested%20in%20the%20Special%20Launch%20Offer!",
     updatedAt: new Date().toISOString()
   };
 
