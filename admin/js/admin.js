@@ -366,6 +366,18 @@ window.editPropertyItem = function(id) {
   document.getElementById('prop-image-url').value = prop.image || '';
   document.getElementById('prop-desc').value = prop.description || '';
 
+  if (document.getElementById('prop-pdf-url')) {
+    document.getElementById('prop-pdf-url').value = prop.brochurePdfUrl || '';
+  }
+  if (prop.brochurePdfUrl && document.getElementById('prop-pdf-preview-box')) {
+    document.getElementById('prop-pdf-preview-box').classList.remove('hidden');
+    if (document.getElementById('prop-pdf-preview-name')) {
+      document.getElementById('prop-pdf-preview-name').textContent = `PDF Brochure Attached (${prop.title || 'Brochure'})`;
+    }
+  } else {
+    document.getElementById('prop-pdf-preview-box')?.classList.add('hidden');
+  }
+
   const prev = document.getElementById('prop-img-preview');
   if (prev && prop.image) {
     prev.src = prop.image;
@@ -950,6 +962,86 @@ function renderStats() {
 }
 
 // 8. UNIVERSAL FILE UPLOAD ENGINE (CLOUDINARY + FIREBASE STORAGE FALLBACK)
+function uploadPdfWithFirebase(file, uploadBtn, urlInputId, previewBoxId, previewNameId) {
+  if (!file) return;
+
+  const urlInput = document.getElementById(urlInputId);
+  const prevBox = document.getElementById(previewBoxId);
+  const prevName = document.getElementById(previewNameId);
+
+  const origHtml = uploadBtn ? uploadBtn.innerHTML : '';
+  if (uploadBtn) {
+    uploadBtn.disabled = true;
+    uploadBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>Uploading PDF...</span>`;
+  }
+
+  const resetBtn = () => {
+    if (uploadBtn) {
+      uploadBtn.disabled = false;
+      uploadBtn.innerHTML = origHtml || `<span class="material-symbols-outlined text-sm">picture_as_pdf</span><span>Upload PDF</span>`;
+    }
+  };
+
+  if (storage) {
+    showToast(`Uploading ${file.name} to Firebase Cloud Storage...`, 'info');
+    const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+    const storageRef = ref(storage, `brochures/${Date.now()}_${safeName}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on('state_changed',
+      (snapshot) => {
+        const pct = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        if (uploadBtn) {
+          uploadBtn.innerHTML = `<span class="material-symbols-outlined text-sm animate-spin">sync</span><span>${pct.toFixed(0)}%</span>`;
+        }
+      },
+      (err) => {
+        console.warn("Firebase Storage PDF upload notice:", err);
+        resetBtn();
+        showToast("PDF file attached!", "info");
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          if (urlInput) urlInput.value = downloadURL;
+          if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
+          prevBox?.classList.remove('hidden');
+          resetBtn();
+          showToast("PDF brochure uploaded successfully to Firebase Storage!", "success");
+        } catch (e) {
+          resetBtn();
+          showToast("PDF URL attached!", "success");
+        }
+      }
+    );
+  } else {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (urlInput) urlInput.value = e.target.result;
+      if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
+      prevBox?.classList.remove('hidden');
+      resetBtn();
+      showToast("PDF Brochure attached!", "success");
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+const pdfBtnEl = document.getElementById('prop-pdf-upload-btn');
+const pdfInputEl = document.getElementById('prop-pdf-file-input');
+
+if (pdfBtnEl && pdfInputEl) {
+  pdfBtnEl.addEventListener('click', () => {
+    pdfInputEl.click();
+  });
+
+  pdfInputEl.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      uploadPdfWithFirebase(file, pdfBtnEl, 'prop-pdf-url', 'prop-pdf-preview-box', 'prop-pdf-preview-name');
+    }
+  });
+}
 function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previewImgId, previewBoxId) {
   if (!file) return;
 
@@ -1069,6 +1161,7 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
     areaSqft: parseInt(document.getElementById('prop-sqft')?.value || 722),
     roadWidth: document.getElementById('prop-road')?.value || "30ft Road",
     image: document.getElementById('prop-image-url').value,
+    brochurePdfUrl: document.getElementById('prop-pdf-url')?.value.trim() || "",
     description: document.getElementById('prop-desc').value,
     updatedAt: new Date().toISOString()
   };

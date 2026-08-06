@@ -571,163 +571,68 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
   }
 
   const successMsg = document.getElementById('brochure-success-msg');
-  if (successMsg) successMsg.classList.remove('hidden');
 
   // Fetch live property details for the PDF
   const liveProps = typeof getLiveProperties === 'function' ? getLiveProperties() : [];
   const property = liveProps.find(p => p.id === propertyId) || {};
-  const price = property.price || "Contact for Price";
-  const emi = property.emiOption || "EMI Available";
-  const location = property.location || "Chennai Growth Corridor";
-  const category = property.category || "Approved Plot Layout";
-  const areaSqft = property.areaSqft || 722;
-  const roadWidth = property.roadWidth || "30ft Wide Roads";
+  const brochureUrl = property.brochurePdfUrl || '';
 
-  // Trigger PDF brochure generation & download
-  setTimeout(() => {
-    try {
-      const { jsPDF } = window.jspdf || {};
-      if (jsPDF) {
-        const doc = new jsPDF({ unit: 'pt', format: 'a4' });
-
-        // Brand Header (Dark & Gold Accent)
-        doc.setFillColor(30, 41, 59); // Slate 800
-        doc.rect(0, 0, 595, 110, 'F');
-
-        doc.setFillColor(217, 119, 6); // Amber 600 line
-        doc.rect(0, 106, 595, 4, 'F');
-
-        doc.setTextColor(245, 158, 11); // Gold Title
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(22);
-        doc.text("TRIANGLE PROPERTIES", 40, 45);
-
-        doc.setTextColor(226, 232, 240); // Light Slate
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(10);
-        doc.text("TAP into Smart Investments | DTCP & RERA Approved Layouts", 40, 65);
-        doc.text("Corporate Office: Vadapalani, Chennai | Helpline: +91 88389 57874", 40, 82);
-
-        // Document Title Banner
-        doc.setFillColor(248, 250, 252);
-        doc.rect(40, 130, 515, 40, 'F');
-        doc.setDrawColor(226, 232, 240);
-        doc.rect(40, 130, 515, 40, 'S');
-
-        doc.setTextColor(15, 23, 42);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(13);
-        doc.text(`OFFICIAL PROJECT BROCHURE: ${title.toUpperCase()}`, 55, 155);
-
-        // Customer Details Box
-        doc.setFillColor(254, 243, 199); // Amber 100
-        doc.rect(40, 185, 515, 45, 'F');
-        doc.setDrawColor(245, 158, 11);
-        doc.rect(40, 185, 515, 45, 'S');
-
-        doc.setTextColor(180, 83, 9);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(10);
-        doc.text("PREPARED EXCLUSIVELY FOR:", 55, 203);
-
-        doc.setTextColor(15, 23, 42);
-        doc.setFont("helvetica", "normal");
-        doc.text(`${name}   |   Mobile: ${phone}   |   Email: ${email || 'N/A'}`, 55, 219);
-
-        // Property Specifications Table
-        doc.setTextColor(15, 23, 42);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(13);
-        doc.text("Project Specifications & Details", 40, 260);
-
-        doc.setLineWidth(1);
-        doc.setDrawColor(217, 119, 6);
-        doc.line(40, 266, 555, 266);
-
-        const specs = [
-          ["Project Title", title],
-          ["Project Code", propertyId.toUpperCase()],
-          ["Approval Status", "CMDA & DTCP Approved Layout"],
-          ["Category", category],
-          ["Location Corridor", location],
-          ["Plot Area", `${areaSqft} sq.ft onwards`],
-          ["Road Infrastructure", roadWidth],
-          ["Launch Price", price],
-          ["EMI Options", emi]
-        ];
-
-        let startY = 280;
-        specs.forEach(([label, value], idx) => {
-          doc.setFillColor(idx % 2 === 0 ? 248 : 255, idx % 2 === 0 ? 250 : 255, idx % 2 === 0 ? 252 : 255);
-          doc.rect(40, startY, 515, 22, 'F');
-
-          doc.setTextColor(71, 85, 105);
-          doc.setFont("helvetica", "bold");
-          doc.setFontSize(9.5);
-          doc.text(label, 50, startY + 15);
-
-          doc.setTextColor(15, 23, 42);
-          doc.setFont("helvetica", "normal");
-          doc.text(String(value), 200, startY + 15);
-
-          startY += 22;
-        });
-
-        // Project Overview & Custom Description
-        startY += 20;
-        doc.setTextColor(15, 23, 42);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(13);
-        doc.text("Project Overview & Description", 40, startY);
-
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9.5);
-        doc.setTextColor(51, 65, 85);
-
-        const rawDesc = property.description || "Premium plotted development by Triangle Properties situated in Chennai's fast-growing investment corridor with 100% clear title, DTCP/CMDA approvals, and immediate plot registration.";
-        const splitDesc = doc.splitTextToSize(rawDesc, 515);
-
-        let descY = startY + 18;
-        splitDesc.forEach((line) => {
-          if (descY < 730) {
-            doc.text(line, 45, descY);
-            descY += 15;
-          }
-        });
-
-        // Corporate Footer Banner
-        doc.setFillColor(30, 41, 59);
-        doc.rect(40, 750, 515, 50, 'F');
-
-        doc.setTextColor(245, 158, 11);
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(11);
-        doc.text("Triangle Properties Pvt Ltd — Direct Sales Desk", 55, 768);
-
-        doc.setTextColor(255, 255, 255);
-        doc.setFont("helvetica", "normal");
-        doc.setFontSize(9);
-        doc.text("Phone: +91 88389 57874 / +91 72002 12759 | Website: https://triangleproperties.in", 55, 785);
-
-        // Download PDF
-        doc.save(`${propertyId}-Brochure-TriangleProperties.pdf`);
-      } else {
-        throw new Error("jsPDF library not available");
-      }
-    } catch (err) {
-      console.warn("jsPDF fallback:", err);
-      const fallbackText = `TRIANGLE PROPERTIES - PROJECT BROCHURE\n=========================================\nProject: ${title}\nLocation: ${location}\nPrice: ${price}\nEMI: ${emi}\n=========================================\nContact: +91 88389 57874\nWebsite: https://triangleproperties.in`;
-      const blob = new Blob([fallbackText], { type: 'text/plain;charset=utf-8' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = `${propertyId}-Brochure-TriangleProperties.txt`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  if (brochureUrl) {
+    if (successMsg) {
+      successMsg.innerHTML = `
+        <div class="space-y-3">
+          <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Thank you, ${name}! Your Brochure is ready.</p>
+          <div class="flex items-center justify-center gap-3 pt-2">
+            <a href="${brochureUrl}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              View Online
+            </a>
+            <a href="${brochureUrl}" download="${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf" target="_blank" class="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-slate-950 rounded-xl text-xs font-bold uppercase tracking-wider transition-all shadow-md">
+              Download PDF
+            </a>
+          </div>
+        </div>
+      `;
+      successMsg.classList.remove('hidden');
     }
 
-    setTimeout(closeBrochureModal, 2000);
-  }, 400);
+    // Trigger direct file download
+    try {
+      const a = document.createElement('a');
+      a.href = brochureUrl;
+      a.download = `${title.replace(/[^a-zA-Z0-9]/g, '_')}_Brochure.pdf`;
+      a.target = '_blank';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } catch (e) {}
+
+    // Open PDF in a new tab for instant viewing
+    try {
+      window.open(brochureUrl, '_blank');
+    } catch (e) {}
+
+    setTimeout(closeBrochureModal, 4000);
+
+  } else {
+    // Fast WhatsApp Fallback (No lag / No heavy jsPDF rendering)
+    if (successMsg) {
+      successMsg.innerHTML = `
+        <div class="space-y-2">
+          <p class="font-bold text-emerald-600 dark:text-emerald-400 text-sm">✓ Thank you, ${name}!</p>
+          <p class="text-xs text-slate-600 dark:text-slate-300">Connecting to WhatsApp to share the official PDF brochure...</p>
+        </div>
+      `;
+      successMsg.classList.remove('hidden');
+    }
+
+    const waText = encodeURIComponent(`Hi Triangle Properties, I submitted my contact details for ${title}. Please share the official PDF brochure with me.`);
+    const waUrl = `https://wa.me/918838957874?text=${waText}`;
+
+    setTimeout(() => {
+      window.open(waUrl, '_blank');
+      closeBrochureModal();
+    }, 1200);
+  }
 }
 
 window.openBrochureModal = openBrochureModal;

@@ -585,6 +585,26 @@
         </div>
 
         <div>
+          <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Brochure PDF Document (Firebase Upload)</label>
+          <div class="flex gap-2">
+            <input type="url" id="prop-pdf-url" placeholder="PDF URL or upload .pdf file..."
+              class="flex-grow px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-xs text-white focus:outline-none focus:border-primary">
+            <input type="file" id="prop-pdf-file-input" accept=".pdf,application/pdf" class="hidden">
+            <button type="button" id="prop-pdf-upload-btn"
+              class="btn-secondary text-xs uppercase px-4 py-2.5 flex items-center gap-1.5 whitespace-nowrap text-amber-400 border-amber-500/30 hover:bg-amber-500/10">
+              <span class="material-symbols-outlined text-sm">picture_as_pdf</span>
+              <span>Upload PDF</span>
+            </button>
+          </div>
+
+          <div id="prop-pdf-preview-box"
+            class="hidden mt-3 flex items-center gap-3 p-2.5 rounded-xl bg-surface-container-high border border-emerald-500/30 text-emerald-400 text-xs font-button">
+            <span class="material-symbols-outlined text-base">picture_as_pdf</span>
+            <span id="prop-pdf-preview-name">PDF Brochure Attached & Ready for Download</span>
+          </div>
+        </div>
+
+        <div>
           <label for="prop-desc"
             class="block font-button text-xs uppercase text-on-surface-variant mb-1">Description</label>
           <textarea id="prop-desc" rows="3" placeholder="Property details..."
