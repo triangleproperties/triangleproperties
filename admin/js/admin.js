@@ -186,7 +186,8 @@ const tabContents = document.querySelectorAll('.tab-content');
 const pageTitle = document.getElementById('page-title');
 
 tabBtns.forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault();
     const tab = btn.getAttribute('data-tab');
 
     tabBtns.forEach(b => {
@@ -205,6 +206,7 @@ tabBtns.forEach(btn => {
                               tab === 'gallery' ? 'Architectural Photo Gallery' :
                               tab === 'testimonials' ? 'Customer Testimonials & Reviews' :
                               tab === 'blog' ? 'Blog & Articles CMS' :
+                              tab === 'signature' ? 'Signature Properties Images' :
                               tab === 'settings' ? 'Site Settings & Configuration' : 'Customer Enquiries & Leads';
     }
   });
@@ -212,17 +214,38 @@ tabBtns.forEach(btn => {
 
 // 7. DATA LOAD & FIRESTORE REALTIME SNAPSHOT SUBSCRIPTIONS
 async function loadDashboardData() {
-  await Promise.all([fetchProperties(), fetchCategories(), fetchGallery(), fetchTestimonials(), fetchBlogPosts(), fetchEnquiries()]);
-  renderStats();
+  fetchProperties();
+  loadCategoriesTable();
+  loadGalleryGrid();
+  loadTestimonialsList();
+  loadBlogPostsTable();
+  loadEnquiriesList();
+  loadSiteSettingsForm();
+  loadSignatureImagesForm();
+}
+
+function loadPropertiesTable() {
+  fetchProperties();
 }
 
 // A. PROPERTIES CRUD
 async function fetchProperties() {
+  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
+  if (!state.properties || state.properties.length === 0) {
+    state.properties = (liveData.properties && liveData.properties.length > 0) ? liveData.properties : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.properties : []);
+  }
+
   try {
     if (db) {
       onSnapshot(collection(db, "properties"), (snap) => {
         if (snap.docs.length > 0) {
           state.properties = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          // Sync into localStorage
+          try {
+            const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
+            customData.properties = state.properties;
+            localStorage.setItem('triangle_custom_data', JSON.stringify(customData));
+          } catch(e) {}
           renderProperties();
           renderStats();
         }
@@ -232,10 +255,6 @@ async function fetchProperties() {
     console.warn("Firestore properties snapshot notice:", e);
   }
 
-  const liveData = window.loadLiveTriangleData ? window.loadLiveTriangleData() : {};
-  if (!state.properties || state.properties.length === 0) {
-    state.properties = (liveData.properties && liveData.properties.length > 0) ? liveData.properties : (window.BASE_TRIANGLE_DATA ? window.BASE_TRIANGLE_DATA.properties : []);
-  }
   renderProperties();
 }
 
@@ -958,14 +977,36 @@ document.getElementById('property-form')?.addEventListener('submit', async (e) =
   };
 
   try {
+    let savedId = docId;
     if (db) {
       if (docId) {
         await setDoc(doc(db, "properties", docId), propData, { merge: true });
       } else {
-        await addDoc(collection(db, "properties"), { ...propData, createdAt: serverTimestamp() });
+        const ref = await addDoc(collection(db, "properties"), { ...propData, createdAt: serverTimestamp() });
+        savedId = ref.id;
       }
     }
-    showToast("Property saved & synced live to Cloud Firestore!", "success");
+
+    const savedItem = { id: savedId || 'prop_' + Date.now(), ...propData };
+    const existingIndex = state.properties.findIndex(p => p.id === savedItem.id);
+    if (existingIndex >= 0) {
+      state.properties[existingIndex] = { ...state.properties[existingIndex], ...savedItem };
+    } else {
+      state.properties.unshift(savedItem);
+    }
+
+    // Persist to local storage and broadcast to active frontend tabs
+    try {
+      const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
+      customData.properties = state.properties;
+      localStorage.setItem('triangle_custom_data', JSON.stringify(customData));
+      localStorage.setItem('triangle_properties', JSON.stringify(state.properties));
+      window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: customData }));
+    } catch (e) {}
+
+    renderProperties();
+    renderStats();
+    showToast("Property saved & synced live across Admin & Frontend!", "success");
     document.getElementById('property-modal')?.classList.add('hidden');
   } catch (err) {
     showToast(`Save error: ${err.message}`, "error");
@@ -1109,3 +1150,120 @@ document.getElementById('site-settings-form')?.addEventListener('submit', async 
     showToast(`Settings save error: ${err.message}`, "error");
   }
 });
+
+// SIGNATURE PROPERTIES IMAGES SUBMIT HANDLER & FILE UPLOADER ENGINE
+function updateSignaturePreview(num) {
+  const urlInput = document.getElementById(`sig-url-${num}`);
+  const imgPreview = document.getElementById(`sig-img-preview-${num}`);
+  if (urlInput && imgPreview && urlInput.value) {
+    imgPreview.src = urlInput.value;
+  }
+}
+
+[1, 2, 3].forEach(num => {
+  const urlInput = document.getElementById(`sig-url-${num}`);
+  const fileInput = document.getElementById(`sig-file-${num}`);
+  const uploadBtn = document.getElementById(`sig-upload-btn-${num}`);
+
+  if (urlInput) {
+    urlInput.addEventListener('input', () => updateSignaturePreview(num));
+  }
+
+  if (uploadBtn) {
+    uploadBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (typeof window.openCloudinaryWidget === 'function') {
+        window.openCloudinaryWidget((url) => {
+          if (urlInput) urlInput.value = url;
+          updateSignaturePreview(num);
+        });
+      } else if (fileInput) {
+        fileInput.click();
+      }
+    });
+  }
+
+  if (fileInput) {
+    fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      if (typeof window.uploadFileToFirebaseStorage === 'function') {
+        showToast(`Uploading Signature Image ${num}...`, 'info');
+        window.uploadFileToFirebaseStorage(
+          file,
+          'signature_images',
+          (progress) => {
+            console.log(`Signature image ${num} upload progress: ${progress}%`);
+          },
+          (downloadURL) => {
+            if (urlInput) urlInput.value = downloadURL;
+            updateSignaturePreview(num);
+            showToast(`Signature Image ${num} uploaded successfully!`, 'success');
+          },
+          () => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              if (urlInput) urlInput.value = event.target.result;
+              updateSignaturePreview(num);
+              showToast(`Signature Image ${num} loaded!`, 'success');
+            };
+            reader.readAsDataURL(file);
+          }
+        );
+      } else {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          if (urlInput) urlInput.value = event.target.result;
+          updateSignaturePreview(num);
+          showToast(`Signature Image ${num} loaded!`, 'success');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+});
+
+document.getElementById('signature-images-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const signatureData = {
+    img1: { title: document.getElementById('sig-title-1')?.value || "Susee Alight Layout", url: document.getElementById('sig-url-1')?.value || "assets/hero-slider-1.jpg" },
+    img2: { title: document.getElementById('sig-title-2')?.value || "M.A. Nagar Kadambathur", url: document.getElementById('sig-url-2')?.value || "assets/hero-slider-2.jpg" },
+    img3: { title: document.getElementById('sig-title-3')?.value || "Ishwarya Nagar ECR", url: document.getElementById('sig-url-3')?.value || "assets/hero-slider-3.jpg" },
+    updatedAt: new Date().toISOString()
+  };
+
+  try {
+    if (db) {
+      await setDoc(doc(db, "settings", "signature_images"), signatureData, { merge: true });
+      await setDoc(doc(db, 'app_data', 'triangle_custom_data'), { signature_images: signatureData }, { merge: true });
+    }
+    localStorage.setItem('triangle_signature_images', JSON.stringify(signatureData));
+    showToast("Signature Properties Images saved live!", "success");
+  } catch (err) {
+    localStorage.setItem('triangle_signature_images', JSON.stringify(signatureData));
+    showToast("Signature Images saved to local storage!", "info");
+  }
+});
+
+async function loadSignatureImagesForm() {
+  let data = null;
+  try {
+    const saved = localStorage.getItem('triangle_signature_images');
+    if (saved) data = JSON.parse(saved);
+  } catch (e) {}
+
+  if (document.getElementById('sig-title-1')) {
+    document.getElementById('sig-title-1').value = data?.img1?.title || "Susee Alight Layout";
+    document.getElementById('sig-url-1').value = data?.img1?.url || "assets/hero-slider-1.jpg";
+    updateSignaturePreview(1);
+
+    document.getElementById('sig-title-2').value = data?.img2?.title || "M.A. Nagar Kadambathur";
+    document.getElementById('sig-url-2').value = data?.img2?.url || "assets/hero-slider-2.jpg";
+    updateSignaturePreview(2);
+
+    document.getElementById('sig-title-3').value = data?.img3?.title || "Ishwarya Nagar ECR";
+    document.getElementById('sig-url-3').value = data?.img3?.url || "assets/hero-slider-3.jpg";
+    updateSignaturePreview(3);
+  }
+}

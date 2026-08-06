@@ -68,11 +68,94 @@
     class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto text-center border-b border-slate-200 dark:border-slate-800">
     <span class="font-button text-xs text-amber-500 uppercase tracking-widest block mb-2">About Us</span>
     <h1 class="font-display text-3xl sm:text-6xl font-light mb-4">TAP into Smart Investment</h1>
-    <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed">
+    <p class="font-body text-slate-600 dark:text-slate-300 text-xs sm:text-sm max-w-2xl mx-auto leading-relaxed mb-8 sm:mb-12">
       Every great journey begins with a single step, and ours started with a simple vision—to make land ownership
       affordable, transparent, and accessible for every family.
     </p>
+
+    <!-- 3 SIGNATURE IMAGES SHOWCASE GRID -->
+    <div id="about-signature-images" class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
+        <div class="relative h-48 sm:h-60 overflow-hidden">
+          <img src="assets/hero-slider-1.jpg" alt="Susee Alight Layout" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-white">Susee Alight Layout</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
+        <div class="relative h-48 sm:h-60 overflow-hidden">
+          <img src="assets/hero-slider-2.jpg" alt="M.A. Nagar Kadambathur" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-white">M.A. Nagar Kadambathur</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
+        <div class="relative h-48 sm:h-60 overflow-hidden">
+          <img src="assets/hero-slider-3.jpg" alt="Ishwarya Nagar ECR" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4">
+            <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+            <h3 class="font-display text-lg sm:text-xl font-bold text-white">Ishwarya Nagar ECR</h3>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <script>
+    function renderSignatureImages() {
+      const container = document.getElementById('about-signature-images');
+      if (!container) return;
+      try {
+        const saved = localStorage.getItem('triangle_signature_images');
+        let data = saved ? JSON.parse(saved) : null;
+
+        if (!data) {
+          const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
+          if (customData.signature_images) data = customData.signature_images;
+        }
+
+        const defaultImgs = [
+          { title: "Susee Alight Layout", url: "assets/hero-slider-1.jpg" },
+          { title: "M.A. Nagar Kadambathur", url: "assets/hero-slider-2.jpg" },
+          { title: "Ishwarya Nagar ECR", url: "assets/hero-slider-3.jpg" }
+        ];
+
+        const imgs = data ? [data.img1, data.img2, data.img3].filter(Boolean) : defaultImgs;
+
+        if (imgs.length > 0) {
+          container.innerHTML = imgs.map((item, i) => `
+            <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
+              <div class="relative h-48 sm:h-60 overflow-hidden">
+                <img src="${item.url || 'assets/hero-slider-' + (i + 1) + '.jpg'}" alt="${item.title || 'Signature Layout ' + (i+1)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
+                <div class="absolute bottom-4 left-4 right-4">
+                  <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
+                  <h3 class="font-display text-lg sm:text-xl font-bold text-white">${item.title || 'Signature Layout ' + (i+1)}</h3>
+                </div>
+              </div>
+            </div>
+          `).join('');
+        }
+      } catch(e) {}
+    }
+
+    renderSignatureImages();
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'triangle_signature_images' || e.key === 'triangle_custom_data') {
+        renderSignatureImages();
+      }
+    });
+    window.addEventListener('triangle_data_updated', renderSignatureImages);
+  </script>
 
   <!-- MAIN CONTENT AREA -->
   <main class="py-12 sm:py-20 px-4 md:px-16 max-w-[1440px] mx-auto flex-grow space-y-16 sm:space-y-24">
@@ -136,14 +219,11 @@
           class="glass-card p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3 sm:space-y-4 hover:-translate-y-1 transition-all duration-300 shadow-xl group">
           <div
             class="relative w-28 h-28 sm:w-52 sm:h-52 mx-auto rounded-full p-1 sm:p-1.5 bg-gradient-to-tr from-amber-500 via-amber-300 to-amber-600 shadow-2xl group-hover:scale-105 transition-transform duration-500">
-            <img src="assets/founder-loheshvar.jpg" alt="Loheshvar - Co-Founder"
+            <img src="assets/founder-loheshvar.jpg" alt="Loheshvar"
               class="w-full h-full object-cover rounded-full border-2 sm:border-4 border-slate-900 dark:border-slate-950">
           </div>
           <div>
-            <h3 class="font-display text-lg sm:text-3xl font-bold text-slate-900 dark:text-white">Loheshvar</h3>
-            <span
-              class="font-button text-[10px] sm:text-xs uppercase tracking-widest text-amber-500 font-bold block mt-0.5 sm:mt-1">Co-Founder
-              & Director</span>
+            <h3 class="font-display text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">Loheshvar</h3>
           </div>
         </div>
 
@@ -152,14 +232,11 @@
           class="glass-card p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 dark:border-slate-800 text-center space-y-3 sm:space-y-4 hover:-translate-y-1 transition-all duration-300 shadow-xl group">
           <div
             class="relative w-28 h-28 sm:w-52 sm:h-52 mx-auto rounded-full p-1 sm:p-1.5 bg-gradient-to-tr from-amber-500 via-amber-300 to-amber-600 shadow-2xl group-hover:scale-105 transition-transform duration-500">
-            <img src="assets/founder-santhakumar.jpg" alt="Santhakumar - Co-Founder"
+            <img src="assets/founder-santhakumar.jpg" alt="Santhakumar"
               class="w-full h-full object-cover rounded-full border-2 sm:border-4 border-slate-900 dark:border-slate-950">
           </div>
           <div>
-            <h3 class="font-display text-lg sm:text-3xl font-bold text-slate-900 dark:text-white">Santhakumar</h3>
-            <span
-              class="font-button text-[10px] sm:text-xs uppercase tracking-widest text-amber-500 font-bold block mt-0.5 sm:mt-1">Co-Founder
-              & Director</span>
+            <h3 class="font-display text-2xl sm:text-4xl font-bold text-slate-900 dark:text-white">Santhakumar</h3>
           </div>
         </div>
       </div>

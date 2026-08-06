@@ -104,7 +104,7 @@
       <span class="material-symbols-outlined text-base text-rose-400">warning</span>
       <span id="diagnostic-text">Checking environment configuration...</span>
     </div>
-    <button onclick="document.getElementById('diagnostic-banner').classList.add('hidden')" class="text-rose-400 hover:text-white text-xs uppercase font-bold">Dismiss</button>
+    <button type="button" onclick="document.getElementById('diagnostic-banner').classList.add('hidden')" class="text-rose-400 hover:text-white text-xs uppercase font-bold">Dismiss</button>
   </div>
 
   <!-- TOAST NOTIFICATION CONTAINER -->
@@ -148,31 +148,35 @@
         </div>
 
         <nav class="space-y-1 font-button text-xs uppercase tracking-wider">
-          <button data-tab="properties" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 border border-primary/20">
+          <button type="button" data-tab="properties" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-primary bg-primary/10 border border-primary/20">
             <span class="material-symbols-outlined text-lg">domain</span>
             <span>Properties</span>
           </button>
-          <button data-tab="categories" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+          <button type="button" data-tab="categories" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-lg">category</span>
             <span>Categories</span>
           </button>
-          <button data-tab="gallery" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+          <button type="button" data-tab="gallery" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-lg">photo_library</span>
             <span>Gallery</span>
           </button>
-          <button data-tab="testimonials" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+          <button type="button" data-tab="testimonials" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-lg">star</span>
             <span>Testimonials</span>
           </button>
-          <button data-tab="blog" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+          <button type="button" data-tab="blog" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-lg">article</span>
             <span>Blog Posts</span>
           </button>
-          <button data-tab="enquiries" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+          <button type="button" data-tab="enquiries" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-lg">inbox</span>
             <span>Enquiries & Leads</span>
           </button>
-          <button data-tab="settings" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+          <button type="button" data-tab="signature" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
+            <span class="material-symbols-outlined text-lg">auto_awesome</span>
+            <span>Signature Properties</span>
+          </button>
+          <button type="button" data-tab="settings" class="nav-tab-btn w-full flex items-center gap-3 px-4 py-3 rounded-xl text-left transition-all text-on-surface-variant hover:text-white hover:bg-surface-container-high">
             <span class="material-symbols-outlined text-lg">settings</span>
             <span>Site Settings</span>
           </button>
@@ -185,7 +189,7 @@
           <span>View Public Site</span>
         </a>
 
-        <button id="logout-btn" class="w-full p-2.5 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white text-xs font-button uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
+        <button type="button" id="logout-btn" class="w-full p-2.5 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white text-xs font-button uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
           <span class="material-symbols-outlined text-base">logout</span>
           <span>Sign Out</span>
         </button>
@@ -237,7 +241,7 @@
       <section id="tab-properties" class="tab-content space-y-6">
         <div class="flex items-center justify-between">
           <h2 class="font-display text-2xl font-light text-white">Projects & Listings</h2>
-          <button id="add-property-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
+          <button type="button" id="add-property-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
             <span class="material-symbols-outlined text-base">add</span>
             <span>Add Property</span>
           </button>
@@ -268,7 +272,7 @@
       <section id="tab-categories" class="tab-content hidden space-y-6">
         <div class="flex items-center justify-between">
           <h2 class="font-display text-2xl font-light text-white">Real Estate Categories</h2>
-          <button id="add-category-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2">
+          <button type="button" id="add-category-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2">
             <span class="material-symbols-outlined text-base">add</span>
             <span>Add Category</span>
           </button>
@@ -283,7 +287,7 @@
       <section id="tab-gallery" class="tab-content hidden space-y-6">
         <div class="flex items-center justify-between">
           <h2 class="font-display text-2xl font-light text-white">Architectural Photo Gallery</h2>
-          <button id="add-gallery-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
+          <button type="button" id="add-gallery-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
             <span class="material-symbols-outlined text-base">add</span>
             <span>Add Photo</span>
           </button>
@@ -298,7 +302,7 @@
       <section id="tab-testimonials" class="tab-content hidden space-y-6">
         <div class="flex items-center justify-between">
           <h2 class="font-display text-2xl font-light text-white">Customer Testimonials & Reviews</h2>
-          <button id="add-testimonial-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
+          <button type="button" id="add-testimonial-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
             <span class="material-symbols-outlined text-base">add</span>
             <span>Add Review</span>
           </button>
@@ -313,7 +317,7 @@
       <section id="tab-blog" class="tab-content hidden space-y-6">
         <div class="flex items-center justify-between">
           <h2 class="font-display text-2xl font-light text-white">Blog & Articles CMS</h2>
-          <button id="add-blog-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
+          <button type="button" id="add-blog-btn" class="btn-primary text-xs uppercase tracking-widest px-5 py-2.5 flex items-center gap-2 shadow-lg">
             <span class="material-symbols-outlined text-base">add</span>
             <span>Add Blog Post</span>
           </button>
@@ -346,10 +350,10 @@
           <h2 class="font-display text-2xl font-light text-white">Customer Enquiries & Leads</h2>
           <!-- Filter Tabs -->
           <div class="flex items-center gap-2 font-button text-xs uppercase">
-            <button class="lead-filter-btn px-3 py-1.5 rounded-lg bg-primary text-surface font-bold" data-filter="all">All Leads</button>
-            <button class="lead-filter-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white" data-filter="Pending">Pending</button>
-            <button class="lead-filter-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white" data-filter="Contacted">Contacted</button>
-            <button class="lead-filter-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white" data-filter="Converted">Converted</button>
+            <button type="button" class="lead-filter-btn px-3 py-1.5 rounded-lg bg-primary text-surface font-bold" data-filter="all">All Leads</button>
+            <button type="button" class="lead-filter-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white" data-filter="Pending">Pending</button>
+            <button type="button" class="lead-filter-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white" data-filter="Contacted">Contacted</button>
+            <button type="button" class="lead-filter-btn px-3 py-1.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-white" data-filter="Converted">Converted</button>
           </div>
         </div>
 
@@ -448,6 +452,65 @@
           <div class="flex justify-end pt-4">
             <button type="submit" class="btn-primary text-xs uppercase tracking-widest px-8 py-3.5 shadow-xl">
               Save All Site Settings
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- TAB 8: SIGNATURE PROPERTIES (ABOUT IMAGES) -->
+      <section id="tab-signature" class="tab-panel hidden space-y-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <span class="font-button text-[11px] uppercase tracking-widest text-primary block mb-1">About Us Section</span>
+            <h2 class="font-display text-3xl font-light text-white">Signature Properties Images</h2>
+          </div>
+        </div>
+
+        <form id="signature-images-form" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Signature Image 1 -->
+            <div class="glass-card p-6 rounded-2xl border border-slate-700 space-y-4">
+              <h3 class="font-button text-xs font-bold uppercase tracking-wider text-amber-400">Signature Image 1</h3>
+              <div>
+                <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Title / Caption</label>
+                <input type="text" id="sig-title-1" placeholder="Susee Alight Layout" class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Image URL</label>
+                <input type="text" id="sig-url-1" placeholder="assets/hero-slider-1.jpg" class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-xs text-white focus:outline-none focus:border-primary">
+              </div>
+            </div>
+
+            <!-- Signature Image 2 -->
+            <div class="glass-card p-6 rounded-2xl border border-slate-700 space-y-4">
+              <h3 class="font-button text-xs font-bold uppercase tracking-wider text-amber-400">Signature Image 2</h3>
+              <div>
+                <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Title / Caption</label>
+                <input type="text" id="sig-title-2" placeholder="M.A. Nagar Kadambathur" class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Image URL</label>
+                <input type="text" id="sig-url-2" placeholder="assets/hero-slider-2.jpg" class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-xs text-white focus:outline-none focus:border-primary">
+              </div>
+            </div>
+
+            <!-- Signature Image 3 -->
+            <div class="glass-card p-6 rounded-2xl border border-slate-700 space-y-4">
+              <h3 class="font-button text-xs font-bold uppercase tracking-wider text-amber-400">Signature Image 3</h3>
+              <div>
+                <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Title / Caption</label>
+                <input type="text" id="sig-title-3" placeholder="Ishwarya Nagar ECR" class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
+              </div>
+              <div>
+                <label class="block font-button text-xs uppercase text-on-surface-variant mb-1">Image URL</label>
+                <input type="text" id="sig-url-3" placeholder="assets/hero-slider-3.jpg" class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-xs text-white focus:outline-none focus:border-primary">
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-end pt-4">
+            <button type="submit" class="btn-primary text-xs uppercase tracking-widest px-8 py-3.5 shadow-xl">
+              Save Signature Images
             </button>
           </div>
         </form>

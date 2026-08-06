@@ -439,14 +439,19 @@ function initFirestoreLiveSync() {
       window.firestoreOnSnapshot(docRef, (snapshot) => {
         if (snapshot.exists()) {
           const cloudData = snapshot.data();
-          console.log("🔥 Received real-time Cloud Firestore update from Admin!");
-          try {
-            localStorage.setItem('triangle_custom_data', JSON.stringify(cloudData));
-          } catch (e) {
-            console.warn("LocalStorage caching notice:", e);
+          const newStr = JSON.stringify(cloudData);
+          const currentStr = localStorage.getItem('triangle_custom_data');
+
+          if (newStr !== currentStr) {
+            console.log("🔥 Received real-time Cloud Firestore update from Admin!");
+            try {
+              localStorage.setItem('triangle_custom_data', newStr);
+            } catch (e) {
+              console.warn("LocalStorage caching notice:", e);
+            }
+            window.TRIANGLE_DATA = loadLiveTriangleData();
+            window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: window.TRIANGLE_DATA }));
           }
-          window.TRIANGLE_DATA = loadLiveTriangleData();
-          window.dispatchEvent(new CustomEvent('triangle_data_updated', { detail: window.TRIANGLE_DATA }));
         }
       });
     } catch (err) {

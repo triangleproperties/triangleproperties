@@ -3,19 +3,58 @@
 document.addEventListener('DOMContentLoaded', () => {
   initPropertyGrid();
   initPropertySearch();
+  initFirestorePropertiesRealtimeSync();
+
+  window.addEventListener('firebase-ready', () => {
+    initFirestorePropertiesRealtimeSync();
+    initPropertyGrid();
+  });
 
   // Listen for Cloud Firestore real-time updates across devices & browser storage
   window.addEventListener('triangle_data_updated', () => {
     initPropertyGrid();
   });
   window.addEventListener('storage', (e) => {
-    if (e.key === 'triangle_custom_data') {
+    if (e.key === 'triangle_custom_data' || e.key === 'triangle_properties') {
       initPropertyGrid();
     }
   });
 });
 
 let cachedPropertiesList = [];
+let firestoreUnsub = null;
+
+async function initFirestorePropertiesRealtimeSync() {
+  if (window.db && !firestoreUnsub) {
+    try {
+      const { collection, onSnapshot } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      firestoreUnsub = onSnapshot(collection(window.db, "properties"), (snap) => {
+        if (snap.docs.length > 0) {
+          const liveProps = snap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+          cachedPropertiesList = liveProps;
+
+          try {
+            const customData = JSON.parse(localStorage.getItem('triangle_custom_data') || '{}');
+            customData.properties = liveProps;
+            const newStr = JSON.stringify(customData);
+            const curStr = localStorage.getItem('triangle_custom_data');
+            if (newStr !== curStr) {
+              localStorage.setItem('triangle_custom_data', newStr);
+              localStorage.setItem('triangle_properties', JSON.stringify(liveProps));
+            }
+          } catch(e) {}
+
+          const gridContainer = document.getElementById('properties-grid');
+          if (gridContainer) {
+            renderProperties(liveProps, gridContainer);
+          }
+        }
+      });
+    } catch (e) {
+      console.warn("Realtime properties subscription notice:", e);
+    }
+  }
+}
 
 async function fetchLiveProperties() {
   if (window.db) {
@@ -156,7 +195,7 @@ function createPropertyCardHTML(prop) {
         <!-- Actions -->
         <div class="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-800 mt-auto">
           <button onclick="openBrochureModal('${prop.id}')" 
-                  class="w-full py-2.5 px-4 bg-slate-900 hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-amber-400 border border-amber-500/30 font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md flex items-center justify-center gap-2">
+                  class="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs uppercase tracking-wider transition-all text-center shadow-md flex items-center justify-center gap-2 border border-emerald-500/40">
             <span class="material-symbols-outlined text-base">picture_as_pdf</span>
             <span>Download Brochure</span>
           </button>
@@ -327,9 +366,12 @@ function openPropertyModal(propertyId) {
           </div>
         </div>
 
-        <div>
-          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 font-heading">Property Description</h3>
-          <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">${prop.description}</p>
+        <div class="p-6 rounded-2xl bg-amber-500/10 border border-amber-500/30">
+          <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 font-heading flex items-center gap-2">
+            <span class="material-symbols-outlined text-amber-500">info</span>
+            Property Overview & Complete Details
+          </h3>
+          <p class="text-slate-700 dark:text-slate-200 text-sm sm:text-base leading-relaxed whitespace-pre-line">${prop.description}</p>
         </div>
 
         ${prop.amenities && prop.amenities.length > 0 ? `
@@ -443,7 +485,7 @@ function openBrochureModal(propertyId) {
         </div>
 
         <button type="submit" id="brochure-submit-btn"
-                class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-button text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-all mt-2">
+                class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white font-button text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg hover:scale-[1.02] transition-all mt-2">
           <span class="material-symbols-outlined text-lg">download</span>
           <span>Submit & Download Brochure PDF</span>
         </button>
@@ -592,26 +634,26 @@ function handleBrochureSubmit(e, propertyId, encodedTitle) {
           startY += 22;
         });
 
-        // Highlights & Amenities
+        // Project Overview & Custom Description
         startY += 20;
         doc.setTextColor(15, 23, 42);
         doc.setFont("helvetica", "bold");
         doc.setFontSize(13);
-        doc.text("Key Infrastructure & Highlights", 40, startY);
-
-        const highlights = [
-          "✓ Blacktop roads with streetlights and avenue trees",
-          "✓ 100% Clear Title layouts verified by legal experts",
-          "✓ Ready for immediate villa construction & fast registration",
-          "✓ Bank loan approval assistance with flexible EMI terms",
-          "✓ 24/7 Gated Security with compound wall & entry arch"
-        ];
+        doc.text("Project Overview & Description", 40, startY);
 
         doc.setFont("helvetica", "normal");
         doc.setFontSize(9.5);
         doc.setTextColor(51, 65, 85);
-        highlights.forEach((h, i) => {
-          doc.text(h, 45, startY + 18 + (i * 17));
+
+        const rawDesc = property.description || "Premium plotted development by Triangle Properties situated in Chennai's fast-growing investment corridor with 100% clear title, DTCP/CMDA approvals, and immediate plot registration.";
+        const splitDesc = doc.splitTextToSize(rawDesc, 515);
+
+        let descY = startY + 18;
+        splitDesc.forEach((line) => {
+          if (descY < 730) {
+            doc.text(line, 45, descY);
+            descY += 15;
+          }
         });
 
         // Corporate Footer Banner
