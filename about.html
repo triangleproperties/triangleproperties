@@ -78,43 +78,22 @@
     <div id="about-signature-images" class="grid grid-cols-1 sm:grid-cols-3 gap-6 text-left">
       <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
         <div class="relative h-48 sm:h-60 overflow-hidden">
-          <img src="assets/hero-slider-1.jpg" alt="Susee Alight Layout"
+          <img src="assets/first.jpg" alt="Signature Layout 1"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
-          <div class="absolute bottom-4 left-4 right-4">
-            <span
-              class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature
-              Layout</span>
-            <h3 class="font-display text-lg sm:text-xl font-bold text-white">Susee Alight Layout</h3>
-          </div>
         </div>
       </div>
 
       <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
         <div class="relative h-48 sm:h-60 overflow-hidden">
-          <img src="assets/hero-slider-2.jpg" alt="M.A. Nagar Kadambathur"
+          <img src="assets/secound.jpg" alt="Signature Layout 2"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
-          <div class="absolute bottom-4 left-4 right-4">
-            <span
-              class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature
-              Layout</span>
-            <h3 class="font-display text-lg sm:text-xl font-bold text-white">M.A. Nagar Kadambathur</h3>
-          </div>
         </div>
       </div>
 
       <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
         <div class="relative h-48 sm:h-60 overflow-hidden">
-          <img src="assets/hero-slider-3.jpg" alt="Ishwarya Nagar ECR"
+          <img src="assets/Third.jpg" alt="Signature Layout 3"
             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
-          <div class="absolute bottom-4 left-4 right-4">
-            <span
-              class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature
-              Layout</span>
-            <h3 class="font-display text-lg sm:text-xl font-bold text-white">Ishwarya Nagar ECR</h3>
-          </div>
         </div>
       </div>
     </div>
@@ -134,26 +113,25 @@
         }
 
         const defaultImgs = [
-          { title: "Susee Alight Layout", url: "assets/hero-slider-1.jpg" },
-          { title: "M.A. Nagar Kadambathur", url: "assets/hero-slider-2.jpg" },
-          { title: "Ishwarya Nagar ECR", url: "assets/hero-slider-3.jpg" }
+          { title: "Signature Layout 1", url: "assets/first.jpg" },
+          { title: "Signature Layout 2", url: "assets/secound.jpg" },
+          { title: "Signature Layout 3", url: "assets/Third.jpg" }
         ];
 
         const imgs = data ? [data.img1, data.img2, data.img3].filter(Boolean) : defaultImgs;
 
         if (imgs.length > 0) {
-          container.innerHTML = imgs.map((item, i) => `
-            <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
-              <div class="relative h-48 sm:h-60 overflow-hidden">
-                <img src="${item.url || 'assets/hero-slider-' + (i + 1) + '.jpg'}" alt="${item.title || 'Signature Layout ' + (i + 1)}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent"></div>
-                <div class="absolute bottom-4 left-4 right-4">
-                  <span class="font-button text-[10px] uppercase tracking-widest text-amber-400 font-bold block mb-1">Signature Layout</span>
-                  <h3 class="font-display text-lg sm:text-xl font-bold text-white">${item.title || 'Signature Layout ' + (i + 1)}</h3>
+          container.innerHTML = imgs.map((item, i) => {
+            const defaultUrl = i === 0 ? 'assets/first.jpg' : i === 1 ? 'assets/secound.jpg' : 'assets/Third.jpg';
+            const imgUrl = (typeof item === 'string' ? item : item.url) || defaultUrl;
+            return `
+              <div class="glass-card rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl group">
+                <div class="relative h-48 sm:h-60 overflow-hidden">
+                  <img src="${imgUrl}" alt="Signature Layout ${i + 1}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
                 </div>
               </div>
-            </div>
-          `).join('');
+            `;
+          }).join('');
         }
       } catch (e) { }
     }
