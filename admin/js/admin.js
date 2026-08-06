@@ -982,25 +982,24 @@ function uploadPdfWithFirebase(file, uploadBtn, urlInputId, previewBoxId, previe
     }
   };
 
-  // 1. Instant 0ms local FileReader preview (guarantees PDF is attached even before cloud upload finishes)
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    if (urlInput) urlInput.value = e.target.result;
+  // 1. Instant 0ms local Blob preview URL (Clean & avoids massive 10MB base64 string)
+  try {
+    const blobUrl = URL.createObjectURL(file);
+    if (urlInput) urlInput.value = blobUrl;
     if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
     prevBox?.classList.remove('hidden');
-  };
-  reader.readAsDataURL(file);
+  } catch (e) {}
 
   // Timeout guard (reset button after 8s if cloud storage is slow)
   const timeoutId = setTimeout(() => {
     resetBtn();
-    showToast("PDF brochure attached successfully!", "success");
+    showToast("PDF brochure attached!", "success");
   }, 8000);
 
-  // 2. Background Cloud Storage Upload
+  // 2. Upload to Firebase Cloud Storage for permanent public URL
   if (storage) {
     try {
-      showToast(`Uploading ${file.name} to Cloud Storage...`, 'info');
+      showToast(`Uploading ${file.name} to Firebase Storage...`, 'info');
       const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
       const storageRef = ref(storage, `brochures/${Date.now()}_${safeName}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
@@ -1023,7 +1022,7 @@ function uploadPdfWithFirebase(file, uploadBtn, urlInputId, previewBoxId, previe
           try {
             const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
             if (urlInput) urlInput.value = downloadURL;
-            if (prevName) prevName.textContent = `PDF Brochure Attached (${file.name})`;
+            if (prevName) prevName.textContent = `PDF Brochure Uploaded (${file.name})`;
             prevBox?.classList.remove('hidden');
             resetBtn();
             showToast("PDF brochure uploaded successfully to Firebase Storage!", "success");
