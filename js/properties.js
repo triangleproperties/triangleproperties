@@ -46,7 +46,7 @@ async function initFirestorePropertiesRealtimeSync() {
 
           const gridContainer = document.getElementById('properties-grid');
           if (gridContainer) {
-            renderProperties(liveProps, gridContainer);
+            switchProjectCategory(currentActiveProjectCategory);
           }
         }
       });
@@ -86,8 +86,8 @@ async function initPropertyGrid() {
   const gridContainer = document.getElementById('properties-grid');
   if (!gridContainer) return;
 
-  const props = await fetchLiveProperties();
-  renderProperties(props, gridContainer);
+  await fetchLiveProperties();
+  switchProjectCategory(currentActiveProjectCategory);
 }
 
 function renderProperties(propertiesList, container) {
@@ -261,31 +261,35 @@ function updateTabButtonsUI(activeCategory) {
 }
 
 function switchProjectCategory(targetCategory) {
-  currentActiveProjectCategory = (targetCategory || 'ONGOING').toUpperCase();
+  const isPropertiesPage = window.location.pathname.includes('properties.html');
 
-  try {
-    const newUrl = window.location.pathname + '?status=' + currentActiveProjectCategory;
-    window.history.replaceState(null, '', newUrl);
-  } catch (e) {}
-
-  updateBannerHeading(currentActiveProjectCategory);
-  updateTabButtonsUI(currentActiveProjectCategory);
+  if (isPropertiesPage) {
+    currentActiveProjectCategory = (targetCategory || 'ONGOING').toUpperCase();
+    try {
+      const newUrl = window.location.pathname + '?status=' + currentActiveProjectCategory;
+      window.history.replaceState(null, '', newUrl);
+    } catch (e) {}
+    updateBannerHeading(currentActiveProjectCategory);
+    updateTabButtonsUI(currentActiveProjectCategory);
+  } else {
+    currentActiveProjectCategory = 'ONGOING';
+  }
 
   const gridContainer = document.getElementById('properties-grid');
   if (!gridContainer) return;
 
   const allProps = getLiveProperties();
 
-  // STRICT ZERO-MIXING FILTERING
+  // STRICT ZERO-MIXING FILTERING (ONGOING vs COMPLETED)
   const filteredProps = allProps.filter(prop => {
     const pStatus = (prop.status || '').toUpperCase();
     const pCategory = (prop.projectCategory || '').toUpperCase();
 
     if (currentActiveProjectCategory === 'COMPLETED') {
-      return pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory === 'COMPLETED';
+      return pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory.includes('COMPLETED');
     } else {
       // ONGOING view: strictly match ongoing/for sale and EXCLUDE completed
-      const isCompleted = pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory === 'COMPLETED';
+      const isCompleted = pStatus === 'COMPLETED' || pStatus === 'SOLD OUT' || pCategory.includes('COMPLETED');
       return !isCompleted;
     }
   });

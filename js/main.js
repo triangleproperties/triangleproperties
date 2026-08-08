@@ -531,7 +531,27 @@ function initAnnouncementLightbox() {
   const lightboxModal = document.getElementById('announcement-lightbox');
   if (!lightboxModal) return;
 
-  // Read active Lightbox settings
+  const updateLightboxDOM = (settings) => {
+    if (!settings) return;
+    if (settings.enabled === false) {
+      lightboxModal.classList.add('hidden');
+      return;
+    }
+
+    const imgEl = document.getElementById('lightbox-popup-img');
+    const titleEl = document.getElementById('lightbox-popup-title');
+    const subEl = document.getElementById('lightbox-popup-subtitle');
+    const ctaEl = document.getElementById('lightbox-popup-cta');
+    const ctaTextEl = document.getElementById('lightbox-popup-cta-text');
+
+    if (imgEl && settings.imageUrl) imgEl.src = settings.imageUrl;
+    if (titleEl && settings.title) titleEl.textContent = settings.title;
+    if (subEl && settings.subtitle) subEl.textContent = settings.subtitle;
+    if (ctaEl && settings.ctaLink) ctaEl.href = settings.ctaLink;
+    if (ctaTextEl && settings.ctaText) ctaTextEl.textContent = settings.ctaText;
+  };
+
+  // Read active Lightbox settings from localStorage first
   let settings = null;
   try {
     const saved = localStorage.getItem('triangle_lightbox_settings');
@@ -550,21 +570,30 @@ function initAnnouncementLightbox() {
     };
   }
 
-  // If disabled by Admin, return early
-  if (settings.enabled === false) return;
+  // Initial population from cached/default settings
+  updateLightboxDOM(settings);
 
-  // Populate Lightbox DOM elements
-  const imgEl = document.getElementById('lightbox-popup-img');
-  const titleEl = document.getElementById('lightbox-popup-title');
-  const subEl = document.getElementById('lightbox-popup-subtitle');
-  const ctaEl = document.getElementById('lightbox-popup-cta');
-  const ctaTextEl = document.getElementById('lightbox-popup-cta-text');
+  // Subscribe to Cloud Firestore for real-time live updates
+  const syncFromFirestore = () => {
+    if (window.db && window.firestoreOnSnapshot && window.firestoreDoc) {
+      try {
+        const docRef = window.firestoreDoc(window.db, 'settings', 'lightbox_popup');
+        window.firestoreOnSnapshot(docRef, (snapshot) => {
+          if (snapshot.exists()) {
+            const cloudSettings = snapshot.data();
+            localStorage.setItem('triangle_lightbox_settings', JSON.stringify(cloudSettings));
+            settings = { ...settings, ...cloudSettings };
+            updateLightboxDOM(settings);
+          }
+        });
+      } catch (e) {
+        console.warn("Firestore lightbox snapshot notice:", e);
+      }
+    }
+  };
 
-  if (imgEl && settings.imageUrl) imgEl.src = settings.imageUrl;
-  if (titleEl && settings.title) titleEl.textContent = settings.title;
-  if (subEl && settings.subtitle) subEl.textContent = settings.subtitle;
-  if (ctaEl && settings.ctaLink) ctaEl.href = settings.ctaLink;
-  if (ctaTextEl && settings.ctaText) ctaTextEl.textContent = settings.ctaText;
+  syncFromFirestore();
+  window.addEventListener('firebase-ready', syncFromFirestore);
 
   // Close handlers
   const closeBtn = document.getElementById('close-lightbox-btn');
@@ -578,10 +607,10 @@ function initAnnouncementLightbox() {
     if (e.target === lightboxModal) closeLightbox();
   });
 
-  // 5-Second Timer Popup Trigger
+  // Timer Popup Trigger
   const delayMs = (settings.delaySeconds || 5) * 1000;
   setTimeout(() => {
-    if (!sessionStorage.getItem('triangle_lightbox_closed')) {
+    if (!sessionStorage.getItem('triangle_lightbox_closed') && settings.enabled !== false) {
       lightboxModal.classList.remove('hidden');
     }
   }, delayMs);
