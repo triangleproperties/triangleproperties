@@ -102,13 +102,119 @@ try {
 // 5. AUTHENTICATION FLOW
 runDiagnosticCheck();
 
+// --- SECURE SESSION & INACTIVITY AUTO-LOGOUT ENGINE ---
+const INACTIVITY_TIMEOUT_MS = 30 * 60 * 1000; // 30 minutes inactivity timeout
+const MAX_SESSION_LIFETIME_MS = 8 * 60 * 60 * 1000; // 8 hours absolute max duration
+
+function saveAdminSession(email) {
+  const sessionData = {
+    email: email || 'admin@triangleproperties.in',
+    loginTime: Date.now(),
+    lastActive: Date.now()
+  };
+  sessionStorage.setItem('triangle_admin_session', JSON.stringify(sessionData));
+  localStorage.setItem('triangle_admin_session', JSON.stringify(sessionData));
+}
+
+function getValidAdminSession() {
+  const raw = sessionStorage.getItem('triangle_admin_session') || localStorage.getItem('triangle_admin_session');
+  if (!raw) return null;
+  try {
+    const session = typeof raw === 'string' && raw.startsWith('{') ? JSON.parse(raw) : { email: raw, loginTime: Date.now(), lastActive: Date.now() };
+    const now = Date.now();
+    if (!session || !session.email) {
+      clearAdminSession();
+      return null;
+    }
+    // Check inactivity timeout (30 mins)
+    if (now - (session.lastActive || 0) > INACTIVITY_TIMEOUT_MS) {
+      console.warn("Admin session expired due to inactivity.");
+      clearAdminSession();
+      return null;
+    }
+    // Check max lifetime (8 hours)
+    if (now - (session.loginTime || 0) > MAX_SESSION_LIFETIME_MS) {
+      console.warn("Admin session expired due to maximum lifetime.");
+      clearAdminSession();
+      return null;
+    }
+    // Touch lastActive
+    session.lastActive = now;
+    sessionStorage.setItem('triangle_admin_session', JSON.stringify(session));
+    localStorage.setItem('triangle_admin_session', JSON.stringify(session));
+    return session;
+  } catch (e) {
+    clearAdminSession();
+    return null;
+  }
+}
+
+function clearAdminSession() {
+  sessionStorage.removeItem('triangle_admin_session');
+  localStorage.removeItem('triangle_admin_session');
+}
+
+function recordUserActivity() {
+  const raw = sessionStorage.getItem('triangle_admin_session') || localStorage.getItem('triangle_admin_session');
+  if (raw) {
+    try {
+      const session = typeof raw === 'string' && raw.startsWith('{') ? JSON.parse(raw) : { email: raw, loginTime: Date.now(), lastActive: Date.now() };
+      session.lastActive = Date.now();
+      sessionStorage.setItem('triangle_admin_session', JSON.stringify(session));
+      localStorage.setItem('triangle_admin_session', JSON.stringify(session));
+    } catch (e) {}
+  }
+}
+
+// Activity event listeners (debounced)
+let activityDebounceTimer = null;
+['mousemove', 'mousedown', 'keydown', 'scroll', 'touchstart'].forEach(evt => {
+  window.addEventListener(evt, () => {
+    if (!activityDebounceTimer) {
+      activityDebounceTimer = setTimeout(() => {
+        recordUserActivity();
+        activityDebounceTimer = null;
+      }, 5000);
+    }
+  }, { passive: true });
+});
+
+// Periodic check for auto-logout (every 30 seconds)
+setInterval(async () => {
+  const dashScreen = document.getElementById('dashboard-screen');
+  if (dashScreen && !dashScreen.classList.contains('hidden')) {
+    const session = getValidAdminSession();
+    if (!session) {
+      await handleAdminLogout("Session expired due to 30 minutes of inactivity. Please sign in again.");
+    } else {
+      const remainingMs = INACTIVITY_TIMEOUT_MS - (Date.now() - session.lastActive);
+      const remainingMins = Math.max(1, Math.ceil(remainingMs / 60000));
+      const timerBadge = document.getElementById('session-timer-text');
+      if (timerBadge) {
+        timerBadge.textContent = `Session Active • ${remainingMins}m idle left`;
+      }
+    }
+  }
+}, 30000);
+
+async function handleAdminLogout(reasonMessage = "Signed out safely.") {
+  clearAdminSession();
+  try {
+    if (auth) await signOut(auth);
+  } catch (err) {}
+  state.user = null;
+  document.getElementById('dashboard-screen')?.classList.add('hidden');
+  document.getElementById('auth-screen')?.classList.remove('hidden');
+  showToast(reasonMessage, "info");
+}
+
 function checkAdminSession() {
-  const activeSession = localStorage.getItem('triangle_admin_session');
+  const activeSession = getValidAdminSession();
   if (activeSession) {
     const authScreen = document.getElementById('auth-screen');
     const dashScreen = document.getElementById('dashboard-screen');
     const emailDisplay = document.getElementById('user-email-display');
-    if (emailDisplay) emailDisplay.textContent = activeSession;
+    if (emailDisplay) emailDisplay.textContent = activeSession.email;
     authScreen?.classList.add('hidden');
     dashScreen?.classList.remove('hidden');
     loadDashboardData();
@@ -124,8 +230,16 @@ if (auth) {
     const emailDisplay = document.getElementById('user-email-display');
 
     if (user) {
+      // Validate that session hasn't expired before auto-restoring
+      const session = getValidAdminSession();
+      if (!session) {
+        await signOut(auth);
+        dashScreen?.classList.add('hidden');
+        authScreen?.classList.remove('hidden');
+        return;
+      }
       state.user = user;
-      localStorage.setItem('triangle_admin_session', user.email || 'admin@triangleproperties.in');
+      saveAdminSession(user.email || 'admin@triangleproperties.in');
       if (emailDisplay) emailDisplay.textContent = user.email || 'admin@triangleproperties.in';
       authScreen?.classList.add('hidden');
       dashScreen?.classList.remove('hidden');
@@ -157,26 +271,24 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
   if (submitBtn) submitBtn.textContent = "Authenticating...";
 
   let authenticated = false;
+  let authErrorMsg = "";
+
   if (auth) {
     try {
       await signInWithEmailAndPassword(auth, email, pass);
       authenticated = true;
     } catch (authErr) {
       console.warn("Firebase sign-in notice:", authErr.code, authErr.message);
-      if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/user-not-found') {
-        try {
-          await createUserWithEmailAndPassword(auth, email, pass);
-          authenticated = true;
-        } catch (createErr) {
-          console.warn("Firebase account creation notice:", createErr.code, createErr.message);
-        }
+      if (authErr.code === 'auth/invalid-credential' || authErr.code === 'auth/user-not-found' || authErr.code === 'auth/wrong-password') {
+        authErrorMsg = "Invalid admin email or password.";
+      } else {
+        authErrorMsg = authErr.message || "Authentication error.";
       }
     }
   }
 
-  // Grant session if Firebase auth succeeded OR valid credentials entered (pass length >= 4)
-  if (authenticated || pass.length >= 4) {
-    localStorage.setItem('triangle_admin_session', email);
+  if (authenticated) {
+    saveAdminSession(email);
     const authScreen = document.getElementById('auth-screen');
     const dashScreen = document.getElementById('dashboard-screen');
     const emailDisplay = document.getElementById('user-email-display');
@@ -187,7 +299,7 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
     await loadDashboardData();
     showToast("Welcome back Admin!", "success");
   } else {
-    showToast("Invalid password! Please enter at least 4 characters.", "error");
+    showToast(authErrorMsg || "Authentication failed! Invalid credentials.", "error");
   }
 
   if (submitBtn) submitBtn.textContent = "Sign In to Dashboard";
@@ -195,13 +307,7 @@ document.getElementById('login-form')?.addEventListener('submit', async (e) => {
 
 // Logout Button
 document.getElementById('logout-btn')?.addEventListener('click', async () => {
-  localStorage.removeItem('triangle_admin_session');
-  try {
-    if (auth) await signOut(auth);
-  } catch (err) {}
-  document.getElementById('dashboard-screen')?.classList.add('hidden');
-  document.getElementById('auth-screen')?.classList.remove('hidden');
-  showToast("Signed out safely.", "info");
+  await handleAdminLogout("Signed out safely.");
 });
 
 // 6. TAB NAVIGATION
@@ -231,6 +337,8 @@ tabBtns.forEach(btn => {
                               tab === 'testimonials' ? 'Customer Testimonials & Reviews' :
                               tab === 'blog' ? 'Blog & Articles CMS' :
                               tab === 'signature' ? 'Signature Properties Images' :
+                              tab === 'lightbox' ? 'Announcement Popup Settings' :
+                              tab === 'hero' ? 'Homepage Hero Slider Management' :
                               tab === 'settings' ? 'Site Settings & Configuration' : 'Customer Enquiries & Leads';
     }
   });
@@ -261,6 +369,10 @@ async function loadDashboardData() {
   try {
     await loadLightboxSettings();
   } catch (e) { console.warn("Lightbox fetch error:", e); }
+
+  try {
+    await loadHeroSliderSettings();
+  } catch (e) { console.warn("Hero slider fetch error:", e); }
 
   renderStats();
 }
@@ -1132,7 +1244,8 @@ function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previe
   { btn: 'cat-upload-btn', input: 'cat-file-input', url: 'cat-image-url', prev: 'cat-img-preview', box: 'cat-img-preview-box', folder: 'categories' },
   { btn: 'gal-upload-btn', input: 'gal-file-input', url: 'gal-image-url', prev: 'gal-img-preview', box: 'gal-img-preview-box', folder: 'gallery' },
   { btn: 'blog-upload-btn', input: 'blog-file-input', url: 'blog-image-url', prev: 'blog-img-preview', box: 'blog-img-preview-box', folder: 'blog' },
-  { btn: 'lightbox-upload-btn', input: 'lightbox-file-input', url: 'lightbox-image-url', prev: 'lightbox-img-preview', box: 'lightbox-img-preview-box', folder: 'lightbox' }
+  { btn: 'lightbox-upload-btn', input: 'lightbox-file-input', url: 'lightbox-image-url', prev: 'lightbox-img-preview', box: 'lightbox-img-preview-box', folder: 'lightbox' },
+  { btn: 'hero-upload-btn', input: 'hero-file-input', url: 'hero-image-url', prev: 'hero-img-preview', box: 'hero-img-preview-box', folder: 'hero' }
 ].forEach(cfg => {
   const btnEl = document.getElementById(cfg.btn);
   const inputEl = document.getElementById(cfg.input);
@@ -1443,3 +1556,316 @@ document.getElementById('lightbox-settings-form')?.addEventListener('submit', as
     showToast("Lightbox settings saved locally!", "info");
   }
 });
+
+// =========================================================================
+// HERO SLIDER / CAROUSEL CRUD ENGINE
+// =========================================================================
+let heroSliderState = {
+  limit: 5,
+  autoPlaySeconds: 5,
+  slides: [
+    {
+      id: "slide_1",
+      image: "assets/hero-slider-1.jpg",
+      title: "Susee Alight Kuthambakkam - Triangle Properties Gated Community Plots",
+      badge: "TAP into Smart Investments",
+      heading: "Premium Plots in Kuthambakkam <br/><span class=\"gold-gradient-text italic font-serif\">Susee Alight – ₹1,899/sq.ft</span>",
+      text: "Triangle Properties delivers DTCP & RERA approved gated community plots in Kuthambakkam, Poonamallee with 33ft blacktop roads and 100% legal title clearance.",
+      link: "properties.html?status=ONGOING"
+    },
+    {
+      id: "slide_2",
+      image: "assets/hero-slider-2.jpg",
+      title: "Ishwarya Nagar ECR - Triangle Properties Resort Layout",
+      badge: "On-Road Resort Plots on ECR",
+      heading: "Ishwarya Nagar – ECR <br/><span class=\"gold-gradient-text italic font-serif\">Affordable Luxury at ₹777/sq.ft</span>",
+      text: "DTCP approved prime resort plots in Koovathur, ECR with avenue trees, entrance arch, street lights, and high appreciation potential.",
+      link: "properties.html?status=ONGOING"
+    },
+    {
+      id: "slide_3",
+      image: "assets/hero-slider-3.jpg",
+      title: "M.A. Nagar Tiruvallur - Triangle Properties Approved Plots",
+      badge: "Kadambathur, Tiruvallur",
+      heading: "M.A. Nagar Tiruvallur <br/><span class=\"gold-gradient-text italic font-serif\">Exclusive Price ₹899/sq.ft</span>",
+      text: "DTCP approved 4.7-acre gated layout with 30ft roads, 24x7 security, EB facility, and ready for immediate registration.",
+      link: "properties.html?status=ONGOING"
+    }
+  ]
+};
+
+async function loadHeroSliderSettings() {
+  try {
+    const saved = localStorage.getItem('triangle_hero_carousel');
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        heroSliderState = { ...heroSliderState, ...parsed };
+      } catch (e) {}
+    }
+
+    if (db) {
+      const snap = await getDocs(collection(db, "settings"));
+      snap.docs.forEach(d => {
+        if (d.id === "hero_carousel") {
+          const liveData = d.data();
+          heroSliderState = { ...heroSliderState, ...liveData };
+          localStorage.setItem('triangle_hero_carousel', JSON.stringify(heroSliderState));
+        }
+      });
+    }
+  } catch (err) {
+    console.warn("Hero settings fetch notice:", err);
+  }
+
+  // Populate settings form
+  const limitInput = document.getElementById('hero-max-limit');
+  const durationInput = document.getElementById('hero-cycle-duration');
+  if (limitInput) limitInput.value = heroSliderState.limit || 5;
+  if (durationInput) durationInput.value = heroSliderState.autoPlaySeconds || 5;
+
+  renderHeroSlidesAdminList();
+}
+
+function renderHeroSlidesAdminList() {
+  const container = document.getElementById('hero-slides-list');
+  const countBadge = document.getElementById('hero-slides-count-badge');
+  if (!container) return;
+
+  const slides = heroSliderState.slides || [];
+  const limit = parseInt(heroSliderState.limit || 5, 10);
+
+  if (countBadge) {
+    countBadge.textContent = `Slides: ${slides.length} / ${limit} (Max Limit)`;
+    if (slides.length >= limit) {
+      countBadge.className = 'px-4 py-2 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 text-xs font-button font-bold uppercase tracking-wider';
+    } else {
+      countBadge.className = 'px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-xs font-button font-bold uppercase tracking-wider';
+    }
+  }
+
+  if (slides.length === 0) {
+    container.innerHTML = `
+      <div class="text-center py-12 px-4 rounded-xl border border-dashed border-slate-800 text-on-surface-variant text-xs">
+        <span class="material-symbols-outlined text-4xl text-slate-700 block mb-2">view_carousel</span>
+        <span>No hero slides configured. Upload a banner image above to add your first slide.</span>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = slides.map((slide, idx) => `
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-surface-container border border-slate-800/80 hover:border-primary/40 transition-all">
+      <div class="flex items-center gap-4">
+        <span class="w-7 h-7 rounded-lg bg-surface-container-high border border-slate-700 text-xs font-bold font-button flex items-center justify-center text-primary shrink-0">
+          #${idx + 1}
+        </span>
+        <div class="w-24 h-14 rounded-lg overflow-hidden bg-slate-900 border border-slate-700 shrink-0">
+          <img src="${escapeHtml(slide.image)}" alt="${escapeHtml(slide.title)}" class="w-full h-full object-cover">
+        </div>
+        <div class="space-y-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <h4 class="text-sm font-bold text-white line-clamp-1">${escapeHtml(slide.title || 'Untitled Slide')}</h4>
+            ${slide.badge ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">${escapeHtml(slide.badge)}</span>` : ''}
+            ${idx < limit ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Live on Site</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">Exceeds Limit</span>`}
+          </div>
+          <p class="text-xs text-on-surface-variant line-clamp-1">${escapeHtml(slide.text || slide.heading || slide.image)}</p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+        ${idx > 0 ? `
+          <button type="button" onclick="window.moveHeroSlide('${slide.id}', -1)" title="Move Up"
+            class="p-2 rounded-lg bg-surface-container-high hover:bg-primary/20 text-on-surface hover:text-primary transition-all">
+            <span class="material-symbols-outlined text-sm">arrow_upward</span>
+          </button>
+        ` : ''}
+        ${idx < slides.length - 1 ? `
+          <button type="button" onclick="window.moveHeroSlide('${slide.id}', 1)" title="Move Down"
+            class="p-2 rounded-lg bg-surface-container-high hover:bg-primary/20 text-on-surface hover:text-primary transition-all">
+            <span class="material-symbols-outlined text-sm">arrow_downward</span>
+          </button>
+        ` : ''}
+        <button type="button" onclick="window.editHeroSlide('${slide.id}')"
+          class="px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary text-primary hover:text-slate-950 text-xs font-button uppercase font-bold transition-all flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">edit</span>
+          <span>Edit</span>
+        </button>
+        <button type="button" onclick="window.deleteHeroSlide('${slide.id}')"
+          class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white text-xs font-button uppercase font-bold transition-all flex items-center gap-1">
+          <span class="material-symbols-outlined text-xs">delete</span>
+          <span>Delete</span>
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
+
+async function saveHeroCarouselToStorage() {
+  localStorage.setItem('triangle_hero_carousel', JSON.stringify(heroSliderState));
+  window.dispatchEvent(new CustomEvent('triangle_hero_updated', { detail: heroSliderState }));
+
+  if (db) {
+    try {
+      await setDoc(doc(db, "settings", "hero_carousel"), heroSliderState, { merge: true });
+      showToast("Hero slider synced live to homepage!", "success");
+      return;
+    } catch (e) {
+      console.warn("Firestore hero save error:", e);
+    }
+  }
+  showToast("Hero slider saved locally!", "info");
+}
+
+// Save Slider Settings (Limit & Duration)
+document.getElementById('hero-settings-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const limitVal = parseInt(document.getElementById('hero-max-limit').value || 5, 10);
+  const cycleVal = parseInt(document.getElementById('hero-cycle-duration').value || 5, 10);
+
+  heroSliderState.limit = Math.max(1, limitVal);
+  heroSliderState.autoPlaySeconds = Math.max(2, cycleVal);
+
+  await saveHeroCarouselToStorage();
+  renderHeroSlidesAdminList();
+});
+
+// Add or Edit Slide Submit
+document.getElementById('hero-slide-form')?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const slideId = document.getElementById('hero-slide-id').value;
+  const title = document.getElementById('hero-slide-title').value.trim();
+  const badge = document.getElementById('hero-slide-badge').value.trim();
+  const imageUrl = document.getElementById('hero-image-url').value.trim();
+  const heading = document.getElementById('hero-slide-heading').value.trim();
+  const link = document.getElementById('hero-slide-link').value.trim();
+  const text = document.getElementById('hero-slide-text').value.trim();
+
+  if (!imageUrl || !title) {
+    showToast("Please provide slide title and banner image.", "error");
+    return;
+  }
+
+  const currentSlides = heroSliderState.slides || [];
+  const limit = parseInt(heroSliderState.limit || 5, 10);
+
+  if (slideId) {
+    // Edit existing slide
+    const idx = currentSlides.findIndex(s => s.id === slideId);
+    if (idx !== -1) {
+      currentSlides[idx] = {
+        ...currentSlides[idx],
+        title,
+        badge,
+        image: imageUrl,
+        heading,
+        link,
+        text,
+        updatedAt: new Date().toISOString()
+      };
+      showToast("Slide updated successfully!", "success");
+    }
+  } else {
+    // New Slide Check Limit
+    if (currentSlides.length >= limit) {
+      showToast(`Cannot add slide! Maximum limit (${limit}) reached. Please increase slide limit above.`, "error");
+      return;
+    }
+
+    const newSlide = {
+      id: "slide_" + Date.now(),
+      title,
+      badge,
+      image: imageUrl,
+      heading,
+      link,
+      text,
+      createdAt: new Date().toISOString()
+    };
+    currentSlides.push(newSlide);
+    showToast("New hero slide added!", "success");
+  }
+
+  heroSliderState.slides = currentSlides;
+  await saveHeroCarouselToStorage();
+  resetHeroSlideForm();
+  renderHeroSlidesAdminList();
+});
+
+function resetHeroSlideForm() {
+  document.getElementById('hero-slide-id').value = '';
+  document.getElementById('hero-slide-title').value = '';
+  document.getElementById('hero-slide-badge').value = '';
+  document.getElementById('hero-image-url').value = '';
+  document.getElementById('hero-slide-heading').value = '';
+  document.getElementById('hero-slide-link').value = '';
+  document.getElementById('hero-slide-text').value = '';
+
+  const prevBox = document.getElementById('hero-img-preview-box');
+  if (prevBox) prevBox.classList.add('hidden');
+
+  const headingEl = document.getElementById('hero-form-heading');
+  if (headingEl) {
+    headingEl.innerHTML = `<span class="material-symbols-outlined text-primary text-xl">add_photo_alternate</span><span>Upload & Add New Hero Slide</span>`;
+  }
+  const submitText = document.getElementById('hero-submit-text');
+  if (submitText) submitText.textContent = "Add Slide to Hero Carousel";
+
+  document.getElementById('cancel-edit-hero-btn')?.classList.add('hidden');
+}
+
+document.getElementById('cancel-edit-hero-btn')?.addEventListener('click', resetHeroSlideForm);
+
+window.editHeroSlide = function(slideId) {
+  const slide = (heroSliderState.slides || []).find(s => s.id === slideId);
+  if (!slide) return;
+
+  document.getElementById('hero-slide-id').value = slide.id;
+  document.getElementById('hero-slide-title').value = slide.title || '';
+  document.getElementById('hero-slide-badge').value = slide.badge || '';
+  document.getElementById('hero-image-url').value = slide.image || '';
+  document.getElementById('hero-slide-heading').value = slide.heading || '';
+  document.getElementById('hero-slide-link').value = slide.link || '';
+  document.getElementById('hero-slide-text').value = slide.text || '';
+
+  const prevImg = document.getElementById('hero-img-preview');
+  const prevBox = document.getElementById('hero-img-preview-box');
+  if (prevImg && slide.image) {
+    prevImg.src = slide.image;
+    prevBox?.classList.remove('hidden');
+  }
+
+  const headingEl = document.getElementById('hero-form-heading');
+  if (headingEl) {
+    headingEl.innerHTML = `<span class="material-symbols-outlined text-primary text-xl">edit</span><span>Edit Hero Slide #${slide.id}</span>`;
+  }
+  const submitText = document.getElementById('hero-submit-text');
+  if (submitText) submitText.textContent = "Update Hero Slide";
+
+  document.getElementById('cancel-edit-hero-btn')?.classList.remove('hidden');
+  document.getElementById('tab-hero')?.scrollIntoView({ behavior: 'smooth' });
+};
+
+window.deleteHeroSlide = async function(slideId) {
+  if (!confirm("Are you sure you want to delete this hero slide?")) return;
+  heroSliderState.slides = (heroSliderState.slides || []).filter(s => s.id !== slideId);
+  await saveHeroCarouselToStorage();
+  renderHeroSlidesAdminList();
+  showToast("Slide deleted.", "info");
+};
+
+window.moveHeroSlide = async function(slideId, direction) {
+  const slides = heroSliderState.slides || [];
+  const idx = slides.findIndex(s => s.id === slideId);
+  if (idx === -1) return;
+  const targetIdx = idx + direction;
+  if (targetIdx < 0 || targetIdx >= slides.length) return;
+
+  const temp = slides[idx];
+  slides[idx] = slides[targetIdx];
+  slides[targetIdx] = temp;
+
+  heroSliderState.slides = slides;
+  await saveHeroCarouselToStorage();
+  renderHeroSlidesAdminList();
+};

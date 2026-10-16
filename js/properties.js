@@ -261,7 +261,8 @@ function updateTabButtonsUI(activeCategory) {
 }
 
 function switchProjectCategory(targetCategory) {
-  const isPropertiesPage = window.location.pathname.includes('properties.html');
+  const hasCategoryTabs = !!document.getElementById('tab-btn-ongoing') || !!document.getElementById('tab-btn-completed');
+  const isPropertiesPage = hasCategoryTabs || /properties(\.html)?/i.test(window.location.pathname);
 
   if (isPropertiesPage) {
     currentActiveProjectCategory = (targetCategory || 'ONGOING').toUpperCase();

@@ -107,64 +107,173 @@ window.initNavigation = initNavigation;
 
 /* -------------------------------------------------------------
  * 4. Hero Section Background Carousel
+/* -------------------------------------------------------------
+ * 4. Luxury Hero Slider Carousel (Dynamic Firebase & Local Sync)
  * ------------------------------------------------------------- */
-function initHeroCarousel() {
-  const slides = document.querySelectorAll('.hero-slide');
-  const indicators = document.querySelectorAll('.hero-indicator');
+let heroCarouselTimer = null;
+
+async function getHeroCarouselData() {
+  let carouselData = {
+    limit: 5,
+    autoPlaySeconds: 5,
+    slides: []
+  };
+
+  try {
+    const local = localStorage.getItem('triangle_hero_carousel');
+    if (local) {
+      const parsed = JSON.parse(local);
+      if (parsed && Array.isArray(parsed.slides) && parsed.slides.length > 0) {
+        carouselData = { ...carouselData, ...parsed };
+      }
+    }
+  } catch (e) {}
+
+  if (window.db) {
+    try {
+      const { collection, getDocs } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+      const snap = await getDocs(collection(window.db, "settings"));
+      snap.docs.forEach(docSnap => {
+        if (docSnap.id === "hero_carousel") {
+          const liveData = docSnap.data();
+          if (liveData && Array.isArray(liveData.slides) && liveData.slides.length > 0) {
+            carouselData = { ...carouselData, ...liveData };
+            localStorage.setItem('triangle_hero_carousel', JSON.stringify(carouselData));
+          }
+        }
+      });
+    } catch (e) {
+      console.warn("Public hero carousel Firestore read notice:", e);
+    }
+  }
+
+  return carouselData;
+}
+
+async function initHeroCarousel() {
+  const carouselContainer = document.getElementById('hero-carousel');
+  if (!carouselContainer) return;
+
   const prevBtn = document.getElementById('hero-prev-btn');
   const nextBtn = document.getElementById('hero-next-btn');
+  const indicatorsContainer = document.getElementById('hero-indicators');
 
   const heroBadge = document.getElementById('hero-slide-badge');
   const heroHeading = document.getElementById('hero-slide-heading');
   const heroText = document.getElementById('hero-slide-text');
 
+  // Load configured hero data
+  const data = await getHeroCarouselData();
+  const limit = Math.max(1, parseInt(data.limit || 5, 10));
+  const autoPlayInterval = Math.max(2, parseInt(data.autoPlaySeconds || 5, 10)) * 1000;
+
+  // Filter slides up to limit
+  let activeSlides = (data.slides || []).slice(0, limit);
+
+  // Fallback default slides if no custom slides configured
+  if (activeSlides.length === 0) {
+    activeSlides = [
+      {
+        id: "slide_1",
+        image: "assets/hero-slider-1.jpg",
+        title: "Susee Alight Kuthambakkam - Triangle Properties Gated Community Plots",
+        badge: "TAP into Smart Investments",
+        heading: "Premium Plots in Kuthambakkam <br/><span class=\"gold-gradient-text italic font-serif\">Susee Alight – ₹1,899/sq.ft</span>",
+        text: "Triangle Properties delivers DTCP & RERA approved gated community plots in Kuthambakkam, Poonamallee with 33ft blacktop roads and 100% legal title clearance.",
+        link: "properties.html?status=ONGOING"
+      },
+      {
+        id: "slide_2",
+        image: "assets/hero-slider-2.jpg",
+        title: "Ishwarya Nagar ECR - Triangle Properties Resort Layout",
+        badge: "On-Road Resort Plots on ECR",
+        heading: "Ishwarya Nagar – ECR <br/><span class=\"gold-gradient-text italic font-serif\">Affordable Luxury at ₹777/sq.ft</span>",
+        text: "DTCP approved prime resort plots in Koovathur, ECR with avenue trees, entrance arch, street lights, and high appreciation potential.",
+        link: "properties.html?status=ONGOING"
+      },
+      {
+        id: "slide_3",
+        image: "assets/hero-slider-3.jpg",
+        title: "M.A. Nagar Tiruvallur - Triangle Properties Approved Plots",
+        badge: "Kadambathur, Tiruvallur",
+        heading: "M.A. Nagar Tiruvallur <br/><span class=\"gold-gradient-text italic font-serif\">Exclusive Price ₹899/sq.ft</span>",
+        text: "DTCP approved 4.7-acre gated layout with 30ft roads, 24x7 security, EB facility, and ready for immediate registration.",
+        link: "properties.html?status=ONGOING"
+      }
+    ].slice(0, limit);
+  }
+
+  // Remove existing slide elements
+  carouselContainer.querySelectorAll('.hero-slide').forEach(s => s.remove());
+
+  // Render slides before controls
+  const controlsEl = carouselContainer.querySelector('.absolute.bottom-3, .absolute.bottom-6');
+  activeSlides.forEach((slide, idx) => {
+    const slideDiv = document.createElement('div');
+    slideDiv.className = `hero-slide absolute inset-0 transition-opacity duration-700 ease-in-out ${idx === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0'}`;
+    slideDiv.setAttribute('data-index', idx);
+    
+    const isFirst = idx === 0;
+    slideDiv.innerHTML = `
+      <img src="${slide.image}" 
+           alt="${slide.title || 'Triangle Properties Hero Slide'}" 
+           class="w-full h-full object-contain sm:object-cover object-center" 
+           ${isFirst ? 'fetchpriority="high"' : 'loading="lazy"'} 
+           width="1600" height="900" 
+           onerror="this.onerror=null;this.src='assets/hero-slider-1.jpg';" />
+      ${slide.link ? `<a href="${slide.link}" class="absolute inset-0 z-10" aria-label="${slide.title}"></a>` : ''}
+    `;
+
+    if (controlsEl) {
+      carouselContainer.insertBefore(slideDiv, controlsEl);
+    } else {
+      carouselContainer.appendChild(slideDiv);
+    }
+  });
+
+  // Render indicators
+  if (indicatorsContainer) {
+    indicatorsContainer.innerHTML = activeSlides.map((_, idx) => `
+      <button class="h-1.5 rounded-full transition-all hero-indicator ${idx === 0 ? 'w-6 bg-amber-500' : 'w-2 bg-slate-600'}" 
+              data-slide="${idx}" 
+              aria-label="Slide ${idx + 1}"></button>
+    `).join('');
+  }
+
+  const slides = carouselContainer.querySelectorAll('.hero-slide');
+  const indicators = indicatorsContainer ? indicatorsContainer.querySelectorAll('.hero-indicator') : [];
+
   if (slides.length === 0) return;
 
-  const slideData = [
-    {
-      badge: "TAP into Smart Investments",
-      heading: "Premium Plots in Kuthambakkam <br/><span class=\"gold-gradient-text italic font-serif\">Susee Alight – ₹1,899/sq.ft</span>",
-      text: "Triangle Properties delivers DTCP & RERA approved gated community plots in Kuthambakkam, Poonamallee with 33ft blacktop roads and 100% legal title clearance."
-    },
-    {
-      badge: "On-Road Resort Plots on ECR",
-      heading: "Ishwarya Nagar – ECR <br/><span class=\"gold-gradient-text italic font-serif\">Affordable Luxury at ₹777/sq.ft</span>",
-      text: "DTCP approved prime resort plots in Koovathur, ECR with avenue trees, entrance arch, street lights, and high appreciation potential."
-    },
-    {
-      badge: "Kadambathur, Tiruvallur",
-      heading: "M.A. Nagar Tiruvallur <br/><span class=\"gold-gradient-text italic font-serif\">Exclusive Price ₹899/sq.ft</span>",
-      text: "DTCP approved 4.7-acre gated layout with 30ft roads, 24x7 security, EB facility, and ready for immediate registration."
-    }
-  ];
-
   let currentSlide = 0;
-  let carouselTimer = null;
 
   function showSlide(index) {
     slides.forEach((slide, i) => {
       if (i === index) {
-        slide.classList.remove('opacity-0');
-        slide.classList.add('opacity-100');
+        slide.classList.remove('opacity-0', 'z-0');
+        slide.classList.add('opacity-100', 'z-10');
       } else {
-        slide.classList.remove('opacity-100');
-        slide.classList.add('opacity-0');
+        slide.classList.remove('opacity-100', 'z-10');
+        slide.classList.add('opacity-0', 'z-0');
       }
     });
 
     indicators.forEach((ind, i) => {
       if (i === index) {
-        ind.classList.remove('w-2.5', 'bg-slate-600');
-        ind.classList.add('w-8', 'bg-amber-500');
+        ind.classList.remove('w-2', 'bg-slate-600');
+        ind.classList.add('w-6', 'bg-amber-500');
       } else {
-        ind.classList.remove('w-8', 'bg-amber-500');
-        ind.classList.add('w-2.5', 'bg-slate-600');
+        ind.classList.remove('w-6', 'bg-amber-500');
+        ind.classList.add('w-2', 'bg-slate-600');
       }
     });
 
-    if (heroBadge && slideData[index]) heroBadge.innerHTML = slideData[index].badge;
-    if (heroHeading && slideData[index]) heroHeading.innerHTML = slideData[index].heading;
-    if (heroText && slideData[index]) heroText.innerHTML = slideData[index].text;
+    const activeItem = activeSlides[index];
+    if (activeItem) {
+      if (heroBadge && activeItem.badge) heroBadge.innerHTML = activeItem.badge;
+      if (heroHeading && activeItem.heading) heroHeading.innerHTML = activeItem.heading;
+      if (heroText && activeItem.text) heroText.innerHTML = activeItem.text;
+    }
 
     currentSlide = index;
   }
@@ -181,19 +290,29 @@ function initHeroCarousel() {
 
   function startAutoCycle() {
     stopAutoCycle();
-    carouselTimer = setInterval(nextSlide, 5000);
+    if (slides.length > 1) {
+      heroCarouselTimer = setInterval(nextSlide, autoPlayInterval);
+    }
   }
 
   function stopAutoCycle() {
-    if (carouselTimer) clearInterval(carouselTimer);
+    if (heroCarouselTimer) {
+      clearInterval(heroCarouselTimer);
+      heroCarouselTimer = null;
+    }
   }
 
-  nextBtn?.addEventListener('click', () => {
+  nextBtn?.replaceWith(nextBtn.cloneNode(true));
+  prevBtn?.replaceWith(prevBtn.cloneNode(true));
+  const newNextBtn = document.getElementById('hero-next-btn');
+  const newPrevBtn = document.getElementById('hero-prev-btn');
+
+  newNextBtn?.addEventListener('click', () => {
     nextSlide();
     startAutoCycle();
   });
 
-  prevBtn?.addEventListener('click', () => {
+  newPrevBtn?.addEventListener('click', () => {
     prevSlide();
     startAutoCycle();
   });
@@ -208,6 +327,19 @@ function initHeroCarousel() {
 
   startAutoCycle();
 }
+
+// Listen for updates from Admin Panel & Firebase
+window.addEventListener('triangle_hero_updated', () => {
+  initHeroCarousel();
+});
+window.addEventListener('storage', (e) => {
+  if (e.key === 'triangle_hero_carousel') {
+    initHeroCarousel();
+  }
+});
+window.addEventListener('firebase-ready', () => {
+  initHeroCarousel();
+});
 
 /* -------------------------------------------------------------
  * 5. Floating Action Buttons (WhatsApp & Call)
