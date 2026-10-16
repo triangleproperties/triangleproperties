@@ -1171,19 +1171,23 @@ if (pdfBtnEl && pdfInputEl) {
     }
   });
 }
-function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previewImgId, previewBoxId) {
+function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previewImgId, previewBoxId, onComplete) {
   if (!file) return;
 
-  const urlInput = document.getElementById(urlInputId);
-  const prevImg = document.getElementById(previewImgId);
-  const prevBox = document.getElementById(previewBoxId);
+  const urlInput = urlInputId ? document.getElementById(urlInputId) : null;
+  const prevImg = previewImgId ? document.getElementById(previewImgId) : null;
+  const prevBox = previewBoxId ? document.getElementById(previewBoxId) : null;
 
   // 1. Instant local FileReader preview (0ms lag)
   const reader = new FileReader();
   reader.onload = (e) => {
-    if (urlInput) urlInput.value = e.target.result;
-    if (prevImg) prevImg.src = e.target.result;
+    const dataUrl = e.target.result;
+    if (urlInput) urlInput.value = dataUrl;
+    if (prevImg) prevImg.src = dataUrl;
     prevBox?.classList.remove('hidden');
+    if (typeof onComplete === 'function') {
+      onComplete(dataUrl);
+    }
   };
   reader.readAsDataURL(file);
 
@@ -1201,7 +1205,7 @@ function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previe
     }
   };
 
-  // 3. Cloudinary or Firebase Storage Upload
+  // 3. Cloud Storage Upload (Firebase Storage)
   if (storage) {
     showToast(`Uploading ${file.name} to cloud storage...`, 'info');
     const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
@@ -1227,6 +1231,9 @@ function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previe
           if (prevImg) prevImg.src = downloadURL;
           resetBtn();
           showToast("Image uploaded successfully to Cloud Storage!", "success");
+          if (typeof onComplete === 'function') {
+            onComplete(downloadURL);
+          }
         } catch (e) {
           resetBtn();
           showToast("Image preview loaded!", "success");
@@ -1244,26 +1251,15 @@ function uploadImageWithFallback(file, folderName, uploadBtn, urlInputId, previe
   { btn: 'cat-upload-btn', input: 'cat-file-input', url: 'cat-image-url', prev: 'cat-img-preview', box: 'cat-img-preview-box', folder: 'categories' },
   { btn: 'gal-upload-btn', input: 'gal-file-input', url: 'gal-image-url', prev: 'gal-img-preview', box: 'gal-img-preview-box', folder: 'gallery' },
   { btn: 'blog-upload-btn', input: 'blog-file-input', url: 'blog-image-url', prev: 'blog-img-preview', box: 'blog-img-preview-box', folder: 'blog' },
-  { btn: 'lightbox-upload-btn', input: 'lightbox-file-input', url: 'lightbox-image-url', prev: 'lightbox-img-preview', box: 'lightbox-img-preview-box', folder: 'lightbox' },
-  { btn: 'hero-upload-btn', input: 'hero-file-input', url: 'hero-image-url', prev: 'hero-img-preview', box: 'hero-img-preview-box', folder: 'hero' }
+  { btn: 'lightbox-upload-btn', input: 'lightbox-file-input', url: 'lightbox-image-url', prev: 'lightbox-img-preview', box: 'lightbox-img-preview-box', folder: 'lightbox' }
 ].forEach(cfg => {
   const btnEl = document.getElementById(cfg.btn);
   const inputEl = document.getElementById(cfg.input);
 
   if (btnEl && inputEl) {
     btnEl.addEventListener('click', () => {
-      if (typeof window.openCloudinaryWidget === 'function') {
-        window.openCloudinaryWidget((url) => {
-          const urlInput = document.getElementById(cfg.url);
-          const prevImg = document.getElementById(cfg.prev);
-          const prevBox = document.getElementById(cfg.box);
-          if (urlInput) urlInput.value = url;
-          if (prevImg) prevImg.src = url;
-          prevBox?.classList.remove('hidden');
-        });
-      } else {
-        inputEl.click();
-      }
+      // Direct file upload without Cloudinary blocking errors
+      inputEl.click();
     });
 
     inputEl.addEventListener('change', (e) => {
@@ -1628,7 +1624,7 @@ async function loadHeroSliderSettings() {
 }
 
 function renderHeroSlidesAdminList() {
-  const container = document.getElementById('hero-slides-list');
+  const container = document.getElementById('hero-slides-grid');
   const countBadge = document.getElementById('hero-slides-count-badge');
   if (!container) return;
 
@@ -1646,59 +1642,84 @@ function renderHeroSlidesAdminList() {
 
   if (slides.length === 0) {
     container.innerHTML = `
-      <div class="text-center py-12 px-4 rounded-xl border border-dashed border-slate-800 text-on-surface-variant text-xs">
+      <div class="col-span-full text-center py-12 px-4 rounded-2xl border-2 border-dashed border-slate-800 text-on-surface-variant text-xs">
         <span class="material-symbols-outlined text-4xl text-slate-700 block mb-2">view_carousel</span>
-        <span>No hero slides configured. Upload a banner image above to add your first slide.</span>
+        <span class="text-sm font-semibold text-white block mb-1">No hero slides found</span>
+        <span>Upload a banner image above to add your first slide to the homepage carousel.</span>
       </div>
     `;
     return;
   }
 
-  container.innerHTML = slides.map((slide, idx) => `
-    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-xl bg-surface-container border border-slate-800/80 hover:border-primary/40 transition-all">
-      <div class="flex items-center gap-4">
-        <span class="w-7 h-7 rounded-lg bg-surface-container-high border border-slate-700 text-xs font-bold font-button flex items-center justify-center text-primary shrink-0">
-          #${idx + 1}
-        </span>
-        <div class="w-24 h-14 rounded-lg overflow-hidden bg-slate-900 border border-slate-700 shrink-0">
-          <img src="${escapeHtml(slide.image)}" alt="${escapeHtml(slide.title)}" class="w-full h-full object-cover">
-        </div>
-        <div class="space-y-1">
-          <div class="flex items-center gap-2 flex-wrap">
-            <h4 class="text-sm font-bold text-white line-clamp-1">${escapeHtml(slide.title || 'Untitled Slide')}</h4>
-            ${slide.badge ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-primary/10 text-primary border border-primary/20">${escapeHtml(slide.badge)}</span>` : ''}
-            ${idx < limit ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Live on Site</span>` : `<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-amber-500/10 text-amber-400 border border-amber-500/20">Exceeds Limit</span>`}
-          </div>
-          <p class="text-xs text-on-surface-variant line-clamp-1">${escapeHtml(slide.text || slide.heading || slide.image)}</p>
-        </div>
-      </div>
+  container.innerHTML = slides.map((slide, idx) => {
+    const isLive = idx < limit;
+    return `
+      <div class="glass-card border ${isLive ? 'border-primary/20 hover:border-primary/50' : 'border-amber-500/30'} rounded-2xl overflow-hidden transition-all flex flex-col group shadow-lg">
+        <!-- Thumbnail -->
+        <div class="relative w-full aspect-video bg-slate-900 overflow-hidden">
+          <img src="${escapeHtml(slide.image)}" alt="Hero Slide ${idx + 1}"
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            onerror="this.src='assets/hero-slider-1.jpg'">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-black/30 pointer-events-none"></div>
+          
+          <!-- Slide Number Badge -->
+          <span class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-primary font-button font-bold text-xs px-2.5 py-1 rounded-lg border border-primary/30 shadow">
+            #${idx + 1}
+          </span>
 
-      <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
-        ${idx > 0 ? `
-          <button type="button" onclick="window.moveHeroSlide('${slide.id}', -1)" title="Move Up"
-            class="p-2 rounded-lg bg-surface-container-high hover:bg-primary/20 text-on-surface hover:text-primary transition-all">
-            <span class="material-symbols-outlined text-sm">arrow_upward</span>
-          </button>
-        ` : ''}
-        ${idx < slides.length - 1 ? `
-          <button type="button" onclick="window.moveHeroSlide('${slide.id}', 1)" title="Move Down"
-            class="p-2 rounded-lg bg-surface-container-high hover:bg-primary/20 text-on-surface hover:text-primary transition-all">
-            <span class="material-symbols-outlined text-sm">arrow_downward</span>
-          </button>
-        ` : ''}
-        <button type="button" onclick="window.editHeroSlide('${slide.id}')"
-          class="px-3 py-1.5 rounded-lg bg-primary/10 hover:bg-primary text-primary hover:text-slate-950 text-xs font-button uppercase font-bold transition-all flex items-center gap-1">
-          <span class="material-symbols-outlined text-xs">edit</span>
-          <span>Edit</span>
-        </button>
-        <button type="button" onclick="window.deleteHeroSlide('${slide.id}')"
-          class="px-3 py-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white text-xs font-button uppercase font-bold transition-all flex items-center gap-1">
-          <span class="material-symbols-outlined text-xs">delete</span>
-          <span>Delete</span>
-        </button>
+          <!-- Status Badge -->
+          <span class="absolute top-3 right-3 ${isLive ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-slate-950'} font-button font-bold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-lg shadow">
+            ${isLive ? 'Live on Site' : 'Exceeds Limit'}
+          </span>
+        </div>
+
+        <!-- Details & Controls -->
+        <div class="p-4 flex flex-col justify-between flex-grow space-y-3 bg-surface-container/50">
+          <div class="flex items-center justify-between gap-2">
+            <span class="text-xs text-on-surface-variant font-mono truncate max-w-[200px]" title="${escapeHtml(slide.image)}">
+              ${escapeHtml(slide.image)}
+            </span>
+            <a href="${escapeHtml(slide.image)}" target="_blank" rel="noopener" class="text-primary hover:text-white text-xs flex items-center gap-0.5 shrink-0" title="Open full image">
+              <span class="material-symbols-outlined text-sm">open_in_new</span>
+            </a>
+          </div>
+
+          <!-- Bottom Action Buttons: Reorder & Delete -->
+          <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 gap-2">
+            <div class="flex items-center gap-1.5">
+              ${idx > 0 ? `
+                <button type="button" onclick="window.moveHeroSlide('${slide.id}', -1)" title="Move Left (Earlier in carousel)"
+                  class="p-2 rounded-xl bg-surface-container-high hover:bg-primary/20 text-on-surface hover:text-primary transition-all flex items-center justify-center">
+                  <span class="material-symbols-outlined text-sm">arrow_back</span>
+                </button>
+              ` : `
+                <div class="p-2 rounded-xl opacity-20 pointer-events-none">
+                  <span class="material-symbols-outlined text-sm">arrow_back</span>
+                </div>
+              `}
+              ${idx < slides.length - 1 ? `
+                <button type="button" onclick="window.moveHeroSlide('${slide.id}', 1)" title="Move Right (Later in carousel)"
+                  class="p-2 rounded-xl bg-surface-container-high hover:bg-primary/20 text-on-surface hover:text-primary transition-all flex items-center justify-center">
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </button>
+              ` : `
+                <div class="p-2 rounded-xl opacity-20 pointer-events-none">
+                  <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </div>
+              `}
+            </div>
+
+            <!-- DELETE BUTTON -->
+            <button type="button" onclick="window.deleteHeroSlide('${slide.id}')" title="Delete this slide"
+              class="px-3.5 py-2 rounded-xl bg-rose-500/10 hover:bg-rose-500 text-rose-400 hover:text-white text-xs font-button font-bold uppercase transition-all flex items-center gap-1.5 shadow">
+              <span class="material-symbols-outlined text-sm">delete</span>
+              <span>Delete</span>
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 }
 
 async function saveHeroCarouselToStorage() {
@@ -1717,7 +1738,7 @@ async function saveHeroCarouselToStorage() {
   showToast("Hero slider saved locally!", "info");
 }
 
-// Save Slider Settings (Limit & Duration)
+// 1. Save Slider Settings (Limit & Duration)
 document.getElementById('hero-settings-form')?.addEventListener('submit', async (e) => {
   e.preventDefault();
   const limitVal = parseInt(document.getElementById('hero-max-limit').value || 5, 10);
@@ -1730,130 +1751,135 @@ document.getElementById('hero-settings-form')?.addEventListener('submit', async 
   renderHeroSlidesAdminList();
 });
 
-// Add or Edit Slide Submit
-document.getElementById('hero-slide-form')?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const slideId = document.getElementById('hero-slide-id').value;
-  const title = document.getElementById('hero-slide-title').value.trim();
-  const badge = document.getElementById('hero-slide-badge').value.trim();
-  const imageUrl = document.getElementById('hero-image-url').value.trim();
-  const heading = document.getElementById('hero-slide-heading').value.trim();
-  const link = document.getElementById('hero-slide-link').value.trim();
-  const text = document.getElementById('hero-slide-text').value.trim();
+// 2. Direct Image File Input (Device Upload)
+const heroDirectInput = document.getElementById('hero-direct-file-input');
+const heroUploadBtnLabel = document.getElementById('hero-upload-btn-label');
 
-  if (!imageUrl || !title) {
-    showToast("Please provide slide title and banner image.", "error");
-    return;
-  }
+if (heroDirectInput) {
+  heroDirectInput.addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
 
-  const currentSlides = heroSliderState.slides || [];
-  const limit = parseInt(heroSliderState.limit || 5, 10);
-
-  if (slideId) {
-    // Edit existing slide
-    const idx = currentSlides.findIndex(s => s.id === slideId);
-    if (idx !== -1) {
-      currentSlides[idx] = {
-        ...currentSlides[idx],
-        title,
-        badge,
-        image: imageUrl,
-        heading,
-        link,
-        text,
-        updatedAt: new Date().toISOString()
-      };
-      showToast("Slide updated successfully!", "success");
-    }
-  } else {
-    // New Slide Check Limit
+    const currentSlides = heroSliderState.slides || [];
+    const limit = parseInt(heroSliderState.limit || 5, 10);
     if (currentSlides.length >= limit) {
-      showToast(`Cannot add slide! Maximum limit (${limit}) reached. Please increase slide limit above.`, "error");
+      if (!confirm(`You have reached the maximum slide limit (${limit}). Adding this slide will put it over the active limit unless you increase the limit in Settings. Do you want to proceed?`)) {
+        heroDirectInput.value = '';
+        return;
+      }
+    }
+
+    if (heroUploadBtnLabel) {
+      heroUploadBtnLabel.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Uploading ${file.name}...`;
+    }
+
+    // Instant local FileReader preview & slide creation
+    const reader = new FileReader();
+    reader.onload = async (ev) => {
+      const dataUrl = ev.target.result;
+      const newSlide = {
+        id: "slide_" + Date.now(),
+        image: dataUrl,
+        title: file.name.replace(/\.[^/.]+$/, ""),
+        createdAt: new Date().toISOString()
+      };
+      heroSliderState.slides.push(newSlide);
+      await saveHeroCarouselToStorage();
+      renderHeroSlidesAdminList();
+      showToast("Hero banner uploaded & added to slider!", "success");
+
+      if (heroUploadBtnLabel) {
+        heroUploadBtnLabel.textContent = "Choose File from Computer / Device";
+      }
+      heroDirectInput.value = '';
+
+      // Asynchronously upload to Firebase Storage for persistent CDN URL if online
+      if (storage) {
+        try {
+          const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+          const storageRef = ref(storage, `hero/${Date.now()}_${safeName}`);
+          const snap = await uploadBytesResumable(storageRef, file);
+          const downloadURL = await getDownloadURL(snap.ref);
+          const idx = heroSliderState.slides.findIndex(s => s.id === newSlide.id);
+          if (idx !== -1) {
+            heroSliderState.slides[idx].image = downloadURL;
+            await saveHeroCarouselToStorage();
+            renderHeroSlidesAdminList();
+          }
+        } catch (err) {
+          console.warn("Storage upload notice:", err);
+        }
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// 3. Drag and Drop Support on Upload Dropzone
+const heroDropzone = document.getElementById('hero-upload-dropzone');
+if (heroDropzone && heroDirectInput) {
+  heroDropzone.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    heroDropzone.classList.add('border-primary', 'bg-surface-container');
+  });
+  heroDropzone.addEventListener('dragleave', (e) => {
+    e.preventDefault();
+    heroDropzone.classList.remove('border-primary', 'bg-surface-container');
+  });
+  heroDropzone.addEventListener('drop', (e) => {
+    e.preventDefault();
+    heroDropzone.classList.remove('border-primary', 'bg-surface-container');
+    if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0]) {
+      heroDirectInput.files = e.dataTransfer.files;
+      heroDirectInput.dispatchEvent(new Event('change'));
+    }
+  });
+}
+
+// 4. URL Paste Alternative
+const heroAddUrlBtn = document.getElementById('hero-add-url-btn');
+const heroQuickUrlInput = document.getElementById('hero-quick-url');
+
+if (heroAddUrlBtn && heroQuickUrlInput) {
+  heroAddUrlBtn.addEventListener('click', async () => {
+    const url = heroQuickUrlInput.value.trim();
+    if (!url) {
+      showToast("Please enter an image URL first.", "error");
       return;
+    }
+
+    const currentSlides = heroSliderState.slides || [];
+    const limit = parseInt(heroSliderState.limit || 5, 10);
+    if (currentSlides.length >= limit) {
+      if (!confirm(`You have reached the maximum slide limit (${limit}). Adding this slide will place it over the active limit unless you increase the limit in Settings. Do you want to proceed?`)) {
+        return;
+      }
     }
 
     const newSlide = {
       id: "slide_" + Date.now(),
-      title,
-      badge,
-      image: imageUrl,
-      heading,
-      link,
-      text,
+      image: url,
+      title: "Hero Banner " + (currentSlides.length + 1),
       createdAt: new Date().toISOString()
     };
-    currentSlides.push(newSlide);
-    showToast("New hero slide added!", "success");
-  }
-
-  heroSliderState.slides = currentSlides;
-  await saveHeroCarouselToStorage();
-  resetHeroSlideForm();
-  renderHeroSlidesAdminList();
-});
-
-function resetHeroSlideForm() {
-  document.getElementById('hero-slide-id').value = '';
-  document.getElementById('hero-slide-title').value = '';
-  document.getElementById('hero-slide-badge').value = '';
-  document.getElementById('hero-image-url').value = '';
-  document.getElementById('hero-slide-heading').value = '';
-  document.getElementById('hero-slide-link').value = '';
-  document.getElementById('hero-slide-text').value = '';
-
-  const prevBox = document.getElementById('hero-img-preview-box');
-  if (prevBox) prevBox.classList.add('hidden');
-
-  const headingEl = document.getElementById('hero-form-heading');
-  if (headingEl) {
-    headingEl.innerHTML = `<span class="material-symbols-outlined text-primary text-xl">add_photo_alternate</span><span>Upload & Add New Hero Slide</span>`;
-  }
-  const submitText = document.getElementById('hero-submit-text');
-  if (submitText) submitText.textContent = "Add Slide to Hero Carousel";
-
-  document.getElementById('cancel-edit-hero-btn')?.classList.add('hidden');
+    heroSliderState.slides.push(newSlide);
+    await saveHeroCarouselToStorage();
+    renderHeroSlidesAdminList();
+    heroQuickUrlInput.value = '';
+    showToast("Hero slide URL added successfully!", "success");
+  });
 }
 
-document.getElementById('cancel-edit-hero-btn')?.addEventListener('click', resetHeroSlideForm);
-
-window.editHeroSlide = function(slideId) {
-  const slide = (heroSliderState.slides || []).find(s => s.id === slideId);
-  if (!slide) return;
-
-  document.getElementById('hero-slide-id').value = slide.id;
-  document.getElementById('hero-slide-title').value = slide.title || '';
-  document.getElementById('hero-slide-badge').value = slide.badge || '';
-  document.getElementById('hero-image-url').value = slide.image || '';
-  document.getElementById('hero-slide-heading').value = slide.heading || '';
-  document.getElementById('hero-slide-link').value = slide.link || '';
-  document.getElementById('hero-slide-text').value = slide.text || '';
-
-  const prevImg = document.getElementById('hero-img-preview');
-  const prevBox = document.getElementById('hero-img-preview-box');
-  if (prevImg && slide.image) {
-    prevImg.src = slide.image;
-    prevBox?.classList.remove('hidden');
-  }
-
-  const headingEl = document.getElementById('hero-form-heading');
-  if (headingEl) {
-    headingEl.innerHTML = `<span class="material-symbols-outlined text-primary text-xl">edit</span><span>Edit Hero Slide #${slide.id}</span>`;
-  }
-  const submitText = document.getElementById('hero-submit-text');
-  if (submitText) submitText.textContent = "Update Hero Slide";
-
-  document.getElementById('cancel-edit-hero-btn')?.classList.remove('hidden');
-  document.getElementById('tab-hero')?.scrollIntoView({ behavior: 'smooth' });
-};
-
+// 5. Delete Slide with Instant Confirmation
 window.deleteHeroSlide = async function(slideId) {
   if (!confirm("Are you sure you want to delete this hero slide?")) return;
   heroSliderState.slides = (heroSliderState.slides || []).filter(s => s.id !== slideId);
   await saveHeroCarouselToStorage();
   renderHeroSlidesAdminList();
-  showToast("Slide deleted.", "info");
+  showToast("Hero slide deleted.", "info");
 };
 
+// 6. Move Slide (Reorder Left/Right in Carousel)
 window.moveHeroSlide = async function(slideId, direction) {
   const slides = heroSliderState.slides || [];
   const idx = slides.findIndex(s => s.id === slideId);

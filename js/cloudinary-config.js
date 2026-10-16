@@ -71,16 +71,8 @@ function openCloudinaryWidget(callback, customOptions = {}) {
     },
     (error, result) => {
       if (error) {
-        console.error("Cloudinary widget error:", error);
-        const newPreset = prompt(
-          `Cloudinary Upload Error: "${error.message || 'Unknown API key'}"\n\nPlease enter your exact Unsigned Upload Preset name from Cloudinary Dashboard (e.g. ml_default or triangle_properties):`,
-          currentPreset
-        );
-        if (newPreset && newPreset.trim() !== '') {
-          localStorage.setItem('cloudinary_preset', newPreset.trim());
-          CLOUDINARY_CONFIG.uploadPreset = newPreset.trim();
-          alert("Upload preset updated to '" + newPreset.trim() + "'. Please click Upload again!");
-        }
+        console.warn("Cloudinary widget upload notice:", error);
+        // Do not block user with modal prompts; allow graceful fallback to device file upload
       } else if (result && result.event === "success") {
         console.log("Image uploaded to Cloudinary successfully:", result.info.secure_url);
         if (typeof callback === 'function') {

@@ -502,8 +502,8 @@
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
             <span class="font-button text-[11px] uppercase tracking-widest text-primary block mb-1">Homepage Header</span>
-            <h2 class="font-display text-3xl font-light text-white">Hero Slider & Banner Management</h2>
-            <p class="text-xs text-on-surface-variant mt-1">Upload banner images, set maximum slides limit, and customize active hero slides for the public website homepage.</p>
+            <h2 class="font-display text-3xl font-light text-white">Hero Slider (Banner Images)</h2>
+            <p class="text-xs text-on-surface-variant mt-1">Upload banner images directly to the homepage carousel. Set maximum slides limit and reorder or delete slides in the grid below.</p>
           </div>
           <div class="flex items-center gap-3">
             <span id="hero-slides-count-badge" class="px-4 py-2 rounded-xl bg-primary/10 border border-primary/30 text-primary text-xs font-button font-bold uppercase tracking-wider">
@@ -513,31 +513,25 @@
         </div>
 
         <!-- 1. SLIDER SETTINGS (LIMIT & AUTO-CYCLE DURATION) -->
-        <div class="glass-card p-6 sm:p-8 rounded-2xl border border-primary/20">
-          <h3 class="font-display text-xl font-light text-white mb-4 flex items-center gap-2">
-            <span class="material-symbols-outlined text-primary text-xl">tune</span>
-            <span>Carousel Display Settings</span>
-          </h3>
-          <form id="hero-settings-form" class="grid grid-cols-1 sm:grid-cols-3 gap-6 items-end">
+        <div class="glass-card p-6 rounded-2xl border border-primary/20">
+          <form id="hero-settings-form" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
             <div>
               <label for="hero-max-limit" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                Maximum Slide Limit *
+                Slide Limit (Max Allowed)
               </label>
               <input type="number" id="hero-max-limit" min="1" max="15" value="5" required
                 class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
-              <span class="text-[11px] text-on-surface-variant mt-1 block">Maximum slides allowed in homepage slider.</span>
             </div>
             <div>
               <label for="hero-cycle-duration" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                Slide Transition Interval (Seconds)
+                Slide Transition Time (Seconds)
               </label>
               <input type="number" id="hero-cycle-duration" min="2" max="20" value="5" required
                 class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
-              <span class="text-[11px] text-on-surface-variant mt-1 block">Duration before auto-transitioning to next slide.</span>
             </div>
             <div>
               <button type="submit" id="save-hero-settings-btn"
-                class="btn-primary w-full py-3 text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg">
+                class="btn-primary w-full py-2.5 text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg">
                 <span class="material-symbols-outlined text-base">save</span>
                 <span>Save Carousel Settings</span>
               </button>
@@ -545,109 +539,56 @@
           </form>
         </div>
 
-        <!-- 2. ADD / EDIT HERO SLIDE FORM -->
+        <!-- 2. DIRECT IMAGE UPLOAD BOX -->
         <div class="glass-card p-6 sm:p-8 rounded-2xl border border-primary/20">
-          <div class="flex items-center justify-between mb-4">
-            <h3 id="hero-form-heading" class="font-display text-xl font-light text-white flex items-center gap-2">
-              <span class="material-symbols-outlined text-primary text-xl">add_photo_alternate</span>
-              <span>Upload & Add New Hero Slide</span>
-            </h3>
-            <button type="button" id="cancel-edit-hero-btn" class="hidden text-xs text-rose-400 hover:underline font-button uppercase">
-              Cancel Edit
+          <h3 class="font-display text-xl font-light text-white mb-2 flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary text-xl">cloud_upload</span>
+            <span>Upload New Banner Image</span>
+          </h3>
+          <p class="text-xs text-on-surface-variant mb-4">Click below to choose an image from your device. It will automatically upload and be added to the homepage hero slider.</p>
+
+          <!-- Upload Dropzone -->
+          <div id="hero-upload-dropzone" onclick="document.getElementById('hero-direct-file-input').click()"
+            class="border-2 border-dashed border-primary/40 hover:border-primary bg-surface-container/60 hover:bg-surface-container rounded-2xl p-8 sm:p-10 text-center cursor-pointer transition-all group">
+            <input type="file" id="hero-direct-file-input" accept="image/*" class="hidden">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <span class="material-symbols-outlined text-3xl">add_photo_alternate</span>
+            </div>
+            <h4 class="font-display text-lg font-bold text-white mb-1">Click to Upload Banner Image</h4>
+            <p class="text-xs text-on-surface-variant mb-4">Supports PNG, JPG, JPEG, WEBP (Recommended: 1600 × 900)</p>
+            <button type="button" class="btn-primary text-xs uppercase px-6 py-2.5 inline-flex items-center gap-2 pointer-events-none">
+              <span class="material-symbols-outlined text-sm">cloud_upload</span>
+              <span id="hero-upload-btn-label">Choose File from Computer / Device</span>
             </button>
           </div>
 
-          <form id="hero-slide-form" class="space-y-4">
-            <input type="hidden" id="hero-slide-id">
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label for="hero-slide-title" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                  Slide Project Title / Alt Description *
-                </label>
-                <input type="text" id="hero-slide-title" required placeholder="Susee Alight Kuthambakkam – Poonamallee"
-                  class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
-              </div>
-              <div>
-                <label for="hero-slide-badge" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                  Badge / Tagline (Optional)
-                </label>
-                <input type="text" id="hero-slide-badge" placeholder="DTCP & RERA Approved Plots"
-                  class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
-              </div>
-            </div>
-
-            <!-- Slide Image Upload -->
-            <div>
-              <label for="hero-image-url" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                Slide Banner Image * (High Resolution Recommended)
-              </label>
-              <div class="flex gap-2">
-                <input type="url" id="hero-image-url" required placeholder="Image URL or upload banner image..."
-                  class="flex-grow px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-xs text-white focus:outline-none focus:border-primary">
-                <input type="file" id="hero-file-input" accept="image/*" class="hidden">
-                <button type="button" id="hero-upload-btn"
-                  class="btn-secondary text-xs uppercase px-4 py-2.5 flex items-center gap-1.5 whitespace-nowrap">
-                  <span class="material-symbols-outlined text-sm">cloud_upload</span>
-                  <span>Upload Image</span>
-                </button>
-              </div>
-
-              <div id="hero-img-preview-box"
-                class="hidden mt-3 flex items-center gap-4 p-3 rounded-xl bg-surface-container-high border border-slate-800">
-                <img id="hero-img-preview" src="" class="w-32 h-18 object-cover rounded-lg border border-slate-700 shadow-md">
-                <div class="text-xs">
-                  <span class="font-bold text-white block">Banner Image Preview</span>
-                  <span class="text-on-surface-variant text-[11px]">Ready to display on homepage hero slider</span>
-                </div>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label for="hero-slide-heading" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                  Custom Headline (Optional)
-                </label>
-                <input type="text" id="hero-slide-heading" placeholder="Premium Plots in Kuthambakkam"
-                  class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
-              </div>
-              <div>
-                <label for="hero-slide-link" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                  Target Link / URL (Optional)
-                </label>
-                <input type="text" id="hero-slide-link" placeholder="properties.html?status=ONGOING"
-                  class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary">
-              </div>
-            </div>
-
-            <div>
-              <label for="hero-slide-text" class="block font-button text-xs uppercase text-on-surface-variant mb-1">
-                Description / Highlights (Optional)
-              </label>
-              <textarea id="hero-slide-text" rows="2" placeholder="DTCP approved plots with 33ft blacktop roads and 100% legal title clearance."
-                class="w-full px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-sm text-white focus:outline-none focus:border-primary"></textarea>
-            </div>
-
-            <div class="flex items-center justify-end gap-3 pt-3">
-              <button type="submit" id="hero-submit-btn" class="btn-primary text-xs uppercase tracking-widest px-8 py-3.5 shadow-xl flex items-center gap-2">
-                <span class="material-symbols-outlined text-sm">add</span>
-                <span id="hero-submit-text">Add Slide to Hero Carousel</span>
-              </button>
-            </div>
-          </form>
+          <!-- URL Paste Alternative -->
+          <div class="mt-4 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row gap-2">
+            <input type="url" id="hero-quick-url" placeholder="Or paste external image URL (e.g. https://...)..."
+              class="flex-grow px-4 py-2.5 rounded-xl bg-surface-container border border-slate-800 text-xs text-white focus:outline-none focus:border-primary">
+            <button type="button" id="hero-add-url-btn"
+              class="btn-secondary text-xs uppercase px-6 py-2.5 flex items-center justify-center gap-1.5 whitespace-nowrap">
+              <span class="material-symbols-outlined text-sm">add_link</span>
+              <span>Add URL as Slide</span>
+            </button>
+          </div>
         </div>
 
-        <!-- 3. CURRENT ACTIVE HERO SLIDES LIST -->
+        <!-- 3. CURRENT ACTIVE HERO SLIDES (GRID SYSTEM) -->
         <div class="glass-card p-6 sm:p-8 rounded-2xl border border-primary/20">
           <div class="flex items-center justify-between mb-6">
-            <h3 class="font-display text-xl font-light text-white flex items-center gap-2">
-              <span class="material-symbols-outlined text-primary text-xl">view_carousel</span>
-              <span>Active Homepage Hero Slides</span>
-            </h3>
-            <span class="text-xs text-on-surface-variant font-button">Drag or reorder directly below</span>
+            <div>
+              <h3 class="font-display text-xl font-light text-white flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-xl">view_carousel</span>
+                <span>Active Homepage Slides</span>
+              </h3>
+              <p class="text-xs text-on-surface-variant mt-0.5">Slides currently live on triangleproperties.in and triangleproperties.com</p>
+            </div>
+            <span class="text-xs text-on-surface-variant font-button hidden sm:block">Grid View</span>
           </div>
 
-          <div id="hero-slides-list" class="space-y-3">
+          <!-- Grid Container -->
+          <div id="hero-slides-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Rendered dynamically -->
           </div>
         </div>
