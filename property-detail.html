@@ -14,8 +14,28 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Property Details | Triangle Properties</title>
-  <meta name="description"
-    content="View detailed specifications, floor plans, amenities, and price details for this luxury property listing by Triangle Properties." />
+  <meta name="description" id="meta-description"
+    content="View detailed specifications, approved plot dimensions, and pricing for this premium listing by Triangle Properties Chennai." />
+  <link rel="canonical" id="canonical-link" href="https://triangleproperties.in/property-detail.html" />
+  <link rel="icon" type="image/png" href="assets/favicon.png" />
+
+  <!-- OPENGRAPH SOCIAL MEDIA META TAGS -->
+  <meta property="og:site_name" content="Triangle Properties" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" id="og-title" content="Property Details | Triangle Properties" />
+  <meta property="og:description" id="og-desc" content="View specifications, location, and pricing by Triangle Properties." />
+  <meta property="og:url" id="og-url" content="https://triangleproperties.in/property-detail.html" />
+  <meta property="og:image" id="og-image" content="https://triangleproperties.in/assets/logo.png" />
+  <meta property="og:locale" content="en_IN" />
+
+  <!-- TWITTER CARD META TAGS -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" id="twitter-title" content="Property Details | Triangle Properties" />
+  <meta name="twitter:description" id="twitter-desc" content="DTCP & RERA approved plots in Chennai by Triangle Properties." />
+  <meta name="twitter:image" id="twitter-image" content="https://triangleproperties.in/assets/logo.png" />
+
+  <!-- DYNAMIC JSON-LD CONTAINER -->
+  <script type="application/ld+json" id="property-schema-jsonld"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -86,6 +106,65 @@
       if (!container || !window.TRIANGLE_DATA) return;
 
       const prop = window.TRIANGLE_DATA.properties.find(p => p.id === id) || window.TRIANGLE_DATA.properties[0];
+
+      // Dynamic SEO Meta & Social Tags
+      const pageTitle = `${prop.title} | Triangle Properties Chennai`;
+      const pageDesc = `${prop.title} in ${prop.location}. ${prop.category} priced at ${prop.price}. ${prop.description ? prop.description.substring(0, 150) : ''}...`;
+      const pageUrl = `https://triangleproperties.in/property-detail.html?id=${encodeURIComponent(prop.id)}`;
+
+      document.title = pageTitle;
+      const metaDescEl = document.getElementById('meta-description');
+      if (metaDescEl) metaDescEl.setAttribute('content', pageDesc);
+
+      const canonicalEl = document.getElementById('canonical-link');
+      if (canonicalEl) canonicalEl.setAttribute('href', pageUrl);
+
+      const ogTitleEl = document.getElementById('og-title');
+      if (ogTitleEl) ogTitleEl.setAttribute('content', pageTitle);
+      const ogDescEl = document.getElementById('og-desc');
+      if (ogDescEl) ogDescEl.setAttribute('content', pageDesc);
+      const ogUrlEl = document.getElementById('og-url');
+      if (ogUrlEl) ogUrlEl.setAttribute('content', pageUrl);
+      const ogImgEl = document.getElementById('og-image');
+      if (ogImgEl && prop.image) ogImgEl.setAttribute('content', prop.image);
+
+      const twTitleEl = document.getElementById('twitter-title');
+      if (twTitleEl) twTitleEl.setAttribute('content', pageTitle);
+      const twDescEl = document.getElementById('twitter-desc');
+      if (twDescEl) twDescEl.setAttribute('content', pageDesc);
+      const twImgEl = document.getElementById('twitter-image');
+      if (twImgEl && prop.image) twImgEl.setAttribute('content', prop.image);
+
+      // Dynamic RealEstateListing / Product JSON-LD Schema
+      const schemaEl = document.getElementById('property-schema-jsonld');
+      if (schemaEl) {
+        schemaEl.textContent = JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          "name": prop.title,
+          "image": prop.image,
+          "description": prop.description || pageDesc,
+          "category": prop.category,
+          "offers": {
+            "@type": "Offer",
+            "price": prop.price,
+            "priceCurrency": "INR",
+            "availability": "https://schema.org/InStock",
+            "seller": {
+              "@type": "RealEstateAgent",
+              "name": "Triangle Properties",
+              "telephone": "+91-8838957874",
+              "address": {
+                "@type": "PostalAddress",
+                "streetAddress": "No.23, Pillaiyar Kovil Street, Vadapalani",
+                "addressLocality": "Chennai",
+                "postalCode": "600026",
+                "addressCountry": "IN"
+              }
+            }
+          }
+        }, null, 2);
+      }
 
       container.innerHTML = `
         <div class="space-y-8 sm:space-y-12">

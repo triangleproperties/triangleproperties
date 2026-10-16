@@ -10,5 +10,5 @@ Disallow: /js/admin.js
 # Sitemap Directives
 Sitemap: https://triangleproperties.in/sitemap.xml
 Sitemap: https://triangleproperties.in/sitemap_index.xml
+Sitemap: https://triangleproperties.com/sitemap.xml
 Sitemap: https://www.trianglepropertiespvt.com/sitemap.xml
-Sitemap: https://www.trianglepropertiespvt.com/sitemap_index.xml
