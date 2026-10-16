@@ -330,6 +330,10 @@ tabBtns.forEach(btn => {
     tabContents.forEach(c => c.classList.add('hidden'));
     document.getElementById(`tab-${tab}`)?.classList.remove('hidden');
 
+    if (tab === 'hero') {
+      renderHeroSlidesAdminList();
+    }
+
     if (pageTitle) {
       pageTitle.textContent = tab === 'properties' ? 'Signature Properties' :
                               tab === 'categories' ? 'Real Estate Categories' :
@@ -1561,6 +1565,15 @@ let heroSliderState = {
   autoPlaySeconds: 5,
   slides: [
     {
+      id: "slide_susee_phase2",
+      image: "assets/susee-alight-phase2-banner.png",
+      title: "Susee Alight Kuthambakkam - Launching Phase 2",
+      badge: "Launching Phase 2 • ₹2,199/sq.ft",
+      heading: "Premium Plots in Kuthambakkam <br/><span class=\"gold-gradient-text italic font-serif\">Launching Phase 2 – ₹2,199/sq.ft</span>",
+      text: "DTCP & RERA approved gated community plots in Kuthambakkam, Poonamallee with 33ft blacktop roads, 24x7 CCTV security and 100% legal title clearance.",
+      link: "properties.html?status=ONGOING"
+    },
+    {
       id: "slide_1",
       image: "assets/hero-slider-1.jpg",
       title: "Susee Alight Kuthambakkam - Triangle Properties Gated Community Plots",
@@ -1722,8 +1735,61 @@ function renderHeroSlidesAdminList() {
   }).join('');
 }
 
+// Helper: Client-side Image Compression Engine using HTML5 Canvas
+// Shrinks large images (e.g. 5MB PNG/JPEG) to ~80-120KB WebP/JPEG preserving 1600px width.
+// Prevents Firestore 1MB document limit exceptions and localStorage QuotaExceeded errors.
+function compressImageToDataUrl(file, maxWidth = 1600, quality = 0.82) {
+  return new Promise((resolve, reject) => {
+    if (!file || !file.type.startsWith('image/')) {
+      return reject(new Error('Please select a valid image file.'));
+    }
+
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Failed to read file from device.'));
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Failed to decode image data.'));
+      img.onload = () => {
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return resolve(e.target.result);
+        }
+
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, 0, 0, width, height);
+
+        let compressedDataUrl = canvas.toDataURL('image/webp', quality);
+        if (!compressedDataUrl || !compressedDataUrl.startsWith('data:image/webp')) {
+          compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+        }
+
+        resolve(compressedDataUrl);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 async function saveHeroCarouselToStorage() {
-  localStorage.setItem('triangle_hero_carousel', JSON.stringify(heroSliderState));
+  try {
+    localStorage.setItem('triangle_hero_carousel', JSON.stringify(heroSliderState));
+  } catch (lsErr) {
+    console.warn("LocalStorage hero save notice:", lsErr);
+  }
   window.dispatchEvent(new CustomEvent('triangle_hero_updated', { detail: heroSliderState }));
 
   if (db) {
@@ -1732,7 +1798,7 @@ async function saveHeroCarouselToStorage() {
       showToast("Hero slider synced live to homepage!", "success");
       return;
     } catch (e) {
-      console.warn("Firestore hero save error:", e);
+      console.warn("Firestore hero save notice:", e);
     }
   }
   showToast("Hero slider saved locally!", "info");
@@ -1751,7 +1817,7 @@ document.getElementById('hero-settings-form')?.addEventListener('submit', async 
   renderHeroSlidesAdminList();
 });
 
-// 2. Direct Image File Input (Device Upload)
+// 2. Direct Image File Input (Device Upload with Automatic Compression)
 const heroDirectInput = document.getElementById('hero-direct-file-input');
 const heroUploadBtnLabel = document.getElementById('hero-upload-btn-label');
 
@@ -1770,30 +1836,26 @@ if (heroDirectInput) {
     }
 
     if (heroUploadBtnLabel) {
-      heroUploadBtnLabel.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Uploading ${file.name}...`;
+      heroUploadBtnLabel.innerHTML = `<span class="animate-spin inline-block mr-1">⌛</span> Optimizing & Uploading ${escapeHtml(file.name)}...`;
     }
 
-    // Instant local FileReader preview & slide creation
-    const reader = new FileReader();
-    reader.onload = async (ev) => {
-      const dataUrl = ev.target.result;
+    try {
+      // Compress client-side to prevent Firestore 1MB limits & localStorage quota crashes
+      const compressedDataUrl = await compressImageToDataUrl(file, 1600, 0.82);
       const newSlide = {
         id: "slide_" + Date.now(),
-        image: dataUrl,
+        image: compressedDataUrl,
         title: file.name.replace(/\.[^/.]+$/, ""),
         createdAt: new Date().toISOString()
       };
-      heroSliderState.slides.push(newSlide);
+      
+      // Add as top slide
+      heroSliderState.slides.unshift(newSlide);
       await saveHeroCarouselToStorage();
       renderHeroSlidesAdminList();
-      showToast("Hero banner uploaded & added to slider!", "success");
+      showToast("Hero banner optimized & added to slider!", "success");
 
-      if (heroUploadBtnLabel) {
-        heroUploadBtnLabel.textContent = "Choose File from Computer / Device";
-      }
-      heroDirectInput.value = '';
-
-      // Asynchronously upload to Firebase Storage for persistent CDN URL if online
+      // Optional background upload to Firebase Storage if available
       if (storage) {
         try {
           const safeName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
@@ -1806,18 +1868,34 @@ if (heroDirectInput) {
             await saveHeroCarouselToStorage();
             renderHeroSlidesAdminList();
           }
-        } catch (err) {
-          console.warn("Storage upload notice:", err);
+        } catch (storageErr) {
+          // Gracefully continue; client-side compressed base64 is already saved and working
+          console.warn("Storage upload notice:", storageErr);
         }
       }
-    };
-    reader.readAsDataURL(file);
+    } catch (err) {
+      console.error("Image upload error:", err);
+      showToast("Upload failed: " + (err.message || "Could not process image"), "error");
+    } finally {
+      if (heroUploadBtnLabel) {
+        heroUploadBtnLabel.textContent = "Choose File from Computer / Device";
+      }
+      heroDirectInput.value = '';
+    }
   });
 }
 
-// 3. Drag and Drop Support on Upload Dropzone
+// 3. Dropzone Click and Drag-and-Drop Support
 const heroDropzone = document.getElementById('hero-upload-dropzone');
 if (heroDropzone && heroDirectInput) {
+  // Click dropzone to open file picker cleanly
+  heroDropzone.addEventListener('click', (e) => {
+    // Avoid double trigger if clicking directly on input
+    if (e.target !== heroDirectInput) {
+      heroDirectInput.click();
+    }
+  });
+
   heroDropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
     heroDropzone.classList.add('border-primary', 'bg-surface-container');

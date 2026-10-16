@@ -174,6 +174,15 @@ async function initHeroCarousel() {
   if (activeSlides.length === 0) {
     activeSlides = [
       {
+        id: "slide_susee_phase2",
+        image: "assets/susee-alight-phase2-banner.png",
+        title: "Susee Alight Kuthambakkam - Launching Phase 2",
+        badge: "Launching Phase 2 • ₹2,199/sq.ft",
+        heading: "Premium Plots in Kuthambakkam <br/><span class=\"gold-gradient-text italic font-serif\">Launching Phase 2 – ₹2,199/sq.ft</span>",
+        text: "DTCP & RERA approved gated community plots in Kuthambakkam, Poonamallee with 33ft blacktop roads, 24x7 CCTV security and 100% legal title clearance.",
+        link: "properties.html?status=ONGOING"
+      },
+      {
         id: "slide_1",
         image: "assets/hero-slider-1.jpg",
         title: "Susee Alight Kuthambakkam - Triangle Properties Gated Community Plots",
